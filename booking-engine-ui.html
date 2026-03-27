@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAYASOM Wellness Resort - Amaala | Book Your Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+        :root {
+            --soft-coral: #F0A088;
+            --soft-coral-light: #F5C4B3;
+            --soft-coral-dark: #D88A70;
+            --delicate-green: #A0D1CA;
+            --delicate-green-light: #C2E3DE;
+            --delicate-green-dark: #7BBEB5;
+            --kind-yellow: #ECC681;
+            --kind-yellow-light: #F2D9A8;
+            --gentle-beige: #CDA788;
+            --gentle-beige-light: #E4D1BF;
+            --gentle-beige-lighter: #F0E6DA;
+            --inner-black: #101820;
+            --inner-black-soft: #2A3440;
+            --open-white: #FAF7F4;
+            --warm-white: #FDFCFA;
+            --purifying-beige: #F5EDE6;
+            --text-primary: #101820;
+            --text-secondary: #5A6570;
+            --text-muted: #8A9199;
+            --border-light: #E8E0D8;
+            --border-medium: #D4C8BC;
+            --shadow-soft: rgba(16, 24, 32, 0.06);
+            --shadow-medium: rgba(16, 24, 32, 0.12);
+            --success-green: #6BAF7B;
+            --error-red: #D4726A;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+            --space-4xl: 96px;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 24px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', 'Futura', sans-serif;
+            background-color: var(--open-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* HEADER */
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(250, 247, 244, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .header-inner {
+            max-width: 1400px; margin: 0 auto;
+            padding: 0 var(--space-2xl);
+            display: flex; align-items: center; justify-content: space-between;
+            height: 72px;
+        }
+        .logo-link {
+            text-decoration: none; cursor: pointer;
+            display: flex; align-items: center;
+        }
+        .logo-text {
+            font-family: 'Century Gothic', 'CenturyGothic', sans-serif;
+            font-size: 28px; font-weight: 700;
+            letter-spacing: 0.22em;
+            color: #4A4A4A;
+            text-transform: uppercase;
+        }
+        .header-right {
+            display: flex; align-items: center; gap: var(--space-lg);
+        }
+        .header-phone {
+            display: flex; align-items: center; gap: var(--space-sm);
+            font-size: 12px; color: var(--text-secondary);
+        }
+        .header-phone svg { width: 16px; height: 16px; stroke: var(--soft-coral); }
+        .lang-switch {
+            font-size: 11px; letter-spacing: 0.1em; color: var(--text-muted);
+            border: 1px solid var(--border-light); padding: 6px 12px;
+            border-radius: var(--radius-sm); background: transparent; cursor: pointer;
+        }
+        .lang-switch:hover { border-color: var(--soft-coral); color: var(--soft-coral); }
+
+        /* MAIN LAYOUT WITH VERTICAL STEPPER */
+        .main-content { margin-top: 72px; min-height: calc(100vh - 72px); }
+
+        .step-layout {
+            display: flex; min-height: calc(100vh - 72px);
+        }
+
+        .step-content-area {
+            flex: 1; min-width: 0;
+        }
+
+        /* VERTICAL STEPPER */
+        .vertical-stepper {
+            width: 240px; flex-shrink: 0;
+            background: var(--warm-white);
+            border-right: 1px solid var(--border-light);
+            padding: var(--space-2xl) var(--space-lg);
+            position: sticky; top: 72px;
+            height: calc(100vh - 72px);
+            overflow-y: auto;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .vertical-stepper.hidden { display: none; }
+
+        .stepper-title {
+            font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: var(--space-xl); font-weight: 700;
+        }
+
+        .v-step {
+            display: flex; align-items: flex-start; gap: var(--space-md);
+            cursor: pointer; position: relative; padding-bottom: 0;
+        }
+
+        .v-step-connector {
+            display: flex; justify-content: center; width: 36px; flex-shrink: 0;
+            padding: 4px 0;
+        }
+        .v-step-connector .v-line {
+            width: 2px; height: 28px; background: var(--border-light);
+            transition: background 0.3s ease;
+        }
+        .v-step.completed + .v-step-connector .v-line,
+        .completed-connector .v-line {
+            background: var(--success-green);
+        }
+
+        .v-step-circle {
+            width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--border-light); background: white;
+            font-size: 13px; font-weight: 700; color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+        .v-step.completed .v-step-circle {
+            background: #E8F5E9; border-color: var(--success-green); color: var(--success-green);
+        }
+        .v-step.active .v-step-circle {
+            background: var(--soft-coral); border-color: var(--soft-coral); color: white;
+        }
+
+        .v-step-text { padding-top: 6px; }
+        .v-step-label {
+            font-size: 13px; font-weight: 700; color: var(--text-muted);
+            line-height: 1.3; transition: color 0.3s ease;
+        }
+        .v-step.active .v-step-label { color: var(--inner-black); }
+        .v-step.completed .v-step-label { color: var(--text-secondary); }
+
+        .v-step-sublabel {
+            font-size: 11px; color: var(--text-muted); line-height: 1.3; margin-top: 1px;
+        }
+
+        /* STEP CONTAINER */
+        .step-container { display: none; animation: fadeInUp 0.4s ease forwards; }
+        .step-container.active { display: block; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* STEP 1: HERO */
+        .hero-section {
+            position: relative; min-height: calc(100vh - 72px);
+            display: flex; align-items: stretch;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--inner-black) 0%, #1a2838 30%, #2a3848 60%, var(--inner-black-soft) 100%);
+        }
+        .hero-bg::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(16,24,32,0.7) 0%, rgba(26,40,56,0.6) 50%, rgba(16,24,32,0.75) 100%);
+            z-index: 1;
+        }
+        .hero-bg-pattern {
+            position: absolute; inset: 0; opacity: 0.03; z-index: 2;
+            background-image:
+                radial-gradient(circle at 20% 50%, var(--soft-coral) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--delicate-green) 0%, transparent 40%),
+                radial-gradient(circle at 60% 80%, var(--kind-yellow) 0%, transparent 45%);
+        }
+        .hero-content {
+            position: relative; z-index: 2; text-align: center;
+            width: 100%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: var(--space-2xl);
+        }
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 42px;
+            font-weight: 300; color: var(--open-white); letter-spacing: 0.08em;
+            line-height: 1.3; margin-bottom: var(--space-md);
+        }
+        .hero-subtitle {
+            font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--soft-coral-light); margin-bottom: var(--space-3xl);
+        }
+        .booking-widget {
+            background: rgba(250, 247, 244, 0.97); border-radius: var(--radius-xl);
+            padding: var(--space-2xl) var(--space-xl); max-width: 720px;
+            width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .booking-widget-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 22px;
+            font-weight: 400; color: var(--inner-black); margin-bottom: var(--space-lg);
+            text-align: center; letter-spacing: 0.05em;
+        }
+        .booking-widget-title span { color: var(--soft-coral); }
+        .booking-form-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);
+        }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-label {
+            font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--text-muted); font-weight: 700;
+        }
+        .form-input, .form-select {
+            font-family: 'Century Gothic', sans-serif; font-size: 14px;
+            padding: 14px 16px; border: 1px solid var(--border-light);
+            border-radius: var(--radius-md); background: var(--warm-white);
+            color: var(--text-primary); outline: none;
+            appearance: none; -webkit-appearance: none; transition: all 0.3s ease;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: var(--soft-coral);
+            box-shadow: 0 0 0 3px rgba(240, 160, 136, 0.1);
+        }
+        .form-input::placeholder { color: var(--text-muted); }
+        .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A9199' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 14px center;
+            padding-right: 40px; cursor: pointer;
+        }
+        .guest-counter { display: flex; align-items: center; gap: var(--space-md); justify-content: center; }
+        .form-group.guest-group { align-items: center; text-align: center; }
+        .counter-btn {
+            width: 36px; height: 36px; border: 1px solid var(--border-light);
+            border-radius: 50%; background: transparent; color: var(--text-secondary);
+            font-size: 18px; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; font-family: 'Century Gothic', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .counter-btn:hover { border-color: var(--soft-coral); color: var(--soft-coral); }
+        .counter-value {
+            font-size: 16px; font-weight: 700; min-width: 24px;
+            text-align: center; color: var(--inner-black);
+        }
+        .promo-toggle {
+            font-size: 12px; color: var(--soft-coral); cursor: pointer;
+            text-decoration: underline; text-underline-offset: 3px;
+            margin-top: var(--space-sm); display: inline-block;
+        }
+        .promo-field { display: none; margin-top: var(--space-sm); }
+        .promo-field.show { display: block; }
+
+        /* BUTTONS */
+        .btn-primary {
+            font-family: 'Century Gothic', sans-serif; font-size: 12px;
+            letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700;
+            padding: 18px 48px; background: var(--soft-coral); color: white;
+            border: none; border-radius: var(--radius-md); cursor: pointer;
+            transition: all 0.4s ease; width: 100%; margin-top: var(--space-lg);
+        }
+        .btn-primary:hover {
+            background: var(--soft-coral-dark); transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(240, 160, 136, 0.3);
+        }
+        .btn-secondary {
+            font-family: 'Century Gothic', sans-serif; font-size: 12px;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            padding: 16px 36px; background: transparent; color: var(--text-secondary);
+            border: 1px solid var(--border-medium); border-radius: var(--radius-md);
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { border-color: var(--inner-black); color: var(--inner-black); }
+
+        /* STEP PAGES */
+        .step-page {
+            max-width: 1200px; margin: 0 auto;
+            padding: var(--space-2xl) var(--space-2xl) var(--space-3xl);
+        }
+        .step-header { margin-bottom: var(--space-2xl); }
+        .step-overline {
+            font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+            color: var(--soft-coral); margin-bottom: var(--space-sm); font-weight: 700;
+        }
+        .step-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 36px;
+            font-weight: 300; color: var(--inner-black); letter-spacing: 0.03em; line-height: 1.2;
+        }
+        .step-description {
+            font-size: 14px; color: var(--text-secondary); margin-top: var(--space-sm);
+            max-width: 600px; line-height: 1.7;
+        }
+
+        /* WELLNESS TABS */
+        .wellness-type-tabs { display: flex; gap: var(--space-md); margin-bottom: var(--space-xl); }
+        .wellness-tab {
+            font-family: 'Century Gothic', sans-serif; font-size: 11px;
+            letter-spacing: 0.15em; text-transform: uppercase; padding: 12px 28px;
+            border: 1px solid var(--border-light); border-radius: var(--radius-2xl);
+            background: transparent; color: var(--text-secondary); cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .wellness-tab.active {
+            background: var(--inner-black); color: var(--open-white); border-color: var(--inner-black);
+        }
+        .wellness-tab:hover:not(.active) { border-color: var(--soft-coral); color: var(--soft-coral); }
+
+        /* RETREAT CARDS */
+        .retreat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-lg); }
+        .retreat-card {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); overflow: hidden;
+            transition: all 0.4s ease; cursor: pointer; position: relative;
+        }
+        .retreat-card:hover {
+            border-color: var(--soft-coral); box-shadow: 0 12px 40px var(--shadow-soft);
+            transform: translateY(-4px);
+        }
+        .retreat-card.selected { border-color: var(--soft-coral); box-shadow: 0 0 0 2px var(--soft-coral); }
+        .retreat-card-image {
+            width: 100%; height: 240px;
+            background: linear-gradient(135deg, var(--gentle-beige-light), var(--purifying-beige));
+            position: relative; overflow: hidden;
+        }
+        .retreat-card-image-placeholder {
+            position: absolute; inset: 0; display: flex; align-items: center;
+            justify-content: center; color: var(--gentle-beige);
+            font-family: 'Cormorant Garamond', serif; font-size: 48px;
+            font-weight: 300; opacity: 0.5;
+        }
+        .retreat-tag {
+            position: absolute; top: var(--space-md); left: var(--space-md);
+            font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+            padding: 6px 14px; background: rgba(250, 247, 244, 0.92);
+            backdrop-filter: blur(10px); border-radius: var(--radius-2xl);
+            color: var(--inner-black); font-weight: 700;
+        }
+        .retreat-duration {
+            position: absolute; top: var(--space-md); right: var(--space-md);
+            font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 6px 14px; background: rgba(16, 24, 32, 0.75);
+            backdrop-filter: blur(10px); border-radius: var(--radius-2xl); color: var(--open-white);
+        }
+        .retreat-card-body { padding: var(--space-lg); }
+        .retreat-card-name {
+            font-family: 'Cormorant Garamond', serif; font-size: 24px;
+            font-weight: 400; color: var(--inner-black); margin-bottom: var(--space-sm);
+        }
+        .retreat-card-desc {
+            font-size: 13px; color: var(--text-secondary); line-height: 1.7;
+            margin-bottom: var(--space-md);
+        }
+        .retreat-card-includes { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md); }
+        .include-tag {
+            font-size: 10px; letter-spacing: 0.08em; padding: 5px 12px;
+            background: var(--purifying-beige); border-radius: var(--radius-2xl); color: var(--text-secondary);
+        }
+        .retreat-card-footer {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            padding-top: var(--space-md); border-top: 1px solid var(--border-light);
+        }
+        .retreat-price { display: flex; flex-direction: column; }
+        .retreat-price-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+        .retreat-price-value { font-size: 22px; font-weight: 700; color: var(--inner-black); }
+        .retreat-price-value span { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+        .retreat-select-btn {
+            font-family: 'Century Gothic', sans-serif; font-size: 11px;
+            letter-spacing: 0.15em; text-transform: uppercase; padding: 12px 24px;
+            background: transparent; border: 1px solid var(--inner-black);
+            border-radius: var(--radius-md); color: var(--inner-black); cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .retreat-select-btn:hover { background: var(--inner-black); color: var(--open-white); }
+        .retreat-card.selected .retreat-select-btn {
+            background: var(--soft-coral); border-color: var(--soft-coral); color: white;
+        }
+        .selected-check {
+            display: none; position: absolute; top: var(--space-md); right: var(--space-md);
+            width: 32px; height: 32px; background: var(--soft-coral); border-radius: 50%;
+            align-items: center; justify-content: center; z-index: 2;
+        }
+        .retreat-card.selected .selected-check { display: flex; }
+        .retreat-card.selected .retreat-duration { display: none; }
+
+        /* ROOM CARDS */
+        .room-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); }
+        .room-card {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); overflow: hidden;
+            transition: all 0.4s ease; cursor: pointer;
+        }
+        .room-card:hover {
+            border-color: var(--soft-coral); box-shadow: 0 12px 40px var(--shadow-soft);
+            transform: translateY(-3px);
+        }
+        .room-card.selected { border-color: var(--soft-coral); box-shadow: 0 0 0 2px var(--soft-coral); }
+        .room-card-image {
+            width: 100%; height: 200px;
+            background: linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));
+            position: relative;
+        }
+        .room-card-image-placeholder {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            color: var(--delicate-green); font-family: 'Cormorant Garamond', serif;
+            font-size: 36px; font-weight: 300; opacity: 0.4;
+        }
+        .room-availability {
+            position: absolute; bottom: var(--space-sm); left: var(--space-sm);
+            font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 4px 10px; border-radius: var(--radius-2xl); font-weight: 700;
+        }
+        .room-availability.available { background: rgba(107,175,123,0.15); color: var(--success-green); }
+        .room-availability.limited { background: rgba(236,198,129,0.2); color: #C4960A; }
+        .room-card-body { padding: var(--space-lg); }
+        .room-card-name {
+            font-family: 'Cormorant Garamond', serif; font-size: 20px;
+            font-weight: 400; color: var(--inner-black); margin-bottom: 6px;
+        }
+        .room-card-size { font-size: 11px; color: var(--text-muted); margin-bottom: var(--space-md); }
+        .room-amenities { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--space-md); }
+        .room-amenity {
+            font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 4px 10px; background: var(--purifying-beige); border-radius: var(--radius-sm); color: var(--text-muted);
+        }
+        .room-card-footer {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            padding-top: var(--space-md); border-top: 1px solid var(--border-light);
+        }
+        .room-price { display: flex; flex-direction: column; }
+        .room-price-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+        .room-price-value { font-size: 20px; font-weight: 700; color: var(--inner-black); }
+        .room-price-value span { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+
+        /* ADD-ONS */
+        .addons-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--space-2xl); }
+        .addons-list { display: flex; flex-direction: column; gap: var(--space-md); }
+        .addon-card {
+            display: flex; background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); overflow: hidden; transition: all 0.3s ease; cursor: pointer;
+        }
+        .addon-card:hover { border-color: var(--soft-coral-light); box-shadow: 0 4px 16px var(--shadow-soft); }
+        .addon-card.selected { border-color: var(--soft-coral); background: rgba(240,160,136,0.03); }
+        .addon-image {
+            width: 160px; min-height: 140px; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--kind-yellow-light), var(--purifying-beige)); position: relative;
+        }
+        .addon-image-placeholder {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--kind-yellow); opacity: 0.5;
+        }
+        .addon-body {
+            flex: 1; padding: var(--space-lg); display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .addon-name {
+            font-family: 'Cormorant Garamond', serif; font-size: 20px;
+            font-weight: 400; color: var(--inner-black); margin-bottom: 4px;
+        }
+        .addon-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+        .addon-footer {
+            display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-md);
+        }
+        .addon-price { font-size: 18px; font-weight: 700; color: var(--inner-black); }
+        .addon-price span { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+        .addon-toggle {
+            width: 52px; height: 28px; border-radius: 14px; background: var(--border-light);
+            border: none; cursor: pointer; position: relative; transition: background 0.3s ease;
+        }
+        .addon-toggle::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 22px; height: 22px; border-radius: 50%; background: white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15); transition: transform 0.3s ease;
+        }
+        .addon-toggle.active { background: var(--soft-coral); }
+        .addon-toggle.active::after { transform: translateX(24px); }
+
+        /* PRICE SUMMARY */
+        .price-summary {
+            position: sticky; top: 100px; background: var(--warm-white);
+            border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--space-xl);
+        }
+        .price-summary-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400;
+            color: var(--inner-black); margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md); border-bottom: 1px solid var(--border-light);
+        }
+        .price-line {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+        .price-line-label { font-size: 13px; color: var(--text-secondary); }
+        .price-line-sublabel { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .price-line-value { font-size: 14px; font-weight: 700; color: var(--inner-black); white-space: nowrap; }
+        .price-divider { height: 1px; background: var(--soft-coral); margin: var(--space-lg) 0; }
+        .price-total-line { display: flex; justify-content: space-between; align-items: center; }
+        .price-total-label {
+            font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--text-secondary); font-weight: 700;
+        }
+        .price-total-value {
+            font-family: 'Cormorant Garamond', serif; font-size: 28px;
+            font-weight: 500; color: var(--inner-black);
+        }
+        .price-vat-note { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 4px; }
+
+        /* GUEST DETAILS */
+        .guest-details-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--space-2xl); }
+        .guest-form-section {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-lg);
+        }
+        .guest-form-section-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400;
+            color: var(--inner-black); margin-bottom: var(--space-lg);
+            display: flex; align-items: center; gap: var(--space-md);
+        }
+        .guest-badge {
+            font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 4px 12px; background: var(--soft-coral); color: white;
+            border-radius: var(--radius-2xl); font-weight: 700;
+        }
+        .child-badge {
+            font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 4px 12px; background: var(--delicate-green); color: white;
+            border-radius: var(--radius-2xl); font-weight: 700;
+        }
+        .guest-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+        .form-input-white {
+            font-family: 'Century Gothic', sans-serif; font-size: 14px; padding: 14px 16px;
+            border: 1px solid var(--border-light); border-radius: var(--radius-md);
+            background: var(--open-white); color: var(--text-primary); outline: none; width: 100%;
+            transition: all 0.3s ease;
+        }
+        .form-input-white:focus {
+            border-color: var(--soft-coral); box-shadow: 0 0 0 3px rgba(240,160,136,0.1);
+        }
+
+        /* SUMMARY & PAYMENT */
+        .summary-layout { display: grid; grid-template-columns: 1fr 400px; gap: var(--space-2xl); }
+        .summary-card {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-lg);
+        }
+        .summary-card-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400;
+            color: var(--inner-black); margin-bottom: var(--space-md);
+            padding-bottom: var(--space-md); border-bottom: 1px solid var(--border-light);
+        }
+        .summary-row { display: flex; justify-content: space-between; padding: var(--space-sm) 0; }
+        .summary-row-label { font-size: 13px; color: var(--text-secondary); }
+        .summary-row-value { font-size: 13px; font-weight: 700; color: var(--inner-black); }
+        .payment-choice-container {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--space-xl);
+            position: sticky; top: 100px;
+        }
+        .payment-choice-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 22px;
+            font-weight: 400; color: var(--inner-black); margin-bottom: var(--space-lg);
+        }
+        .payment-option {
+            border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+            padding: var(--space-lg); margin-bottom: var(--space-md);
+            cursor: pointer; transition: all 0.3s ease; position: relative;
+        }
+        .payment-option:hover { border-color: var(--soft-coral-light); }
+        .payment-option.selected { border-color: var(--soft-coral); background: rgba(240,160,136,0.04); }
+        .payment-option-radio {
+            position: absolute; top: var(--space-lg); right: var(--space-lg);
+            width: 20px; height: 20px; border: 2px solid var(--border-medium);
+            border-radius: 50%; transition: all 0.3s ease;
+        }
+        .payment-option.selected .payment-option-radio {
+            border-color: var(--soft-coral); background: var(--soft-coral);
+            box-shadow: inset 0 0 0 4px white;
+        }
+        .payment-option-title { font-size: 14px; font-weight: 700; color: var(--inner-black); margin-bottom: 4px; }
+        .payment-option-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+        .payment-option-amount {
+            font-family: 'Cormorant Garamond', serif; font-size: 24px;
+            font-weight: 500; color: var(--inner-black); margin-top: var(--space-md);
+        }
+        .policies-section {
+            margin-top: var(--space-lg); padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-light);
+        }
+        .policy-check {
+            display: flex; gap: var(--space-md); margin-bottom: var(--space-md);
+            cursor: pointer; user-select: none;
+        }
+        .policy-checkbox {
+            width: 20px; height: 20px; min-width: 20px;
+            border: 1.5px solid var(--border-medium); border-radius: var(--radius-sm);
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; margin-top: 1px;
+        }
+        .policy-checkbox.checked {
+            background: var(--soft-coral); border-color: var(--soft-coral);
+        }
+        .policy-checkbox.checked svg { display: block; }
+        .policy-checkbox svg { display: none; }
+        .policy-text { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+        .policy-text a { color: var(--soft-coral); text-decoration: underline; text-underline-offset: 2px; }
+
+        /* CONFIRMATION */
+        .confirmation-page {
+            max-width: 680px; margin: 0 auto;
+            padding: var(--space-4xl) var(--space-2xl); text-align: center;
+        }
+        .confirmation-icon {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: rgba(107,175,123,0.1); display: flex;
+            align-items: center; justify-content: center; margin: 0 auto var(--space-xl);
+        }
+        .confirmation-icon svg { width: 36px; height: 36px; stroke: var(--success-green); }
+        .confirmation-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 36px;
+            font-weight: 300; color: var(--inner-black); margin-bottom: var(--space-md);
+        }
+        .confirmation-subtitle {
+            font-size: 14px; color: var(--text-secondary); line-height: 1.7;
+            margin-bottom: var(--space-2xl);
+        }
+        .confirmation-ref {
+            display: inline-flex; align-items: center; gap: var(--space-md);
+            background: var(--purifying-beige); padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-md); margin-bottom: var(--space-2xl);
+        }
+        .confirmation-ref-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+        .confirmation-ref-value { font-size: 18px; font-weight: 700; color: var(--inner-black); letter-spacing: 0.05em; }
+        .confirmation-details {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--space-xl);
+            text-align: left; margin-bottom: var(--space-xl);
+        }
+        .confirmation-detail-row {
+            display: flex; justify-content: space-between; padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .confirmation-detail-row:last-child { border-bottom: none; }
+        .confirmation-detail-label { font-size: 13px; color: var(--text-secondary); }
+        .confirmation-detail-value { font-size: 13px; font-weight: 700; color: var(--inner-black); }
+        .confirmation-message {
+            font-size: 13px; color: var(--text-secondary); line-height: 1.7;
+            font-style: italic; padding: var(--space-lg);
+            background: rgba(240,160,136,0.06); border-radius: var(--radius-md);
+            border-left: 3px solid var(--soft-coral); text-align: left;
+        }
+
+        /* NAV BUTTONS */
+        .step-navigation {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: var(--space-2xl); padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-light);
+        }
+        .step-nav-back {
+            display: flex; align-items: center; gap: var(--space-sm);
+            font-family: 'Century Gothic', sans-serif; font-size: 12px;
+            letter-spacing: 0.1em; color: var(--text-secondary); background: none;
+            border: none; cursor: pointer; text-transform: uppercase;
+        }
+        .step-nav-back:hover { color: var(--inner-black); }
+        .step-nav-next {
+            font-family: 'Century Gothic', sans-serif; font-size: 12px;
+            letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700;
+            padding: 16px 40px; background: var(--soft-coral); color: white;
+            border: none; border-radius: var(--radius-md); cursor: pointer;
+            transition: all 0.4s ease; display: flex; align-items: center; gap: var(--space-sm);
+        }
+        .step-nav-next:hover {
+            background: var(--soft-coral-dark); transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(240,160,136,0.3);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--inner-black); padding: var(--space-3xl) var(--space-2xl);
+        }
+        .step1-footer { margin-top: 0; }
+        .footer-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
+        .footer-logo-text {
+            font-family: 'Century Gothic', 'CenturyGothic', sans-serif;
+            font-size: 28px; font-weight: 700; letter-spacing: 0.22em;
+            color: #F0E6DA; text-transform: uppercase;
+        }
+        .footer-tagline {
+            font-family: 'Cormorant Garamond', serif; font-size: 16px;
+            font-weight: 300; font-style: italic; color: var(--soft-coral-light);
+            margin-top: var(--space-md); opacity: 0.8;
+        }
+        .footer-links { display: flex; gap: var(--space-3xl); }
+        .footer-col-title {
+            font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--soft-coral); margin-bottom: var(--space-md);
+        }
+        .footer-col a {
+            display: block; font-size: 12px; color: rgba(250,247,244,0.6);
+            text-decoration: none; margin-bottom: var(--space-sm); transition: color 0.3s ease;
+        }
+        .footer-col a:hover { color: var(--open-white); }
+        .footer-bottom {
+            max-width: 1200px; margin: var(--space-xl) auto 0;
+            padding-top: var(--space-xl); border-top: 1px solid rgba(250,247,244,0.08);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-bottom p { font-size: 11px; color: rgba(250,247,244,0.3); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .vertical-stepper { display: none; }
+            .retreat-grid { grid-template-columns: 1fr; }
+            .room-grid { grid-template-columns: repeat(2, 1fr); }
+            .addons-layout, .guest-details-layout, .summary-layout { grid-template-columns: 1fr; }
+            .price-summary, .payment-choice-container { position: static; }
+        }
+        @media (max-width: 768px) {
+            .header-inner { padding: 0 var(--space-md); height: 56px; }
+            .logo-text { font-size: 20px; }
+            .hero-title { font-size: 28px; }
+            .booking-widget { padding: var(--space-lg); }
+            .booking-form-grid { grid-template-columns: 1fr; }
+            .room-grid { grid-template-columns: 1fr; }
+            .step-page { padding: var(--space-xl) var(--space-md); }
+            .step-title { font-size: 28px; }
+            .addon-card { flex-direction: column; }
+            .addon-image { width: 100%; height: 160px; }
+            .guest-form-grid { grid-template-columns: 1fr; }
+            .footer-inner { flex-direction: column; gap: var(--space-xl); }
+            .footer-links { flex-direction: column; gap: var(--space-lg); }
+            .main-content { margin-top: 56px; }
+        }
+        /* ===== IMAGES IN PLACEHOLDERS ===== */
+        .retreat-card-image, .room-card-image, .addon-image {
+            background-size: cover; background-position: center;
+        }
+        .retreat-card-image img, .room-card-image img, .addon-image img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .retreat-card:hover .retreat-card-image img,
+        .room-card:hover .room-card-image img {
+            transform: scale(1.08);
+        }
+        .addon-card:hover .addon-image img {
+            transform: scale(1.06);
+        }
+
+        /* ===== ANIMATIONS & TRANSITIONS ===== */
+
+        /* Staggered fade-in for cards */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(240, 160, 136, 0.3); }
+            50% { box-shadow: 0 0 0 8px rgba(240, 160, 136, 0); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes checkPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        @keyframes floatUp {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes heroTextReveal {
+            from { opacity: 0; transform: translateY(30px); letter-spacing: 0.15em; }
+            to { opacity: 1; transform: translateY(0); letter-spacing: 0.08em; }
+        }
+        @keyframes widgetSlideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes successBounce {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.15); }
+            70% { transform: scale(0.95); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes lineGrow {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Hero Animations */
+        .hero-title { animation: heroTextReveal 1s ease-out 0.2s both; }
+        .hero-subtitle { animation: fadeInUp 0.8s ease-out 0.6s both; }
+        .booking-widget { animation: widgetSlideUp 0.8s ease-out 0.8s both; }
+
+        /* Step container stagger children */
+        .step-container.active .step-header { animation: fadeInUp 0.5s ease-out 0.1s both; }
+        .step-container.active .wellness-type-tabs { animation: fadeInUp 0.5s ease-out 0.2s both; }
+        .step-container.active .retreat-card:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.15s both; }
+        .step-container.active .retreat-card:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.25s both; }
+        .step-container.active .retreat-card:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.35s both; }
+        .step-container.active .retreat-card:nth-child(4) { animation: fadeInUp 0.5s ease-out 0.45s both; }
+        .step-container.active .room-card:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.15s both; }
+        .step-container.active .room-card:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.25s both; }
+        .step-container.active .room-card:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.35s both; }
+        .step-container.active .addon-card:nth-child(1) { animation: fadeInLeft 0.5s ease-out 0.1s both; }
+        .step-container.active .addon-card:nth-child(2) { animation: fadeInLeft 0.5s ease-out 0.2s both; }
+        .step-container.active .addon-card:nth-child(3) { animation: fadeInLeft 0.5s ease-out 0.3s both; }
+        .step-container.active .addon-card:nth-child(4) { animation: fadeInLeft 0.5s ease-out 0.4s both; }
+        .step-container.active .price-summary { animation: fadeInLeft 0.6s ease-out 0.3s both; }
+        .step-container.active .step-navigation { animation: fadeInUp 0.5s ease-out 0.5s both; }
+
+        /* Card hover enhancements */
+        .retreat-card {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.4s ease, border-color 0.3s ease;
+        }
+        .retreat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(16, 24, 32, 0.12);
+        }
+        .room-card {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.4s ease, border-color 0.3s ease;
+        }
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 44px rgba(16, 24, 32, 0.1);
+        }
+        .addon-card {
+            transition: transform 0.35s ease, box-shadow 0.35s ease,
+                        border-color 0.3s ease, background 0.3s ease;
+        }
+        .addon-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 28px rgba(16, 24, 32, 0.08);
+        }
+
+        /* Selection animation */
+        .retreat-card.selected .selected-check { animation: checkPop 0.4s ease-out; }
+        .room-card.selected { animation: fadeInScale 0.3s ease; }
+        .addon-card.selected .addon-toggle { animation: pulseGlow 0.6s ease; }
+
+        /* Button hover effects */
+        .btn-primary {
+            position: relative; overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .btn-primary::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 0; height: 0; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: width 0.6s ease, height 0.6s ease;
+            transform: translate(-50%, -50%);
+        }
+        .btn-primary:hover::after { width: 300px; height: 300px; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(240, 160, 136, 0.35);
+        }
+
+        .btn-secondary {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(16, 24, 32, 0.08);
+        }
+
+        .step-nav-next {
+            position: relative; overflow: hidden;
+        }
+        .step-nav-next::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 0; height: 0; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            transition: width 0.5s ease, height 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        .step-nav-next:hover::after { width: 300px; height: 300px; }
+        .step-nav-next:hover svg { transform: translateX(3px); }
+        .step-nav-next svg { transition: transform 0.3s ease; }
+
+        .step-nav-back:hover svg { transform: translateX(-3px); }
+        .step-nav-back svg { transition: transform 0.3s ease; }
+
+        /* Counter button interactions */
+        .counter-btn {
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .counter-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--soft-coral);
+            color: var(--soft-coral);
+            box-shadow: 0 2px 8px rgba(240, 160, 136, 0.2);
+        }
+        .counter-btn:active { transform: scale(0.92); }
+        .counter-value { transition: transform 0.2s ease; }
+
+        /* Form input focus effects */
+        .form-input, .form-select, .form-input-white {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .form-input:focus, .form-select:focus, .form-input-white:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(240, 160, 136, 0.12);
+        }
+
+        /* Wellness tab interaction */
+        .wellness-tab { transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .wellness-tab:active { transform: scale(0.96); }
+
+        /* Include tag hover */
+        .include-tag {
+            transition: all 0.25s ease;
+        }
+        .include-tag:hover {
+            background: var(--soft-coral-light);
+            color: var(--inner-black);
+            transform: translateY(-1px);
+        }
+
+        /* Retreat select button pulse when card hovered */
+        .retreat-card:hover .retreat-select-btn {
+            border-color: var(--soft-coral);
+            color: var(--soft-coral);
+        }
+
+        /* Payment option hover */
+        .payment-option {
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .payment-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 24, 32, 0.06);
+        }
+
+        /* Policy checkbox animation */
+        .policy-checkbox {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .policy-checkbox.checked {
+            animation: checkPop 0.35s ease-out;
+        }
+
+        /* Confirmation animation */
+        .step-container.active .confirmation-icon { animation: successBounce 0.7s ease-out 0.2s both; }
+        .step-container.active .confirmation-title { animation: fadeInUp 0.6s ease-out 0.5s both; }
+        .step-container.active .confirmation-subtitle { animation: fadeInUp 0.6s ease-out 0.65s both; }
+        .step-container.active .confirmation-ref { animation: fadeInScale 0.5s ease-out 0.8s both; }
+        .step-container.active .confirmation-details { animation: fadeInUp 0.6s ease-out 0.95s both; }
+        .step-container.active .confirmation-message { animation: fadeInUp 0.6s ease-out 1.1s both; }
+
+        /* Stepper step hover */
+        .v-step { transition: transform 0.2s ease; }
+        .v-step:hover { transform: translateX(3px); }
+        .v-step.active .v-step-circle { animation: pulseGlow 2s ease-in-out infinite; }
+
+        /* Addon toggle smooth */
+        .addon-toggle { transition: background 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .addon-toggle::after { transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+        /* Price summary shimmer on value update */
+        .price-total-value {
+            transition: color 0.3s ease;
+        }
+
+        /* Promo field slide */
+        .promo-field {
+            max-height: 0; overflow: hidden; opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+            display: block !important; margin-top: 0;
+        }
+        .promo-field.show {
+            max-height: 80px; opacity: 1; margin-top: var(--space-sm);
+        }
+
+        /* Logo hover */
+        .logo-link { transition: opacity 0.3s ease; }
+        .logo-link:hover { opacity: 0.7; }
+
+        /* Footer link hover underline animation */
+        .footer-col a {
+            position: relative;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+        .footer-col a::after {
+            content: ''; position: absolute; bottom: -1px; left: 0;
+            width: 0; height: 1px; background: var(--soft-coral);
+            transition: width 0.3s ease;
+        }
+        .footer-col a:hover::after { width: 100%; }
+        .footer-col a:hover { transform: translateX(3px); }
+
+        /* Smooth scroll behavior */
+        html { scroll-behavior: smooth; }
+
+        /* Image overlay on hover for cards */
+        .retreat-card-image::after, .room-card-image::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(16, 24, 32, 0.3) 0%, transparent 50%);
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .retreat-card:hover .retreat-card-image::after,
+        .room-card:hover .room-card-image::after {
+            opacity: 1;
+        }
+
+        /* Room amenity hover */
+        .room-amenity { transition: all 0.2s ease; }
+        .room-amenity:hover {
+            background: var(--delicate-green-light); color: var(--inner-black);
+        }
+
+        /* Summary card entrance */
+        .step-container.active .summary-card:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.1s both; }
+        .step-container.active .summary-card:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.2s both; }
+        .step-container.active .summary-card:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.3s both; }
+        .step-container.active .payment-choice-container { animation: fadeInLeft 0.6s ease-out 0.2s both; }
+
+        /* Guest form section entrance */
+        .step-container.active .guest-form-section:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.1s both; }
+        .step-container.active .guest-form-section:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.2s both; }
+        .step-container.active .guest-form-section:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.3s both; }
+        .step-container.active .guest-form-section:nth-child(4) { animation: fadeInUp 0.5s ease-out 0.4s both; }
+
+        /* Hero BG subtle movement */
+        .hero-bg {
+            animation: subtlePan 20s ease-in-out infinite alternate;
+        }
+        @keyframes subtlePan {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* ===== RTL SUPPORT ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+
+        [dir="rtl"] {
+            font-family: 'Noto Sans Arabic', 'Century Gothic', sans-serif;
+            text-align: right;
+        }
+        [dir="rtl"] .header-inner { direction: rtl; }
+        [dir="rtl"] .header-right { flex-direction: row-reverse; }
+        [dir="rtl"] .step-layout { flex-direction: row-reverse; }
+        [dir="rtl"] .vertical-stepper { border-right: none; border-left: 1px solid var(--border-light); }
+        [dir="rtl"] .v-step { flex-direction: row-reverse; text-align: right; }
+        [dir="rtl"] .v-step:hover { transform: translateX(-3px); }
+        [dir="rtl"] .v-step-text { text-align: right; }
+        [dir="rtl"] .booking-widget-title { text-align: center; }
+        [dir="rtl"] .booking-form-grid { direction: rtl; }
+        [dir="rtl"] .form-select {
+            background-position: left 14px center;
+            padding-right: 16px; padding-left: 40px;
+        }
+        [dir="rtl"] .step-header { text-align: right; }
+        [dir="rtl"] .step-navigation { flex-direction: row-reverse; }
+        [dir="rtl"] .step-nav-back { flex-direction: row-reverse; }
+        [dir="rtl"] .step-nav-back svg { transform: scaleX(-1); }
+        [dir="rtl"] .step-nav-next { flex-direction: row-reverse; }
+        [dir="rtl"] .step-nav-next svg { transform: scaleX(-1); }
+        [dir="rtl"] .retreat-card-footer { flex-direction: row-reverse; }
+        [dir="rtl"] .retreat-tag { left: auto; right: var(--space-md); }
+        [dir="rtl"] .retreat-duration { right: auto; left: var(--space-md); }
+        [dir="rtl"] .selected-check { right: auto; left: var(--space-md); }
+        [dir="rtl"] .retreat-card.selected .retreat-duration { display: none; }
+        [dir="rtl"] .room-card-footer { flex-direction: row-reverse; }
+        [dir="rtl"] .room-availability { left: auto; right: var(--space-sm); }
+        [dir="rtl"] .addon-card { flex-direction: row-reverse; }
+        [dir="rtl"] .addon-footer { flex-direction: row-reverse; }
+        [dir="rtl"] .addons-layout { direction: rtl; }
+        [dir="rtl"] .guest-details-layout { direction: rtl; }
+        [dir="rtl"] .guest-form-grid { direction: rtl; }
+        [dir="rtl"] .guest-form-section-title { flex-direction: row-reverse; justify-content: flex-end; }
+        [dir="rtl"] .summary-layout { direction: rtl; }
+        [dir="rtl"] .summary-row { flex-direction: row-reverse; }
+        [dir="rtl"] .price-line { flex-direction: row-reverse; }
+        [dir="rtl"] .price-line > div:first-child { text-align: right; }
+        [dir="rtl"] .price-total-line { flex-direction: row-reverse; }
+        [dir="rtl"] .price-vat-note { text-align: left; }
+        [dir="rtl"] .payment-option-radio { right: auto; left: var(--space-lg); }
+        [dir="rtl"] .policy-check { flex-direction: row-reverse; }
+        [dir="rtl"] .policy-text { text-align: right; }
+        [dir="rtl"] .confirmation-page { text-align: center; }
+        [dir="rtl"] .confirmation-detail-row { flex-direction: row-reverse; }
+        [dir="rtl"] .confirmation-message { text-align: right; border-left: none; border-right: 3px solid var(--soft-coral); }
+        [dir="rtl"] .footer-inner { flex-direction: row-reverse; }
+        [dir="rtl"] .footer-links { flex-direction: row-reverse; }
+        [dir="rtl"] .footer-col { text-align: right; }
+        [dir="rtl"] .footer-col a::after { left: auto; right: 0; }
+        [dir="rtl"] .footer-col a:hover { transform: translateX(-3px); }
+        [dir="rtl"] .footer-bottom { flex-direction: row-reverse; }
+        [dir="rtl"] .footer-tagline { text-align: right; }
+        [dir="rtl"] .addon-card:hover { transform: translateX(-4px); }
+        [dir="rtl"] .retreat-card-includes { justify-content: flex-start; }
+        [dir="rtl"] .room-amenities { justify-content: flex-start; }
+        [dir="rtl"] .payment-choice-container { direction: rtl; }
+        [dir="rtl"] .hero-title, [dir="rtl"] .hero-subtitle { direction: rtl; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <a class="logo-link" onclick="goToStep(1)" title="Home">
+                <span class="logo-text">JAYASOM</span>
+            </a>
+            <div class="header-right">
+                <div class="header-phone">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span>+966 800 123 4567</span>
+                </div>
+                <button class="lang-switch" onclick="toggleLanguage()">EN / AR</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- STEP 1: SEARCH -->
+        <div class="step-container active" id="step1">
+            <div class="hero-section">
+                <div class="hero-bg" style="background:url('images/Rectangle 33.png') center/cover no-repeat;"><div class="hero-bg-pattern"></div></div>
+                <div class="hero-content">
+                    <h1 class="hero-title" data-i18n="heroTitle">Begin Your Return<br>to Inner Wellness</h1>
+                    <p class="hero-subtitle" data-i18n="heroSubtitle">A pause for renewal at Amaala, Red Sea</p>
+                    <div class="booking-widget">
+                        <h2 class="booking-widget-title" data-i18n="widgetTitle">Plan your <span>journey</span></h2>
+                        <div class="booking-form-grid">
+                            <div class="form-group full-width">
+                                <label class="form-label" data-i18n="destination">Destination</label>
+                                <select class="form-select"><option selected>Jayasom Wellness Resort - Amaala</option></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="checkin">Check-in</label>
+                                <input type="date" class="form-input" id="checkinDate" value="2026-04-15">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="checkout">Check-out</label>
+                                <input type="date" class="form-input" id="checkoutDate" value="2026-04-22">
+                            </div>
+                            <div class="form-group guest-group">
+                                <label class="form-label" data-i18n="adults">Adults</label>
+                                <div class="guest-counter">
+                                    <button class="counter-btn" onclick="updateCount('adults', -1)">-</button>
+                                    <span class="counter-value" id="adultsCount">2</span>
+                                    <button class="counter-btn" onclick="updateCount('adults', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group guest-group">
+                                <label class="form-label" data-i18n="children">Children</label>
+                                <div class="guest-counter">
+                                    <button class="counter-btn" onclick="updateCount('children', -1)">-</button>
+                                    <span class="counter-value" id="childrenCount">0</span>
+                                    <button class="counter-btn" onclick="updateCount('children', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <span class="promo-toggle" onclick="togglePromo()" data-i18n="promoToggle">Have a promo code?</span>
+                                <div class="promo-field" id="promoField">
+                                    <input type="text" class="form-input" placeholder="Enter promo or discount code">
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <button class="btn-primary" onclick="goToStep(2)" data-i18n="beginJourney">Begin Your Journey</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer step1-footer">
+                <div class="footer-inner">
+                    <div>
+                        <a class="logo-link" onclick="goToStep(1)" style="display:inline-block;"><span class="footer-logo-text">JAYASOM</span></a>
+                        <p class="footer-tagline">"Connecting each guest to their own singularity."</p>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-col"><div class="footer-col-title">Explore</div><a href="#">Retreats & Programs</a><a href="#">Accommodation</a><a href="#">Dining</a><a href="#">Experiences</a></div>
+                        <div class="footer-col"><div class="footer-col-title">Information</div><a href="#">About Jayasom</a><a href="#">About Amaala</a><a href="#">Getting Here</a><a href="#">Contact Us</a></div>
+                        <div class="footer-col"><div class="footer-col-title">Legal</div><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a><a href="#">Booking Policies</a><a href="#">Cookie Settings</a></div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 Jayasom Wellness Resort. All rights reserved.</p>
+                    <p>Part of the Amaala destination, Red Sea, Saudi Arabia</p>
+                </div>
+            </footer>
+        </div>
+
+        <!-- STEPS 2-7 WRAPPED WITH STEPPER LAYOUT -->
+        <div class="step-layout" id="stepLayout" style="display:none;">
+            <!-- VERTICAL STEPPER -->
+            <div class="vertical-stepper" id="verticalStepper">
+                <div class="stepper-title" data-i18n="stepperTitle">Your Booking Progress</div>
+                <div id="stepperContent"></div>
+            </div>
+            <div class="step-content-area">
+
+                <!-- STEP 2: RETREAT -->
+                <div class="step-container" id="step2">
+                    <div class="step-page">
+                        <div class="step-header">
+                            <p class="step-overline" data-i18n="step1of7">Step 1 of 7</p>
+                            <h2 class="step-title" data-i18n="chooseRetreat">Choose Your Retreat</h2>
+                            <p class="step-description" data-i18n="chooseRetreatDesc">Each retreat is a curated journey designed to guide you back to your inner self. Select the experience that speaks to your needs.</p>
+                        </div>
+                        <div class="wellness-type-tabs">
+                            <button class="wellness-tab active" onclick="switchWellnessTab(this, 'adult')" data-i18n="adultWellness">Adult Wellness</button>
+                            <button class="wellness-tab" onclick="switchWellnessTab(this, 'family')" data-i18n="familyWellness">Family Wellness</button>
+                        </div>
+                        <div class="retreat-grid" id="retreatGrid">
+                            <div class="retreat-card" onclick="selectRetreat(this, 'The Renewal Retreat', 28500)" data-price="28500">
+                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                <div class="retreat-card-image">
+                                    <img src="images/Rectangle 13-3.png" alt="The Renewal Retreat">
+                                    <span class="retreat-tag">Signature</span><span class="retreat-duration">7 Nights</span>
+                                </div>
+                                <div class="retreat-card-body">
+                                    <h3 class="retreat-card-name" data-i18n="renewalRetreat">The Renewal Retreat</h3>
+                                    <p class="retreat-card-desc" data-i18n="renewalRetreatDesc">A transformative seven-night journey combining ancient healing traditions with modern wellness science. Rediscover balance through personalized therapies, mindful movement, and restorative nutrition.</p>
+                                    <div class="retreat-card-includes"><span class="include-tag">Wellness Assessment</span><span class="include-tag">Daily Treatments</span><span class="include-tag">Nutrition Plan</span><span class="include-tag">Yoga Sessions</span></div>
+                                    <div class="retreat-card-footer">
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 28,500 <span>/ person</span></span></div>
+                                        <button class="retreat-select-btn">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="retreat-card" onclick="selectRetreat(this, 'The Reset Experience', 19200)" data-price="19200">
+                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                <div class="retreat-card-image">
+                                    <img src="images/Rectangle 13-4.png" alt="The Reset Experience">
+                                    <span class="retreat-tag">Popular</span><span class="retreat-duration">5 Nights</span>
+                                </div>
+                                <div class="retreat-card-body">
+                                    <h3 class="retreat-card-name">The Reset Experience</h3>
+                                    <p class="retreat-card-desc">A focused five-night program designed to restore your natural rhythm. Immerse yourself in desert tranquility with targeted spa therapies and guided meditation practices.</p>
+                                    <div class="retreat-card-includes"><span class="include-tag">Spa Treatments</span><span class="include-tag">Meditation</span><span class="include-tag">Desert Excursion</span></div>
+                                    <div class="retreat-card-footer">
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 19,200 <span>/ person</span></span></div>
+                                        <button class="retreat-select-btn">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="retreat-card" onclick="selectRetreat(this, 'The Reclaim Journey', 52000)" data-price="52000">
+                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                <div class="retreat-card-image">
+                                    <img src="images/Rectangle 13-5.png" alt="The Reclaim Journey">
+                                    <span class="retreat-tag">Intensive</span><span class="retreat-duration">14 Nights</span>
+                                </div>
+                                <div class="retreat-card-body">
+                                    <h3 class="retreat-card-name">The Reclaim Journey</h3>
+                                    <p class="retreat-card-desc">Our most comprehensive two-week transformation. A deep, holistic approach that addresses body, mind and spirit through an integrated wellness protocol tailored uniquely for you.</p>
+                                    <div class="retreat-card-includes"><span class="include-tag">Full Assessment</span><span class="include-tag">Daily Therapies</span><span class="include-tag">Fitness Program</span><span class="include-tag">Nutrition</span><span class="include-tag">Mindfulness</span></div>
+                                    <div class="retreat-card-footer">
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 52,000 <span>/ person</span></span></div>
+                                        <button class="retreat-select-btn">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="retreat-card" onclick="selectRetreat(this, 'The Weekend Pause', 9800)" data-price="9800">
+                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                <div class="retreat-card-image">
+                                    <img src="images/image 20.png" alt="The Weekend Pause">
+                                    <span class="retreat-tag">Escape</span><span class="retreat-duration">3 Nights</span>
+                                </div>
+                                <div class="retreat-card-body">
+                                    <h3 class="retreat-card-name">The Weekend Pause</h3>
+                                    <p class="retreat-card-desc">A brief yet meaningful three-night retreat perfect for those seeking a restorative pause. Experience curated spa rituals and the calming embrace of the Red Sea landscape.</p>
+                                    <div class="retreat-card-includes"><span class="include-tag">Spa Ritual</span><span class="include-tag">Sunset Yoga</span><span class="include-tag">Wellness Dining</span></div>
+                                    <div class="retreat-card-footer">
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 9,800 <span>/ person</span></span></div>
+                                        <button class="retreat-select-btn">Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-navigation">
+                            <button class="step-nav-back" onclick="goToStep(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back</button>
+                            <button class="step-nav-next" onclick="goToStep(3)">Continue to Room Selection <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: ROOM -->
+                <div class="step-container" id="step3">
+                    <div class="step-page">
+                        <div class="step-header">
+                            <p class="step-overline">Step 2 of 7</p>
+                            <h2 class="step-title">Select Your Accommodation</h2>
+                            <p class="step-description">Every room is a sanctuary, designed with soft tones and natural light inspired by the desert and the Red Sea.</p>
+                        </div>
+                        <div class="room-grid">
+                            <div class="room-card" onclick="selectRoom(this, 'Desert View Suite', 3200)">
+                                <div class="room-card-image"><img src="images/Rectangle 13-2.png" alt="Desert View Suite"><span class="room-availability available">Available</span></div>
+                                <div class="room-card-body">
+                                    <h3 class="room-card-name">Desert View Suite</h3>
+                                    <p class="room-card-size">72 m&sup2; &middot; King Bed &middot; 2 Guests</p>
+                                    <div class="room-amenities"><span class="room-amenity">Private Terrace</span><span class="room-amenity">Rain Shower</span><span class="room-amenity">Mini Bar</span></div>
+                                    <div class="room-card-footer"><div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 3,200 <span>/night</span></span></div></div>
+                                </div>
+                            </div>
+                            <div class="room-card" onclick="selectRoom(this, 'Sea View Villa', 5800)">
+                                <div class="room-card-image"><img src="images/Rectangle 33.png" alt="Sea View Villa"><span class="room-availability available">Available</span></div>
+                                <div class="room-card-body">
+                                    <h3 class="room-card-name">Sea View Villa</h3>
+                                    <p class="room-card-size">120 m&sup2; &middot; King Bed &middot; 3 Guests</p>
+                                    <div class="room-amenities"><span class="room-amenity">Private Pool</span><span class="room-amenity">Living Area</span><span class="room-amenity">Ocean View</span></div>
+                                    <div class="room-card-footer"><div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 5,800 <span>/night</span></span></div></div>
+                                </div>
+                            </div>
+                            <div class="room-card" onclick="selectRoom(this, 'Presidential Residence', 12500)">
+                                <div class="room-card-image"><img src="images/image 9.png" alt="Presidential Residence"><span class="room-availability limited">2 Left</span></div>
+                                <div class="room-card-body">
+                                    <h3 class="room-card-name">Presidential Residence</h3>
+                                    <p class="room-card-size">240 m&sup2; &middot; 2 Bedrooms &middot; 4 Guests</p>
+                                    <div class="room-amenities"><span class="room-amenity">Private Garden</span><span class="room-amenity">Plunge Pool</span><span class="room-amenity">Butler Service</span></div>
+                                    <div class="room-card-footer"><div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 12,500 <span>/night</span></span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-navigation">
+                            <button class="step-nav-back" onclick="goToStep(2)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Retreats</button>
+                            <button class="step-nav-next" onclick="goToStep(4)">Continue to Treatments <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: ADD-ONS -->
+                <div class="step-container" id="step4">
+                    <div class="step-page">
+                        <div class="step-header">
+                            <p class="step-overline">Step 3 of 7</p>
+                            <h2 class="step-title">Enhance Your Experience</h2>
+                            <p class="step-description">Add personalized treatments to deepen your wellness journey.</p>
+                        </div>
+                        <div class="addons-layout">
+                            <div class="addons-list">
+                                <div class="addon-card" onclick="toggleAddon(this)" data-price="850" data-name="Deep Tissue Massage">
+                                    <div class="addon-image"><img src="images/image 18.png" alt="Deep Tissue Massage"></div>
+                                    <div class="addon-body">
+                                        <div><h3 class="addon-name">Deep Tissue Massage</h3><p class="addon-desc">A therapeutic massage targeting deep muscle layers to release chronic tension. 90 minutes of focused recovery.</p></div>
+                                        <div class="addon-footer"><span class="addon-price">SAR 850 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                    </div>
+                                </div>
+                                <div class="addon-card" onclick="toggleAddon(this)" data-price="600" data-name="Ayurvedic Consultation">
+                                    <div class="addon-image"><img src="images/image 19.png" alt="Ayurvedic Consultation"></div>
+                                    <div class="addon-body">
+                                        <div><h3 class="addon-name">Ayurvedic Consultation</h3><p class="addon-desc">A comprehensive dosha assessment with personalized lifestyle and nutrition recommendations rooted in ancient Ayurvedic wisdom.</p></div>
+                                        <div class="addon-footer"><span class="addon-price">SAR 600 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                    </div>
+                                </div>
+                                <div class="addon-card" onclick="toggleAddon(this)" data-price="750" data-name="Hydrating Facial Treatment">
+                                    <div class="addon-image"><img src="images/image 31.png" alt="Hydrating Facial Treatment"></div>
+                                    <div class="addon-body">
+                                        <div><h3 class="addon-name">Hydrating Facial Treatment</h3><p class="addon-desc">A luxurious facial using marine-based ingredients and advanced hydration techniques to restore skin luminosity.</p></div>
+                                        <div class="addon-footer"><span class="addon-price">SAR 750 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                    </div>
+                                </div>
+                                <div class="addon-card" onclick="toggleAddon(this)" data-price="450" data-name="Sound Healing Session">
+                                    <div class="addon-image"><img src="images/Rectangle 50.png" alt="Sound Healing Session"></div>
+                                    <div class="addon-body">
+                                        <div><h3 class="addon-name">Sound Healing Session</h3><p class="addon-desc">An immersive sonic meditation using Tibetan singing bowls and tuning forks for deep relaxation and inner stillness.</p></div>
+                                        <div class="addon-footer"><span class="addon-price">SAR 450 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="price-summary" id="priceSummaryStep4"></div>
+                        </div>
+                        <div class="step-navigation">
+                            <button class="step-nav-back" onclick="goToStep(3)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Rooms</button>
+                            <button class="step-nav-next" onclick="goToStep(5)">Continue to Price Breakdown <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: PRICE BREAKDOWN -->
+                <div class="step-container" id="step5">
+                    <div class="step-page">
+                        <div class="step-header">
+                            <p class="step-overline">Step 4 of 7</p>
+                            <h2 class="step-title">Price Breakdown</h2>
+                            <p class="step-description">Review your complete booking cost before proceeding.</p>
+                        </div>
+                        <div style="max-width:700px;">
+                            <div class="summary-card" id="priceBreakdownCard"></div>
+                            <div class="step-navigation" style="border-top:none;padding-top:0;margin-top:var(--space-lg);">
+                                <button class="step-nav-back" onclick="goToStep(4)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Treatments</button>
+                                <button class="step-nav-next" onclick="goToStep(6)">Continue to Guest Details <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 6: GUEST DETAILS -->
+                <div class="step-container" id="step6">
+                    <div class="step-page">
+                        <div class="step-header">
+                            <p class="step-overline">Step 5 of 7</p>
+                            <h2 class="step-title">Guest Information</h2>
+                            <p class="step-description">Please provide the details for each guest. The lead guest's information will be used for correspondence.</p>
+                        </div>
+                        <div class="guest-details-layout">
+                            <div id="guestFormsContainer"></div>
+                            <div class="price-summary" id="priceSummaryStep6"></div>
+                        </div>
+                        <div class="step-navigation">
+                            <button class="step-nav-back" onclick="goToStep(5)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Price Breakdown</button>
+                            <button class="step-nav-next" onclick="goToStep(7)">Review Booking <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 7: SUMMARY & PAYMENT -->
+                <div class="step-container" id="step7">
+                    <div class="step-page">
+                        <div class="step-header">
+                            <p class="step-overline">Step 6 of 7</p>
+                            <h2 class="step-title">Review & Confirm</h2>
+                            <p class="step-description">Please review your booking details and select your preferred payment option.</p>
+                        </div>
+                        <div class="summary-layout">
+                            <div>
+                                <div class="summary-card" id="summaryDetailsCard"></div>
+                                <div class="summary-card" id="summarySelectionsCard"></div>
+                                <div class="summary-card">
+                                    <h4 class="summary-card-title">Booking Policies</h4>
+                                    <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                                        <p style="margin-bottom:var(--space-md);"><strong>Cancellation Policy:</strong> Free cancellation up to 14 days before check-in. 50% charge within 7-14 days. Full charge within 7 days.</p>
+                                        <p style="margin-bottom:var(--space-md);"><strong>Check-in:</strong> From 3:00 PM &middot; <strong>Check-out:</strong> Until 12:00 PM</p>
+                                        <p><strong>Special Requests:</strong> Subject to availability. Contact the resort for dietary or medical requirements.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="payment-choice-container">
+                                    <h3 class="payment-choice-title">Select Payment</h3>
+                                    <div id="paymentBreakdown"></div>
+                                    <div class="payment-option selected" onclick="selectPayment(this, 'full')">
+                                        <div class="payment-option-radio"></div>
+                                        <div class="payment-option-title">Full Payment</div>
+                                        <p class="payment-option-desc">Pay the full amount now and your booking is confirmed immediately.</p>
+                                        <div class="payment-option-amount" id="fullPaymentAmount"></div>
+                                    </div>
+                                    <div class="payment-option" onclick="selectPayment(this, 'deposit')">
+                                        <div class="payment-option-radio"></div>
+                                        <div class="payment-option-title">Deposit Payment</div>
+                                        <p class="payment-option-desc">Reserve with a 30% deposit. Remaining balance due 14 days before check-in.</p>
+                                        <div class="payment-option-amount" id="depositPaymentAmount"></div>
+                                    </div>
+                                    <div class="policies-section">
+                                        <div class="policy-check" onclick="toggleCheck(this)">
+                                            <div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                            <p class="policy-text">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a> of Jayasom Wellness Resort.</p>
+                                        </div>
+                                        <div class="policy-check" onclick="toggleCheck(this)">
+                                            <div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                            <p class="policy-text">I have read and accept the <a href="#">Cancellation Policy</a> and <a href="#">Booking Terms</a>.</p>
+                                        </div>
+                                    </div>
+                                    <button class="btn-primary" onclick="goToStep(8)">Confirm & Proceed to Payment</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-navigation">
+                            <button class="step-nav-back" onclick="goToStep(6)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Guest Details</button>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 8: CONFIRMATION -->
+                <div class="step-container" id="step8">
+                    <div class="confirmation-page">
+                        <div class="confirmation-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <h2 class="confirmation-title">Your Journey is Confirmed</h2>
+                        <p class="confirmation-subtitle">Thank you for choosing Jayasom Wellness Resort. Your booking is confirmed and a confirmation email has been sent to your registered email address.</p>
+                        <div class="confirmation-ref">
+                            <div><div class="confirmation-ref-label">Booking Reference</div><div class="confirmation-ref-value">JWR-2026-04158</div></div>
+                        </div>
+                        <div class="confirmation-details" id="confirmationDetails"></div>
+                        <div class="confirmation-message">"Your time in Jayasom will come as a pause, a gentle intermission in your everyday life, that will allow you to reclaim the best in you. We look forward to welcoming you."</div>
+                        <div style="margin-top:var(--space-2xl);display:flex;gap:var(--space-md);justify-content:center;">
+                            <button class="btn-secondary" onclick="goToStep(7)">Manage Booking</button>
+                            <button class="btn-primary" style="width:auto;margin-top:0;" onclick="startNewBooking()">New Booking</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER (for steps 2-8) -->
+    <footer class="footer" id="mainFooter" style="display:none;">
+        <div class="footer-inner">
+            <div>
+                <a class="logo-link" onclick="goToStep(1)" style="display:inline-block;"><span class="footer-logo-text">JAYASOM</span></a>
+                <p class="footer-tagline">"Connecting each guest to their own singularity."</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col"><div class="footer-col-title">Explore</div><a href="#">Retreats & Programs</a><a href="#">Accommodation</a><a href="#">Dining</a><a href="#">Experiences</a></div>
+                <div class="footer-col"><div class="footer-col-title">Information</div><a href="#">About Jayasom</a><a href="#">About Amaala</a><a href="#">Getting Here</a><a href="#">Contact Us</a></div>
+                <div class="footer-col"><div class="footer-col-title">Legal</div><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a><a href="#">Booking Policies</a><a href="#">Cookie Settings</a></div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Jayasom Wellness Resort. All rights reserved.</p>
+            <p>Part of the Amaala destination, Red Sea, Saudi Arabia</p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== STATE =====
+        let currentStep = 1;
+        const stepNames = [
+            { label: 'Select Retreat', sub: 'Choose your journey' },
+            { label: 'Select Room', sub: 'Pick accommodation' },
+            { label: 'Treatments', sub: 'Add-on services' },
+            { label: 'Price Breakdown', sub: 'Review costs' },
+            { label: 'Guest Details', sub: 'Personal information' },
+            { label: 'Summary & Payment', sub: 'Review and pay' },
+            { label: 'Confirmation', sub: 'Booking confirmed' }
+        ];
+
+        let booking = {
+            retreatName: '', retreatPrice: 0,
+            roomName: '', roomPricePerNight: 0,
+            addons: [],
+            adults: 2, children: 0,
+            checkin: '2026-04-15', checkout: '2026-04-22'
+        };
+
+        function getNights() {
+            const ci = new Date(booking.checkin);
+            const co = new Date(booking.checkout);
+            const diff = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+            return diff > 0 ? diff : 1;
+        }
+
+        function getTotal() {
+            const nights = getNights();
+            const retreatTotal = booking.retreatPrice * booking.adults;
+            const roomTotal = booking.roomPricePerNight * nights;
+            const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
+            return retreatTotal + roomTotal + addonsTotal;
+        }
+
+        function formatSAR(num) {
+            return 'SAR ' + num.toLocaleString('en-US');
+        }
+
+        // ===== NAVIGATION =====
+        function goToStep(step) {
+            // Sync dates and guest counts
+            const ci = document.getElementById('checkinDate');
+            const co = document.getElementById('checkoutDate');
+            if (ci) booking.checkin = ci.value;
+            if (co) booking.checkout = co.value;
+            booking.adults = parseInt(document.getElementById('adultsCount').textContent);
+            booking.children = parseInt(document.getElementById('childrenCount').textContent);
+
+            // Hide all steps
+            document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
+
+            currentStep = step;
+
+            if (step === 1) {
+                document.getElementById('step1').classList.add('active');
+                document.getElementById('stepLayout').style.display = 'none';
+                document.getElementById('mainFooter').style.display = 'none';
+            } else {
+                document.getElementById('stepLayout').style.display = 'flex';
+                document.getElementById('mainFooter').style.display = 'block';
+                const stepId = 'step' + step;
+                document.getElementById(stepId).classList.add('active');
+            }
+
+            // Update stepper
+            updateStepper(step);
+
+            // Build dynamic content
+            if (step === 4) renderPriceSummary('priceSummaryStep4');
+            if (step === 5) renderPriceBreakdown();
+            if (step === 6) { renderGuestForms(); renderPriceSummary('priceSummaryStep6'); }
+            if (step === 7) renderSummary();
+            if (step === 8) renderConfirmation();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== STEPPER =====
+        function updateStepper(step) {
+            const activeIdx = step - 2; // steps 2-8 map to indices 0-6
+            const container = document.getElementById('stepperContent');
+            if (!container) return;
+            let html = '';
+            for (let i = 0; i < stepNames.length; i++) {
+                let cls = '';
+                if (i < activeIdx) cls = 'completed';
+                else if (i === activeIdx) cls = 'active';
+
+                const circleContent = (i < activeIdx)
+                    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+                    : (i + 1);
+
+                html += `<div class="v-step ${cls}" onclick="goToStep(${i + 2})">
+                    <div class="v-step-circle">${circleContent}</div>
+                    <div class="v-step-text">
+                        <div class="v-step-label">${stepNames[i].label}</div>
+                        <div class="v-step-sublabel">${stepNames[i].sub}</div>
+                    </div>
+                </div>`;
+                if (i < stepNames.length - 1) {
+                    const connCls = (i < activeIdx) ? 'completed-connector' : '';
+                    html += `<div class="v-step-connector ${connCls}"><div class="v-line"></div></div>`;
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        // ===== GUEST COUNTER =====
+        function updateCount(type, delta) {
+            const el = document.getElementById(type + 'Count');
+            let val = parseInt(el.textContent);
+            val = Math.max(type === 'adults' ? 1 : 0, val + delta);
+            val = Math.min(10, val);
+            el.textContent = val;
+            el.style.transform = 'scale(1.3)';
+            setTimeout(() => el.style.transform = 'scale(1)', 200);
+            booking[type] = val;
+        }
+
+        function togglePromo() {
+            const f = document.getElementById('promoField');
+            f.classList.toggle('show');
+        }
+
+        // ===== WELLNESS TABS =====
+        function switchWellnessTab(btn, type) {
+            document.querySelectorAll('.wellness-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // ===== RETREAT SELECTION =====
+        function selectRetreat(card, name, price) {
+            document.querySelectorAll('.retreat-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            booking.retreatName = name;
+            booking.retreatPrice = price;
+        }
+
+        // ===== ROOM SELECTION =====
+        function selectRoom(card, name, pricePerNight) {
+            document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            booking.roomName = name;
+            booking.roomPricePerNight = pricePerNight;
+        }
+
+        // ===== ADDONS =====
+        function toggleAddon(card) {
+            card.classList.toggle('selected');
+            const toggle = card.querySelector('.addon-toggle');
+            if (toggle) toggle.classList.toggle('active');
+
+            // Rebuild addons list
+            booking.addons = [];
+            document.querySelectorAll('.addon-card.selected').forEach(c => {
+                booking.addons.push({
+                    name: c.dataset.name,
+                    price: parseInt(c.dataset.price)
+                });
+            });
+
+            if (currentStep === 4) renderPriceSummary('priceSummaryStep4');
+        }
+
+        // ===== PAYMENT =====
+        function selectPayment(option, type) {
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+        }
+
+        function toggleCheck(el) {
+            el.querySelector('.policy-checkbox').classList.toggle('checked');
+        }
+
+        // ===== RENDER PRICE SUMMARY =====
+        function renderPriceSummary(containerId) {
+            const el = document.getElementById(containerId);
+            if (!el) return;
+            const nights = getNights();
+            const retreatTotal = booking.retreatPrice * booking.adults;
+            const roomTotal = booking.roomPricePerNight * nights;
+            const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
+            const total = retreatTotal + roomTotal + addonsTotal;
+
+            const isAr = currentLang === 'ar';
+            const t = translations.ar;
+            let html = `<h3 class="price-summary-title">${isAr ? t.journeySummary : 'Your Journey Summary'}</h3>`;
+            if (booking.retreatName) {
+                html += `<div class="price-line"><div><div class="price-line-label">${booking.retreatName}</div><div class="price-line-sublabel">${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</div></div><div class="price-line-value">${formatSAR(retreatTotal)}</div></div>`;
+            }
+            if (booking.roomName) {
+                html += `<div class="price-line"><div><div class="price-line-label">${booking.roomName}</div><div class="price-line-sublabel">${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatSAR(roomTotal)}</div></div>`;
+            }
+            if (booking.addons.length > 0) {
+                html += `<div class="price-line"><div><div class="price-line-label">${isAr ? t.additionalTreatments : 'Additional Treatments'}</div><div class="price-line-sublabel">${booking.addons.length} ${isAr ? t.selected : 'selected'}</div></div><div class="price-line-value">${formatSAR(addonsTotal)}</div></div>`;
+            }
+            html += `<div class="price-divider"></div>
+                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatSAR(total)}</span></div>
+                <p class="price-vat-note">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p>`;
+            el.innerHTML = html;
+        }
+
+        // ===== RENDER PRICE BREAKDOWN (Step 5) =====
+        function renderPriceBreakdown() {
+            const el = document.getElementById('priceBreakdownCard');
+            const nights = getNights();
+            const retreatTotal = booking.retreatPrice * booking.adults;
+            const roomTotal = booking.roomPricePerNight * nights;
+            const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
+            const total = retreatTotal + roomTotal + addonsTotal;
+
+            const isAr = currentLang === 'ar'; const t = translations.ar;
+            const indentDir = isAr ? 'padding-right' : 'padding-left';
+            let html = `<h4 class="summary-card-title">${isAr ? t.completePriceBreakdown : 'Complete Price Breakdown'}</h4>`;
+            html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.retreat : 'Retreat'}: ${booking.retreatName || (isAr ? t.notSelected : 'Not selected')}</span><span class="summary-row-value">${formatSAR(retreatTotal)}</span></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatSAR(booking.retreatPrice)} x ${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</span><span class="summary-row-value"></span></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.room : 'Room'}: ${booking.roomName || (isAr ? t.notSelected : 'Not selected')}</span><span class="summary-row-value">${formatSAR(roomTotal)}</span></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatSAR(booking.roomPricePerNight)} x ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</span><span class="summary-row-value"></span></div>`;
+
+            booking.addons.forEach(a => {
+                html += `<div class="summary-row"><span class="summary-row-label">${a.name}</span><span class="summary-row-value">${formatSAR(a.price)}</span></div>`;
+            });
+
+            html += `<div style="height:1px;background:var(--soft-coral);margin:var(--space-lg) 0;"></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label" style="font-weight:700;font-size:14px;">${isAr ? t.total : 'Total'}</span><span class="summary-row-value" style="font-size:22px;font-family:'Cormorant Garamond',serif;">${formatSAR(total)}</span></div>`;
+            html += `<p style="font-size:11px;color:var(--text-muted);text-align:${isAr ? 'left' : 'right'};">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p>`;
+            el.innerHTML = html;
+        }
+
+        // ===== RENDER GUEST FORMS =====
+        function renderGuestForms() {
+            const container = document.getElementById('guestFormsContainer');
+            let html = '';
+            const isAr = currentLang === 'ar'; const t = translations.ar;
+
+            for (let i = 0; i < booking.adults; i++) {
+                const isLead = i === 0;
+                const adultLabel = isAr ? `${t.adult} ${i + 1}` : `Adult ${i + 1}`;
+                const leadBadge = isLead ? `<span class="guest-badge">${isAr ? t.leadGuest : 'Lead Guest'}</span>` : '';
+                html += `<div class="guest-form-section">
+                    <h3 class="guest-form-section-title">${adultLabel} ${leadBadge}</h3>
+                    <div class="guest-form-grid">
+                        <div class="form-group"><label class="form-label">${isAr ? t.title : 'Title'}</label><select class="form-select" style="background:var(--open-white);"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.firstName : 'First Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterFirstName : 'Enter first name'}"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.lastName : 'Last Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterLastName : 'Enter last name'}"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.emailAddress : 'Email Address'}</label><input type="email" class="form-input-white" placeholder="email@example.com"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.phoneNumber : 'Phone Number'}</label><input type="tel" class="form-input-white" placeholder="+966 5XX XXX XXXX"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.dateOfBirth : 'Date of Birth'}</label><input type="date" class="form-input-white"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.nationality : 'Nationality'}</label><select class="form-select" style="background:var(--open-white);"><option>${isAr ? t.selectNationality : 'Select nationality'}</option><option>Saudi Arabia</option><option>United Arab Emirates</option><option>United Kingdom</option><option>United States</option><option>Other</option></select></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.idPassport : 'ID / Passport Number'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterDocNumber : 'Enter document number'}"></div>`;
+                if (isLead) {
+                    html += `<div class="form-group full-width"><label class="form-label">${isAr ? t.address : 'Address'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.streetAddress : 'Street address'}"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.city : 'City'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.city : 'City'}"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.country : 'Country'}</label><select class="form-select" style="background:var(--open-white);"><option>${isAr ? t.selectCountry : 'Select country'}</option><option>Saudi Arabia</option><option>United Arab Emirates</option><option>United Kingdom</option><option>United States</option></select></div>`;
+                }
+                html += `</div></div>`;
+            }
+
+            for (let i = 0; i < booking.children; i++) {
+                const childLabel = isAr ? `${t.child} ${i + 1}` : `Child ${i + 1}`;
+                html += `<div class="guest-form-section">
+                    <h3 class="guest-form-section-title">${childLabel} <span class="child-badge">${isAr ? t.child : 'Child'}</span></h3>
+                    <div class="guest-form-grid">
+                        <div class="form-group"><label class="form-label">${isAr ? t.firstName : 'First Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterFirstName : 'Enter first name'}"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.lastName : 'Last Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterLastName : 'Enter last name'}"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.dateOfBirth : 'Date of Birth'}</label><input type="date" class="form-input-white"></div>
+                        <div class="form-group"><label class="form-label">${isAr ? t.nationality : 'Nationality'}</label><select class="form-select" style="background:var(--open-white);"><option>${isAr ? t.selectNationality : 'Select nationality'}</option><option>Saudi Arabia</option><option>United Arab Emirates</option><option>United Kingdom</option><option>United States</option><option>Other</option></select></div>
+                    </div></div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ===== RENDER SUMMARY (Step 7) =====
+        function renderSummary() {
+            const nights = getNights();
+            const total = getTotal();
+            const ci = new Date(booking.checkin);
+            const co = new Date(booking.checkout);
+            const isAr = currentLang === 'ar'; const t = translations.ar;
+            const locale = isAr ? 'ar-SA' : 'en-GB';
+            const opts = { day: 'numeric', month: 'long', year: 'numeric' };
+
+            document.getElementById('summaryDetailsCard').innerHTML = `
+                <h4 class="summary-card-title">${isAr ? t.stayDetails : 'Stay Details'}</h4>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.destinationLabel : 'Destination'}</span><span class="summary-row-value">Jayasom Wellness Resort, Amaala</span></div>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.checkin : 'Check-in'}</span><span class="summary-row-value">${ci.toLocaleDateString(locale, opts)}</span></div>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.checkout : 'Check-out'}</span><span class="summary-row-value">${co.toLocaleDateString(locale, opts)}</span></div>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.duration : 'Duration'}</span><span class="summary-row-value">${nights} ${isAr ? t.nightsLabel : 'Nights'}</span></div>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.guests : 'Guests'}</span><span class="summary-row-value">${booking.adults} ${isAr ? t.adultsLabel : 'Adult(s)'}${booking.children > 0 ? ', ' + booking.children + ' ' + (isAr ? t.childrenLabel : 'Child(ren)') : ''}</span></div>`;
+
+            let selectionsHtml = `<h4 class="summary-card-title">${isAr ? t.yourSelections : 'Your Selections'}</h4>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.retreat : 'Retreat'}</span><span class="summary-row-value">${booking.retreatName || (isAr ? t.notSelected : 'Not selected')}</span></div>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.room : 'Room'}</span><span class="summary-row-value">${booking.roomName || (isAr ? t.notSelected : 'Not selected')}</span></div>`;
+            booking.addons.forEach(a => {
+                selectionsHtml += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.treatment : 'Treatment'}</span><span class="summary-row-value">${a.name}</span></div>`;
+            });
+            document.getElementById('summarySelectionsCard').innerHTML = selectionsHtml;
+
+            const retreatTotal = booking.retreatPrice * booking.adults;
+            const roomTotal = booking.roomPricePerNight * nights;
+            const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
+            let breakdownHtml = `<div style="margin-bottom:var(--space-lg);">
+                <div class="price-line"><div class="price-line-label">${isAr ? t.retreat : 'Retreat'}</div><div class="price-line-value">${formatSAR(retreatTotal)}</div></div>
+                <div class="price-line"><div class="price-line-label">${isAr ? t.accommodation : 'Accommodation'}</div><div class="price-line-value">${formatSAR(roomTotal)}</div></div>`;
+            if (addonsTotal > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-value">${formatSAR(addonsTotal)}</div></div>`;
+            breakdownHtml += `<div class="price-divider"></div>
+                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatSAR(total)}</span></div>
+                <p class="price-vat-note">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p></div>`;
+            document.getElementById('paymentBreakdown').innerHTML = breakdownHtml;
+
+            document.getElementById('fullPaymentAmount').textContent = formatSAR(total);
+            const deposit = Math.round(total * 0.3);
+            document.getElementById('depositPaymentAmount').innerHTML = formatSAR(deposit) + ` <span style="font-size:14px;color:var(--text-muted);font-family:Century Gothic,sans-serif;">${isAr ? t.depositPercent : '(30% deposit)'}</span>`;
+        }
+
+        // ===== RENDER CONFIRMATION (Step 8) =====
+        function renderConfirmation() {
+            const nights = getNights();
+            const total = getTotal();
+            const ci = new Date(booking.checkin);
+            const co = new Date(booking.checkout);
+            const isAr = currentLang === 'ar'; const t = translations.ar;
+            const locale = isAr ? 'ar-SA' : 'en-GB';
+            const opts = { day: 'numeric', month: 'long', year: 'numeric' };
+
+            let html = '';
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.retreat : 'Retreat'}</span><span class="confirmation-detail-value">${booking.retreatName || 'N/A'}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.room : 'Room'}</span><span class="confirmation-detail-value">${booking.roomName || 'N/A'}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkin : 'Check-in'}</span><span class="confirmation-detail-value">${ci.toLocaleDateString(locale, opts)}, 3:00 PM</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkout : 'Check-out'}</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}, 12:00 PM</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.guests : 'Guests'}</span><span class="confirmation-detail-value">${booking.adults} ${isAr ? t.adultsLabel : 'Adult(s)'}${booking.children > 0 ? ', ' + booking.children + ' ' + (isAr ? t.childrenLabel : 'Child(ren)') : ''}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.totalPaid : 'Total Paid'}</span><span class="confirmation-detail-value">${formatSAR(total)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.paymentStatus : 'Payment Status'}</span><span class="confirmation-detail-value" style="color:var(--success-green);">${isAr ? t.confirmed : 'Confirmed'}</span></div>`;
+
+            document.getElementById('confirmationDetails').innerHTML = html;
+        }
+
+        // ===== NEW BOOKING =====
+        function startNewBooking() {
+            booking = { retreatName: '', retreatPrice: 0, roomName: '', roomPricePerNight: 0, addons: [], adults: 2, children: 0, checkin: '2026-04-15', checkout: '2026-04-22' };
+            document.getElementById('adultsCount').textContent = '2';
+            document.getElementById('childrenCount').textContent = '0';
+            document.querySelectorAll('.retreat-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.addon-card').forEach(c => { c.classList.remove('selected'); const t = c.querySelector('.addon-toggle'); if(t) t.classList.remove('active'); });
+            document.querySelectorAll('.policy-checkbox').forEach(c => c.classList.remove('checked'));
+            goToStep(1);
+        }
+
+        // ===== i18n TRANSLATION SYSTEM =====
+        let currentLang = 'en';
+
+        const translations = {
+            ar: {
+                // Hero
+                heroTitle: 'ابدأ رحلة العودة<br>إلى العافية الداخلية',
+                heroSubtitle: 'استراحة للتجديد في أمالا، البحر الأحمر',
+                widgetTitle: 'خطط <span>لرحلتك</span>',
+                destination: 'الوجهة',
+                checkin: 'تسجيل الوصول',
+                checkout: 'تسجيل المغادرة',
+                adults: 'البالغون',
+                children: 'الأطفال',
+                promoToggle: 'هل لديك رمز ترويجي؟',
+                beginJourney: 'ابدأ رحلتك',
+                promoPlaceholder: 'أدخل رمز الخصم أو العرض',
+                // Stepper
+                stepperTitle: 'تقدم الحجز الخاص بك',
+                // Step names
+                sn_selectRetreat: 'اختيار المنتجع',
+                sn_chooseJourney: 'اختر رحلتك',
+                sn_selectRoom: 'اختيار الغرفة',
+                sn_pickAccommodation: 'اختر الإقامة',
+                sn_treatments: 'العلاجات',
+                sn_addonServices: 'خدمات إضافية',
+                sn_priceBreakdown: 'تفاصيل الأسعار',
+                sn_reviewCosts: 'مراجعة التكاليف',
+                sn_guestDetails: 'بيانات الضيوف',
+                sn_personalInfo: 'المعلومات الشخصية',
+                sn_summaryPayment: 'الملخص والدفع',
+                sn_reviewPay: 'المراجعة والدفع',
+                sn_confirmation: 'التأكيد',
+                sn_bookingConfirmed: 'تم تأكيد الحجز',
+                // Step 2: Retreat
+                step1of7: 'الخطوة ١ من ٧',
+                chooseRetreat: 'اختر منتجعك',
+                chooseRetreatDesc: 'كل منتجع هو رحلة مُنسّقة مصممة لإعادتك إلى ذاتك الداخلية. اختر التجربة التي تناسب احتياجاتك.',
+                adultWellness: 'عافية البالغين',
+                familyWellness: 'عافية العائلة',
+                renewalRetreat: 'منتجع التجديد',
+                renewalRetreatDesc: 'رحلة تحويلية لسبع ليالٍ تجمع بين تقاليد الشفاء القديمة وعلوم العافية الحديثة. أعد اكتشاف التوازن من خلال العلاجات الشخصية والحركة الواعية والتغذية التصالحية.',
+                resetExperience: 'تجربة إعادة الضبط',
+                resetExperienceDesc: 'برنامج مركز لخمس ليالٍ مصمم لاستعادة إيقاعك الطبيعي. انغمس في هدوء الصحراء مع علاجات السبا المستهدفة وممارسات التأمل الموجه.',
+                reclaimJourney: 'رحلة الاستعادة',
+                reclaimJourneyDesc: 'تحولنا الأكثر شمولاً لمدة أسبوعين. نهج شامل وعميق يعالج الجسد والعقل والروح من خلال بروتوكول عافية متكامل مصمم خصيصاً لك.',
+                weekendPause: 'استراحة نهاية الأسبوع',
+                weekendPauseDesc: 'منتجع قصير ولكنه ذو معنى لثلاث ليالٍ مثالي لمن يبحثون عن استراحة تصالحية. استمتع بطقوس السبا المنسّقة وعناق البحر الأحمر المهدئ.',
+                signature: 'مميز',
+                popular: 'الأكثر طلباً',
+                intensive: 'مكثف',
+                escape: 'استجمام',
+                nights7: '٧ ليالٍ',
+                nights5: '٥ ليالٍ',
+                nights14: '١٤ ليلة',
+                nights3: '٣ ليالٍ',
+                startingFrom: 'يبدأ من',
+                perPerson: '/ شخص',
+                select: 'اختيار',
+                wellnessAssessment: 'تقييم العافية',
+                dailyTreatments: 'علاجات يومية',
+                nutritionPlan: 'خطة تغذية',
+                yogaSessions: 'جلسات يوغا',
+                spaTreatments: 'علاجات السبا',
+                meditation: 'تأمل',
+                desertExcursion: 'رحلة صحراوية',
+                fullAssessment: 'تقييم شامل',
+                dailyTherapies: 'علاجات يومية',
+                fitnessProgram: 'برنامج لياقة',
+                nutrition: 'تغذية',
+                mindfulness: 'يقظة ذهنية',
+                spaRitual: 'طقوس السبا',
+                sunsetYoga: 'يوغا الغروب',
+                wellnessDining: 'مطعم العافية',
+                back: 'رجوع',
+                continueToRoom: 'المتابعة لاختيار الغرفة',
+                // Step 3: Room
+                step2of7: 'الخطوة ٢ من ٧',
+                selectAccommodation: 'اختر إقامتك',
+                selectAccommodationDesc: 'كل غرفة هي ملاذ، مصممة بألوان ناعمة وضوء طبيعي مستوحى من الصحراء والبحر الأحمر.',
+                desertViewSuite: 'جناح إطلالة الصحراء',
+                seaViewVilla: 'فيلا إطلالة البحر',
+                presidentialResidence: 'الإقامة الرئاسية',
+                available: 'متاح',
+                twoLeft: 'متبقي ٢',
+                perNight: 'لليلة',
+                nightUnit: '/ليلة',
+                privateTermrace: 'شرفة خاصة',
+                rainShower: 'دش مطري',
+                miniBar: 'ميني بار',
+                privatePool: 'مسبح خاص',
+                livingArea: 'منطقة معيشة',
+                oceanView: 'إطلالة على البحر',
+                privateGarden: 'حديقة خاصة',
+                plungePool: 'بركة غطس',
+                butlerService: 'خدمة الخادم الشخصي',
+                backToRetreats: 'العودة للمنتجعات',
+                continueToTreatments: 'المتابعة للعلاجات',
+                // Step 4: Treatments
+                step3of7: 'الخطوة ٣ من ٧',
+                enhanceExperience: 'عزّز تجربتك',
+                enhanceExperienceDesc: 'أضف علاجات مخصصة لتعميق رحلة العافية الخاصة بك.',
+                deepTissueMassage: 'تدليك الأنسجة العميقة',
+                deepTissueMassageDesc: 'تدليك علاجي يستهدف طبقات العضلات العميقة لتحرير التوتر المزمن. ٩٠ دقيقة من التعافي المركز.',
+                ayurvedicConsultation: 'استشارة الأيورفيدا',
+                ayurvedicConsultationDesc: 'تقييم شامل للدوشا مع توصيات مخصصة لنمط الحياة والتغذية متجذرة في حكمة الأيورفيدا القديمة.',
+                hydratingFacial: 'علاج ترطيب الوجه',
+                hydratingFacialDesc: 'علاج فاخر للوجه باستخدام مكونات بحرية وتقنيات ترطيب متقدمة لاستعادة إشراق البشرة.',
+                soundHealing: 'جلسة العلاج بالصوت',
+                soundHealingDesc: 'تأمل صوتي غامر باستخدام أوعية الغناء التبتية والشوكات الرنانة للاسترخاء العميق والسكينة الداخلية.',
+                perSession: '/ جلسة',
+                backToRooms: 'العودة للغرف',
+                continueToPriceBreakdown: 'المتابعة لتفاصيل الأسعار',
+                // Price Summary
+                journeySummary: 'ملخص رحلتك',
+                additionalTreatments: 'علاجات إضافية',
+                selected: 'مختار',
+                total: 'الإجمالي',
+                inclusiveVAT: 'شامل ضريبة القيمة المضافة',
+                // Step 5: Price Breakdown
+                step4of7: 'الخطوة ٤ من ٧',
+                priceBreakdownTitle: 'تفاصيل الأسعار',
+                priceBreakdownDesc: 'راجع تكلفة الحجز الكاملة قبل المتابعة.',
+                completePriceBreakdown: 'التفاصيل الكاملة للأسعار',
+                retreat: 'المنتجع',
+                room: 'الغرفة',
+                guests: 'الضيوف',
+                guestUnit: 'ضيف/ضيوف',
+                nightsUnit: 'ليلة/ليالٍ',
+                notSelected: 'لم يتم الاختيار',
+                backToTreatments: 'العودة للعلاجات',
+                continueToGuestDetails: 'المتابعة لبيانات الضيوف',
+                // Step 6: Guest Details
+                step5of7: 'الخطوة ٥ من ٧',
+                guestInformation: 'معلومات الضيوف',
+                guestInfoDesc: 'يرجى تقديم البيانات لكل ضيف. سيتم استخدام معلومات الضيف الرئيسي للمراسلات.',
+                adult: 'بالغ',
+                child: 'طفل',
+                leadGuest: 'الضيف الرئيسي',
+                title: 'اللقب',
+                firstName: 'الاسم الأول',
+                lastName: 'اسم العائلة',
+                emailAddress: 'البريد الإلكتروني',
+                phoneNumber: 'رقم الهاتف',
+                dateOfBirth: 'تاريخ الميلاد',
+                nationality: 'الجنسية',
+                idPassport: 'رقم الهوية / جواز السفر',
+                address: 'العنوان',
+                city: 'المدينة',
+                country: 'الدولة',
+                selectNationality: 'اختر الجنسية',
+                selectCountry: 'اختر الدولة',
+                enterFirstName: 'أدخل الاسم الأول',
+                enterLastName: 'أدخل اسم العائلة',
+                enterDocNumber: 'أدخل رقم الوثيقة',
+                streetAddress: 'عنوان الشارع',
+                backToPriceBreakdown: 'العودة لتفاصيل الأسعار',
+                reviewBooking: 'مراجعة الحجز',
+                // Step 7: Summary
+                step6of7: 'الخطوة ٦ من ٧',
+                reviewConfirm: 'المراجعة والتأكيد',
+                reviewConfirmDesc: 'يرجى مراجعة تفاصيل الحجز واختيار طريقة الدفع المفضلة.',
+                stayDetails: 'تفاصيل الإقامة',
+                destinationLabel: 'الوجهة',
+                duration: 'المدة',
+                nightsLabel: 'ليالٍ',
+                adultsLabel: 'بالغ/بالغين',
+                childrenLabel: 'طفل/أطفال',
+                yourSelections: 'اختياراتك',
+                treatment: 'العلاج',
+                bookingPolicies: 'سياسات الحجز',
+                cancellationPolicy: 'سياسة الإلغاء:',
+                cancellationPolicyText: 'إلغاء مجاني حتى ١٤ يوماً قبل الوصول. رسوم ٥٠٪ خلال ٧-١٤ يوماً. رسوم كاملة خلال ٧ أيام.',
+                checkinTime: 'الوصول:',
+                checkinTimeText: 'من ٣:٠٠ مساءً',
+                checkoutTime: 'المغادرة:',
+                checkoutTimeText: 'حتى ١٢:٠٠ ظهراً',
+                specialRequests: 'طلبات خاصة:',
+                specialRequestsText: 'حسب التوفر. تواصل مع المنتجع للمتطلبات الغذائية أو الطبية.',
+                selectPayment: 'اختر الدفع',
+                accommodation: 'الإقامة',
+                treatmentsLabel: 'العلاجات',
+                fullPayment: 'الدفع الكامل',
+                fullPaymentDesc: 'ادفع المبلغ الكامل الآن وسيتم تأكيد حجزك فوراً.',
+                depositPayment: 'دفع العربون',
+                depositPaymentDesc: 'احجز بعربون ٣٠٪. المبلغ المتبقي مستحق قبل ١٤ يوماً من الوصول.',
+                depositPercent: '(عربون ٣٠٪)',
+                agreeTerms: 'أوافق على <a href="#">الشروط والأحكام</a> و<a href="#">سياسة الخصوصية</a> لمنتجع جاياسوم الصحي.',
+                agreeCancel: 'لقد قرأت وأقبل <a href="#">سياسة الإلغاء</a> و<a href="#">شروط الحجز</a>.',
+                confirmProceed: 'تأكيد والمتابعة للدفع',
+                backToGuestDetails: 'العودة لبيانات الضيوف',
+                // Step 8: Confirmation
+                journeyConfirmed: 'تم تأكيد رحلتك',
+                confirmationSubtitle: 'شكراً لاختيارك منتجع جاياسوم الصحي. تم تأكيد حجزك وتم إرسال بريد تأكيد إلى عنوان بريدك الإلكتروني المسجل.',
+                bookingReference: 'رقم مرجع الحجز',
+                totalPaid: 'المبلغ المدفوع',
+                paymentStatus: 'حالة الدفع',
+                confirmed: 'مؤكد',
+                confirmationMessage: '"وقتك في جاياسوم سيكون بمثابة استراحة، فاصل لطيف في حياتك اليومية، يتيح لك استعادة أفضل ما فيك. نتطلع لاستقبالك."',
+                manageBooking: 'إدارة الحجز',
+                newBooking: 'حجز جديد',
+                // Footer
+                footerTagline: '"ربط كل ضيف بتفرده الخاص."',
+                explore: 'استكشف',
+                retreatsPrograms: 'المنتجعات والبرامج',
+                accommodationFooter: 'الإقامة',
+                dining: 'المطاعم',
+                experiences: 'التجارب',
+                information: 'معلومات',
+                aboutJayasom: 'عن جاياسوم',
+                aboutAmaala: 'عن أمالا',
+                gettingHere: 'كيفية الوصول',
+                contactUs: 'اتصل بنا',
+                legal: 'قانوني',
+                privacyPolicy: 'سياسة الخصوصية',
+                termsConditions: 'الشروط والأحكام',
+                bookingPoliciesFooter: 'سياسات الحجز',
+                cookieSettings: 'إعدادات ملفات تعريف الارتباط',
+                copyright: '© ٢٠٢٦ منتجع جاياسوم الصحي. جميع الحقوق محفوظة.',
+                partOfAmaala: 'جزء من وجهة أمالا، البحر الأحمر، المملكة العربية السعودية',
+                continue: 'متابعة',
+            }
+        };
+
+        // Static element mapping: data-i18n key -> translation key
+        // Store all English originals on first page load (before any translation)
+        let englishOriginals = {};
+        function captureEnglishOriginals() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                englishOriginals[el.dataset.i18n] = el.innerHTML;
+            });
+        }
+        // Capture immediately
+        captureEnglishOriginals();
+
+        function applyTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (lang === 'ar' && translations.ar[key]) {
+                    el.innerHTML = translations.ar[key];
+                } else if (englishOriginals[key]) {
+                    el.innerHTML = englishOriginals[key];
+                }
+            });
+        }
+
+        // Capture bulk English originals on first load
+        let bulkEnglish = new Map();
+        let bulkCaptured = false;
+        function captureBulkEnglish() {
+            if (bulkCaptured) return;
+            bulkCaptured = true;
+            document.querySelectorAll('.step-overline, .step-title, .confirmation-title, .step-description, .confirmation-subtitle, .retreat-card-name, .retreat-card-desc, .retreat-tag, .retreat-duration, .retreat-price-label, .retreat-select-btn, .include-tag, .room-card-name, .room-availability, .room-price-label, .room-amenity, .addon-name, .addon-desc, .payment-choice-title, .payment-option-title, .payment-option-desc, .policy-text, .summary-card-title, .confirmation-ref-label, .confirmation-message, .footer-tagline, .footer-col-title, .footer-col a, .footer-bottom p, .btn-secondary, .step-nav-back, .step-nav-next').forEach((el, i) => {
+                bulkEnglish.set(el, el.innerHTML);
+            });
+        }
+        captureBulkEnglish();
+
+        function applyBulkTranslations(lang) {
+            if (lang !== 'ar') return;
+            const t = translations.ar;
+
+            // Step overlines
+            const overlines = {
+                'Step 1 of 7': t.step1of7, 'Step 2 of 7': t.step2of7, 'Step 3 of 7': t.step3of7,
+                'Step 4 of 7': t.step4of7, 'Step 5 of 7': t.step5of7, 'Step 6 of 7': t.step6of7
+            };
+            document.querySelectorAll('.step-overline').forEach(el => {
+                const txt = (bulkEnglish.get(el) || el.textContent).trim();
+                if (overlines[txt]) el.textContent = overlines[txt];
+            });
+
+            // Helper: use bulkEnglish map for lookups (always English source)
+            function bGet(el) { return (bulkEnglish.get(el) || '').trim(); }
+
+            // Step titles
+            const titles = {
+                'Select Your Accommodation': t.selectAccommodation,
+                'Enhance Your Experience': t.enhanceExperience,
+                'Price Breakdown': t.priceBreakdownTitle,
+                'Guest Information': t.guestInformation,
+                'Review &amp; Confirm': t.reviewConfirm,
+                'Review & Confirm': t.reviewConfirm,
+                'Your Journey is Confirmed': t.journeyConfirmed,
+            };
+            document.querySelectorAll('.step-title, .confirmation-title').forEach(el => {
+                const txt = bGet(el) || el.textContent.trim();
+                if (titles[txt]) el.textContent = titles[txt];
+            });
+
+            // Step descriptions
+            document.querySelectorAll('.step-description').forEach(el => {
+                const txt = bGet(el);
+                if (txt.includes('Every room is a sanctuary')) el.textContent = t.selectAccommodationDesc;
+                else if (txt.includes('Add personalized treatments')) el.textContent = t.enhanceExperienceDesc;
+                else if (txt.includes('Review your complete booking')) el.textContent = t.priceBreakdownDesc;
+                else if (txt.includes('Please provide the details')) el.textContent = t.guestInfoDesc;
+                else if (txt.includes('Please review your booking')) el.textContent = t.reviewConfirmDesc;
+            });
+            document.querySelectorAll('.confirmation-subtitle').forEach(el => {
+                el.textContent = t.confirmationSubtitle;
+            });
+
+            // Retreat card names
+            const retreatNames = {
+                'The Renewal Retreat': t.renewalRetreat, 'The Reset Experience': t.resetExperience,
+                'The Reclaim Journey': t.reclaimJourney, 'The Weekend Pause': t.weekendPause
+            };
+            document.querySelectorAll('.retreat-card-name').forEach(el => {
+                const txt = bGet(el); if (retreatNames[txt]) el.textContent = retreatNames[txt];
+            });
+
+            // Retreat descriptions
+            const retreatDescs = [t.renewalRetreatDesc, t.resetExperienceDesc, t.reclaimJourneyDesc, t.weekendPauseDesc];
+            document.querySelectorAll('.retreat-card-desc').forEach((el, i) => {
+                if (retreatDescs[i]) el.textContent = retreatDescs[i];
+            });
+
+            // Retreat tags
+            const tags = { 'Signature': t.signature, 'Popular': t.popular, 'Intensive': t.intensive, 'Escape': t.escape };
+            document.querySelectorAll('.retreat-tag').forEach(el => {
+                const txt = bGet(el); if (tags[txt]) el.textContent = tags[txt];
+            });
+
+            // Durations
+            const durs = { '7 Nights': t.nights7, '5 Nights': t.nights5, '14 Nights': t.nights14, '3 Nights': t.nights3 };
+            document.querySelectorAll('.retreat-duration').forEach(el => {
+                const txt = bGet(el); if (durs[txt]) el.textContent = durs[txt];
+            });
+
+            // Price labels and select buttons
+            document.querySelectorAll('.retreat-price-label').forEach(el => { el.textContent = t.startingFrom; });
+            document.querySelectorAll('.retreat-select-btn').forEach(el => { el.textContent = t.select; });
+
+            // Include tags
+            const incTags = {
+                'Wellness Assessment': t.wellnessAssessment, 'Daily Treatments': t.dailyTreatments,
+                'Nutrition Plan': t.nutritionPlan, 'Yoga Sessions': t.yogaSessions,
+                'Spa Treatments': t.spaTreatments, 'Meditation': t.meditation,
+                'Desert Excursion': t.desertExcursion, 'Full Assessment': t.fullAssessment,
+                'Daily Therapies': t.dailyTherapies, 'Fitness Program': t.fitnessProgram,
+                'Nutrition': t.nutrition, 'Mindfulness': t.mindfulness,
+                'Spa Ritual': t.spaRitual, 'Sunset Yoga': t.sunsetYoga,
+                'Wellness Dining': t.wellnessDining
+            };
+            document.querySelectorAll('.include-tag').forEach(el => {
+                const txt = bGet(el); if (incTags[txt]) el.textContent = incTags[txt];
+            });
+
+            // Room card names
+            const roomNames = {
+                'Desert View Suite': t.desertViewSuite, 'Sea View Villa': t.seaViewVilla,
+                'Presidential Residence': t.presidentialResidence
+            };
+            document.querySelectorAll('.room-card-name').forEach(el => {
+                const txt = bGet(el); if (roomNames[txt]) el.textContent = roomNames[txt];
+            });
+
+            // Room availability
+            const avail = { 'Available': t.available, '2 Left': t.twoLeft };
+            document.querySelectorAll('.room-availability').forEach(el => {
+                const txt = bGet(el); if (avail[txt]) el.textContent = avail[txt];
+            });
+
+            // Room price labels
+            document.querySelectorAll('.room-price-label').forEach(el => { el.textContent = t.perNight; });
+
+            // Room amenities
+            const amenities = {
+                'Private Terrace': t.privateTermrace, 'Rain Shower': t.rainShower, 'Mini Bar': t.miniBar,
+                'Private Pool': t.privatePool, 'Living Area': t.livingArea, 'Ocean View': t.oceanView,
+                'Private Garden': t.privateGarden, 'Plunge Pool': t.plungePool, 'Butler Service': t.butlerService
+            };
+            document.querySelectorAll('.room-amenity').forEach(el => {
+                const txt = bGet(el); if (amenities[txt]) el.textContent = amenities[txt];
+            });
+
+            // Addon names and descriptions
+            const addonNames = {
+                'Deep Tissue Massage': t.deepTissueMassage, 'Ayurvedic Consultation': t.ayurvedicConsultation,
+                'Hydrating Facial Treatment': t.hydratingFacial, 'Sound Healing Session': t.soundHealing
+            };
+            document.querySelectorAll('.addon-name').forEach(el => {
+                const txt = bGet(el); if (addonNames[txt]) el.textContent = addonNames[txt];
+            });
+            const addonDescs = [t.deepTissueMassageDesc, t.ayurvedicConsultationDesc, t.hydratingFacialDesc, t.soundHealingDesc];
+            document.querySelectorAll('.addon-desc').forEach((el, i) => {
+                if (addonDescs[i]) el.textContent = addonDescs[i];
+            });
+
+            // Nav buttons - use bulkEnglish for matching
+            const navTexts = {
+                'Back': t.back, 'Back to Retreats': t.backToRetreats, 'Back to Rooms': t.backToRooms,
+                'Back to Treatments': t.backToTreatments, 'Back to Price Breakdown': t.backToPriceBreakdown,
+                'Back to Guest Details': t.backToGuestDetails
+            };
+            document.querySelectorAll('.step-nav-back').forEach(el => {
+                const origHtml = bulkEnglish.get(el) || '';
+                const origTxt = origHtml.replace(/<[^>]*>/g, '').trim();
+                const svg = el.querySelector('svg')?.outerHTML || '';
+                Object.keys(navTexts).forEach(k => {
+                    if (origTxt.includes(k)) el.innerHTML = svg + ' ' + navTexts[k];
+                });
+            });
+
+            const nextTexts = {
+                'Continue to Room Selection': t.continueToRoom,
+                'Continue to Treatments': t.continueToTreatments,
+                'Continue to Price Breakdown': t.continueToPriceBreakdown,
+                'Continue to Guest Details': t.continueToGuestDetails,
+                'Review Booking': t.reviewBooking
+            };
+            document.querySelectorAll('.step-nav-next').forEach(el => {
+                const origHtml = bulkEnglish.get(el) || '';
+                const origTxt = origHtml.replace(/<[^>]*>/g, '').trim();
+                const svg = el.querySelector('svg')?.outerHTML || '';
+                Object.keys(nextTexts).forEach(k => {
+                    if (origTxt.includes(k)) el.innerHTML = nextTexts[k] + ' ' + svg;
+                });
+            });
+
+            // Payment section
+            document.querySelectorAll('.payment-choice-title').forEach(el => { el.textContent = t.selectPayment; });
+            document.querySelectorAll('.payment-option-title').forEach((el, i) => {
+                el.textContent = i === 0 ? t.fullPayment : t.depositPayment;
+            });
+            document.querySelectorAll('.payment-option-desc').forEach((el, i) => {
+                el.textContent = i === 0 ? t.fullPaymentDesc : t.depositPaymentDesc;
+            });
+
+            // Policy texts
+            document.querySelectorAll('.policy-text').forEach((el, i) => {
+                el.innerHTML = i === 0 ? t.agreeTerms : t.agreeCancel;
+            });
+
+            // Confirm button
+            document.querySelectorAll('.payment-choice-container .btn-primary').forEach(el => { el.textContent = t.confirmProceed; });
+
+            // Booking policies card
+            document.querySelectorAll('.summary-card-title').forEach(el => {
+                const txt = bGet(el);
+                if (txt === 'Booking Policies') el.textContent = t.bookingPolicies;
+            });
+
+            // Confirmation page
+            document.querySelectorAll('.confirmation-ref-label').forEach(el => { el.textContent = t.bookingReference; });
+            document.querySelectorAll('.confirmation-message').forEach(el => { el.textContent = t.confirmationMessage; });
+
+            // Buttons by English original
+            document.querySelectorAll('.btn-secondary').forEach(el => {
+                const txt = bGet(el); if (txt === 'Manage Booking') el.textContent = t.manageBooking;
+            });
+            document.querySelectorAll('.btn-primary').forEach(el => {
+                const txt = bGet(el); if (txt === 'New Booking') el.textContent = t.newBooking;
+            });
+
+            // Footers
+            document.querySelectorAll('.footer-tagline').forEach(el => { el.textContent = t.footerTagline; });
+            const footerColTitles = [t.explore, t.information, t.legal];
+            document.querySelectorAll('.footer-col-title').forEach((el, i) => {
+                if (footerColTitles[i % 3]) el.textContent = footerColTitles[i % 3];
+            });
+            const footerLinks = [
+                [t.retreatsPrograms, t.accommodationFooter, t.dining, t.experiences],
+                [t.aboutJayasom, t.aboutAmaala, t.gettingHere, t.contactUs],
+                [t.privacyPolicy, t.termsConditions, t.bookingPoliciesFooter, t.cookieSettings]
+            ];
+            document.querySelectorAll('.footer-col').forEach((col, ci) => {
+                col.querySelectorAll('a').forEach((a, ai) => {
+                    if (footerLinks[ci % 3] && footerLinks[ci % 3][ai]) a.textContent = footerLinks[ci % 3][ai];
+                });
+            });
+            document.querySelectorAll('.footer-bottom p').forEach((el, i) => {
+                el.textContent = i === 0 ? t.copyright : t.partOfAmaala;
+            });
+        }
+
+        function resetBulkTranslations() {
+            bulkEnglish.forEach((originalHtml, el) => {
+                if (document.contains(el)) {
+                    el.innerHTML = originalHtml;
+                }
+            });
+        }
+
+        function updateStepNamesLang() {
+            if (currentLang === 'ar') {
+                const t = translations.ar;
+                stepNames[0] = { label: t.sn_selectRetreat, sub: t.sn_chooseJourney };
+                stepNames[1] = { label: t.sn_selectRoom, sub: t.sn_pickAccommodation };
+                stepNames[2] = { label: t.sn_treatments, sub: t.sn_addonServices };
+                stepNames[3] = { label: t.sn_priceBreakdown, sub: t.sn_reviewCosts };
+                stepNames[4] = { label: t.sn_guestDetails, sub: t.sn_personalInfo };
+                stepNames[5] = { label: t.sn_summaryPayment, sub: t.sn_reviewPay };
+                stepNames[6] = { label: t.sn_confirmation, sub: t.sn_bookingConfirmed };
+            } else {
+                stepNames[0] = { label: 'Select Retreat', sub: 'Choose your journey' };
+                stepNames[1] = { label: 'Select Room', sub: 'Pick accommodation' };
+                stepNames[2] = { label: 'Treatments', sub: 'Add-on services' };
+                stepNames[3] = { label: 'Price Breakdown', sub: 'Review costs' };
+                stepNames[4] = { label: 'Guest Details', sub: 'Personal information' };
+                stepNames[5] = { label: 'Summary & Payment', sub: 'Review and pay' };
+                stepNames[6] = { label: 'Confirmation', sub: 'Booking confirmed' };
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            const html = document.documentElement;
+
+            if (currentLang === 'ar') {
+                html.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', 'ar');
+                applyTranslations('ar');
+                applyBulkTranslations('ar');
+            } else {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'en');
+                resetBulkTranslations();
+                applyTranslations('en');
+            }
+
+            updateStepNamesLang();
+            updateStepper(currentStep);
+
+            // Re-render dynamic steps if visible
+            if (currentStep === 4) renderPriceSummary('priceSummaryStep4');
+            if (currentStep === 5) renderPriceBreakdown();
+            if (currentStep === 6) { renderGuestForms(); renderPriceSummary('priceSummaryStep6'); }
+            if (currentStep === 7) renderSummary();
+            if (currentStep === 8) renderConfirmation();
+        }
+    </script>
+</body>
+</html>
