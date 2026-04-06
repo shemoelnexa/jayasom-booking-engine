@@ -438,11 +438,13 @@
             font-family: 'Cormorant Garamond', serif; font-size: 20px;
             font-weight: 400; color: var(--inner-black); margin-bottom: 6px;
         }
-        .room-card-size { font-size: 11px; color: var(--text-muted); margin-bottom: var(--space-md); }
-        .room-amenities { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--space-md); }
-        .room-amenity {
-            font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
-            padding: 4px 10px; background: var(--purifying-beige); border-radius: var(--radius-sm); color: var(--text-muted);
+        .room-card-size { font-size: 11px; color: var(--text-muted); margin-bottom: var(--space-sm); }
+        .room-card-desc {
+            font-size: 13px; color: var(--text-secondary); line-height: 1.7;
+            margin-bottom: var(--space-md);
+        }
+        .room-included {
+            display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);
         }
         .room-card-footer {
             display: flex; align-items: flex-end; justify-content: space-between;
@@ -546,6 +548,56 @@
             border-radius: var(--radius-2xl); font-weight: 700;
         }
         .guest-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+        .room-accordion { margin-bottom: var(--space-lg); }
+        .room-accordion-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: var(--space-lg); background: var(--warm-white);
+            border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+            cursor: pointer; transition: all 0.3s ease; user-select: none;
+        }
+        .room-accordion-header:hover { border-color: var(--soft-coral-light); }
+        .room-accordion-header.active { border-color: var(--soft-coral); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+        .room-accordion-title {
+            font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400;
+            color: var(--inner-black); display: flex; align-items: center; gap: var(--space-md);
+        }
+        .room-accordion-chevron {
+            transition: transform 0.3s ease; color: var(--text-muted);
+        }
+        .room-accordion-header.active .room-accordion-chevron { transform: rotate(180deg); }
+        .room-accordion-content {
+            display: none; border: 1px solid var(--soft-coral); border-top: none;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            padding: var(--space-lg); background: var(--warm-white);
+        }
+        .room-accordion-content.open { display: block; }
+        .add-guest-section {
+            margin-top: var(--space-lg); padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-light);
+        }
+        .add-guest-field {
+            display: flex; align-items: center; gap: var(--space-md);
+        }
+        .add-guest-btn {
+            font-family: 'Century Gothic', sans-serif; font-size: 11px;
+            letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700;
+            padding: 12px 24px; background: transparent;
+            border: 1px dashed var(--soft-coral); border-radius: var(--radius-md);
+            color: var(--soft-coral); cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: var(--space-sm);
+        }
+        .add-guest-btn:hover { background: rgba(240,160,136,0.06); border-style: solid; }
+        .additional-guest-form {
+            margin-top: var(--space-lg); padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-light); position: relative;
+        }
+        .remove-guest-btn {
+            position: absolute; top: var(--space-lg); right: 0;
+            background: none; border: none; color: var(--error-red);
+            cursor: pointer; font-size: 11px; letter-spacing: 0.1em;
+            text-transform: uppercase; font-family: 'Century Gothic', sans-serif;
+        }
+        .remove-guest-btn:hover { text-decoration: underline; }
         .form-input-white {
             font-family: 'Century Gothic', sans-serif; font-size: 14px; padding: 14px 16px;
             border: 1px solid var(--border-light); border-radius: var(--radius-md);
@@ -729,6 +781,62 @@
         }
         .footer-bottom p { font-size: 11px; color: rgba(250,247,244,0.3); }
 
+        /* MANAGE BOOKING PAGE */
+        .manage-booking-page {
+            max-width: 640px; margin: 0 auto;
+            padding: var(--space-4xl) var(--space-2xl);
+        }
+        .manage-booking-page .step-header { text-align: center; margin-bottom: var(--space-2xl); }
+        .manage-booking-form {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--space-xl);
+        }
+        .manage-booking-form .guest-form-grid { margin-bottom: var(--space-lg); }
+        .manage-booking-result {
+            margin-top: var(--space-xl); display: none;
+        }
+        .manage-booking-result.show { display: block; }
+        .manage-booking-detail-card {
+            background: var(--warm-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-lg);
+        }
+        .manage-booking-actions {
+            display: flex; gap: var(--space-md); justify-content: center; margin-top: var(--space-xl);
+        }
+        .btn-danger {
+            font-family: 'Century Gothic', sans-serif; font-size: 12px;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            padding: 16px 36px; background: transparent; color: var(--error-red);
+            border: 1px solid var(--error-red); border-radius: var(--radius-md);
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .btn-danger:hover { background: var(--error-red); color: white; }
+        .cancel-confirm-overlay {
+            display: none; position: fixed; inset: 0; z-index: 2000;
+            background: rgba(16,24,32,0.5); align-items: center; justify-content: center;
+        }
+        .cancel-confirm-overlay.show { display: flex; }
+        .cancel-confirm-box {
+            background: var(--open-white); border-radius: var(--radius-lg);
+            padding: var(--space-2xl); max-width: 440px; width: 90%;
+            text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .cancel-confirm-box h3 {
+            font-family: 'Cormorant Garamond', serif; font-size: 24px;
+            font-weight: 400; margin-bottom: var(--space-md);
+        }
+        .cancel-confirm-box p {
+            font-size: 13px; color: var(--text-secondary); margin-bottom: var(--space-xl); line-height: 1.7;
+        }
+        .cancel-confirm-box .manage-booking-actions { justify-content: center; }
+        .header-manage-link {
+            font-family: 'Century Gothic', sans-serif; font-size: 11px;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-secondary); text-decoration: none;
+            cursor: pointer; transition: color 0.3s ease;
+        }
+        .header-manage-link:hover { color: var(--soft-coral); }
+
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .vertical-stepper { display: none; }
@@ -742,7 +850,7 @@
             .logo-text { font-size: 20px; }
             .hero-title { font-size: 28px; }
             .booking-widget { padding: var(--space-lg); }
-            .booking-form-grid { grid-template-columns: 1fr; }
+            .booking-form-grid { grid-template-columns: 1fr !important; }
             .room-grid { grid-template-columns: 1fr; }
             .step-page { padding: var(--space-xl) var(--space-md); }
             .step-title { font-size: 28px; }
@@ -1143,6 +1251,7 @@
                 <span class="logo-text">JAYASOM</span>
             </a>
             <div class="header-right">
+                <a class="header-manage-link" onclick="showManageBooking()">Manage Booking</a>
                 <div class="header-phone">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                     <span>+966 800 123 4567</span>
@@ -1177,20 +1286,32 @@
                                 <label class="form-label" data-i18n="checkout">Check-out</label>
                                 <input type="date" class="form-input" id="checkoutDate" value="2026-04-22">
                             </div>
-                            <div class="form-group guest-group">
-                                <label class="form-label" data-i18n="adults">Adults</label>
-                                <div class="guest-counter">
-                                    <button class="counter-btn" onclick="updateCount('adults', -1)">-</button>
-                                    <span class="counter-value" id="adultsCount">2</span>
-                                    <button class="counter-btn" onclick="updateCount('adults', 1)">+</button>
-                                </div>
-                            </div>
-                            <div class="form-group guest-group">
-                                <label class="form-label" data-i18n="children">Children</label>
-                                <div class="guest-counter">
-                                    <button class="counter-btn" onclick="updateCount('children', -1)">-</button>
-                                    <span class="counter-value" id="childrenCount">0</span>
-                                    <button class="counter-btn" onclick="updateCount('children', 1)">+</button>
+                            <div class="form-group full-width">
+                                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-md);">
+                                    <div class="form-group guest-group">
+                                        <label class="form-label" data-i18n="adults">Adults</label>
+                                        <div class="guest-counter">
+                                            <button class="counter-btn" onclick="updateCount('adults', -1)">-</button>
+                                            <span class="counter-value" id="adultsCount">2</span>
+                                            <button class="counter-btn" onclick="updateCount('adults', 1)">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group guest-group">
+                                        <label class="form-label" data-i18n="children">Children</label>
+                                        <div class="guest-counter">
+                                            <button class="counter-btn" onclick="updateCount('children', -1)">-</button>
+                                            <span class="counter-value" id="childrenCount">0</span>
+                                            <button class="counter-btn" onclick="updateCount('children', 1)">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group guest-group">
+                                        <label class="form-label" data-i18n="rooms">Rooms</label>
+                                        <div class="guest-counter">
+                                            <button class="counter-btn" onclick="updateCount('rooms', -1)">-</button>
+                                            <span class="counter-value" id="roomsCount">1</span>
+                                            <button class="counter-btn" onclick="updateCount('rooms', 1)">+</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group full-width">
@@ -1242,16 +1363,11 @@
                             <h2 class="step-title" data-i18n="chooseRetreat">Choose Your Retreat</h2>
                             <p class="step-description" data-i18n="chooseRetreatDesc">Each retreat is a curated journey designed to guide you back to your inner self. Select the experience that speaks to your needs.</p>
                         </div>
-                        <div class="wellness-type-tabs">
-                            <button class="wellness-tab active" onclick="switchWellnessTab(this, 'adult')" data-i18n="adultWellness">Adult Wellness</button>
-                            <button class="wellness-tab" onclick="switchWellnessTab(this, 'family')" data-i18n="familyWellness">Family Wellness</button>
-                        </div>
                         <div class="retreat-grid" id="retreatGrid">
                             <div class="retreat-card" onclick="selectRetreat(this, 'The Renewal Retreat', 28500)" data-price="28500">
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <img src="images/Rectangle 13-3.png" alt="The Renewal Retreat">
-                                    <span class="retreat-tag">Signature</span><span class="retreat-duration">7 Nights</span>
                                 </div>
                                 <div class="retreat-card-body">
                                     <h3 class="retreat-card-name" data-i18n="renewalRetreat">The Renewal Retreat</h3>
@@ -1267,7 +1383,6 @@
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <img src="images/Rectangle 13-4.png" alt="The Reset Experience">
-                                    <span class="retreat-tag">Popular</span><span class="retreat-duration">5 Nights</span>
                                 </div>
                                 <div class="retreat-card-body">
                                     <h3 class="retreat-card-name">The Reset Experience</h3>
@@ -1283,7 +1398,6 @@
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <img src="images/Rectangle 13-5.png" alt="The Reclaim Journey">
-                                    <span class="retreat-tag">Intensive</span><span class="retreat-duration">14 Nights</span>
                                 </div>
                                 <div class="retreat-card-body">
                                     <h3 class="retreat-card-name">The Reclaim Journey</h3>
@@ -1299,7 +1413,6 @@
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <img src="images/image 20.png" alt="The Weekend Pause">
-                                    <span class="retreat-tag">Escape</span><span class="retreat-duration">3 Nights</span>
                                 </div>
                                 <div class="retreat-card-body">
                                     <h3 class="retreat-card-name">The Weekend Pause</h3>
@@ -1329,29 +1442,32 @@
                         </div>
                         <div class="room-grid">
                             <div class="room-card" onclick="selectRoom(this, 'Desert View Suite', 3200)">
-                                <div class="room-card-image"><img src="images/Rectangle 13-2.png" alt="Desert View Suite"><span class="room-availability available">Available</span></div>
+                                <div class="room-card-image"><img src="images/Rectangle 13-2.png" alt="Desert View Suite"></div>
                                 <div class="room-card-body">
                                     <h3 class="room-card-name">Desert View Suite</h3>
                                     <p class="room-card-size">72 m&sup2; &middot; King Bed &middot; 2 Guests</p>
-                                    <div class="room-amenities"><span class="room-amenity">Private Terrace</span><span class="room-amenity">Rain Shower</span><span class="room-amenity">Mini Bar</span></div>
+                                    <p class="room-card-desc">A serene sanctuary with panoramic desert views, designed with natural tones and soft lighting to create a calming retreat after a day of wellness.</p>
+                                    <div class="room-included"><span class="include-tag">Daily Breakfast</span><span class="include-tag">Wi-Fi</span><span class="include-tag">Wellness Minibar</span><span class="include-tag">Spa Access</span></div>
                                     <div class="room-card-footer"><div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 3,200 <span>/night</span></span></div></div>
                                 </div>
                             </div>
                             <div class="room-card" onclick="selectRoom(this, 'Sea View Villa', 5800)">
-                                <div class="room-card-image"><img src="images/Rectangle 33.png" alt="Sea View Villa"><span class="room-availability available">Available</span></div>
+                                <div class="room-card-image"><img src="images/Rectangle 33.png" alt="Sea View Villa"></div>
                                 <div class="room-card-body">
                                     <h3 class="room-card-name">Sea View Villa</h3>
                                     <p class="room-card-size">120 m&sup2; &middot; King Bed &middot; 3 Guests</p>
-                                    <div class="room-amenities"><span class="room-amenity">Private Pool</span><span class="room-amenity">Living Area</span><span class="room-amenity">Ocean View</span></div>
+                                    <p class="room-card-desc">An expansive private villa overlooking the Red Sea, featuring a private pool and living area for an elevated coastal wellness experience.</p>
+                                    <div class="room-included"><span class="include-tag">Daily Breakfast</span><span class="include-tag">Private Pool</span><span class="include-tag">Butler Service</span><span class="include-tag">Spa Access</span><span class="include-tag">Airport Transfer</span></div>
                                     <div class="room-card-footer"><div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 5,800 <span>/night</span></span></div></div>
                                 </div>
                             </div>
                             <div class="room-card" onclick="selectRoom(this, 'Presidential Residence', 12500)">
-                                <div class="room-card-image"><img src="images/image 9.png" alt="Presidential Residence"><span class="room-availability limited">2 Left</span></div>
+                                <div class="room-card-image"><img src="images/image 9.png" alt="Presidential Residence"></div>
                                 <div class="room-card-body">
                                     <h3 class="room-card-name">Presidential Residence</h3>
                                     <p class="room-card-size">240 m&sup2; &middot; 2 Bedrooms &middot; 4 Guests</p>
-                                    <div class="room-amenities"><span class="room-amenity">Private Garden</span><span class="room-amenity">Plunge Pool</span><span class="room-amenity">Butler Service</span></div>
+                                    <p class="room-card-desc">The ultimate expression of luxury and privacy, set within lush gardens with a plunge pool, dedicated butler, and bespoke wellness programming.</p>
+                                    <div class="room-included"><span class="include-tag">All-Inclusive Dining</span><span class="include-tag">Private Garden</span><span class="include-tag">Plunge Pool</span><span class="include-tag">Butler Service</span><span class="include-tag">Spa Access</span><span class="include-tag">Airport Transfer</span></div>
                                     <div class="room-card-footer"><div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 12,500 <span>/night</span></span></div></div>
                                 </div>
                             </div>
@@ -1471,21 +1587,9 @@
                             </div>
                             <div>
                                 <div class="payment-choice-container">
-                                    <h3 class="payment-choice-title">Select Payment</h3>
+                                    <h3 class="payment-choice-title">Confirm Booking</h3>
                                     <div id="paymentBreakdown"></div>
-                                    <div class="payment-option selected" onclick="selectPayment(this, 'full')">
-                                        <div class="payment-option-radio"></div>
-                                        <div class="payment-option-title">Full Payment</div>
-                                        <p class="payment-option-desc">Pay the full amount now and your booking is confirmed immediately.</p>
-                                        <div class="payment-option-amount" id="fullPaymentAmount"></div>
-                                    </div>
-                                    <div class="payment-option" onclick="selectPayment(this, 'deposit')">
-                                        <div class="payment-option-radio"></div>
-                                        <div class="payment-option-title">Deposit Payment</div>
-                                        <p class="payment-option-desc">Reserve with a 30% deposit. Remaining balance due 14 days before check-in.</p>
-                                        <div class="payment-option-amount" id="depositPaymentAmount"></div>
-                                    </div>
-                                    <div class="policies-section">
+                                    <div class="policies-section" style="border-top:none;padding-top:0;">
                                         <div class="policy-check" onclick="toggleCheck(this)">
                                             <div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <p class="policy-text">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a> of Jayasom Wellness Resort.</p>
@@ -1495,7 +1599,7 @@
                                             <p class="policy-text">I have read and accept the <a href="#">Cancellation Policy</a> and <a href="#">Booking Terms</a>.</p>
                                         </div>
                                     </div>
-                                    <button class="btn-primary" onclick="goToStep(8)">Confirm & Proceed to Payment</button>
+                                    <button class="btn-primary" onclick="goToStep(8)">Confirm Booking</button>
                                 </div>
                             </div>
                         </div>
@@ -1515,13 +1619,52 @@
                         <h2 class="confirmation-title">Your Journey is Confirmed</h2>
                         <p class="confirmation-subtitle">Thank you for choosing Jayasom Wellness Resort. Your booking is confirmed and a confirmation email has been sent to your registered email address.</p>
                         <div class="confirmation-ref">
-                            <div><div class="confirmation-ref-label">Booking Reference</div><div class="confirmation-ref-value">JWR-2026-04158</div></div>
+                            <div><div class="confirmation-ref-label">Booking Reference</div><div class="confirmation-ref-value" id="confirmationRefValue">JWR-2026-04158</div></div>
                         </div>
                         <div class="confirmation-details" id="confirmationDetails"></div>
                         <div class="confirmation-message">"Your time in Jayasom will come as a pause, a gentle intermission in your everyday life, that will allow you to reclaim the best in you. We look forward to welcoming you."</div>
                         <div style="margin-top:var(--space-2xl);display:flex;gap:var(--space-md);justify-content:center;">
-                            <button class="btn-secondary" onclick="goToStep(7)">Manage Booking</button>
+                            <button class="btn-secondary" onclick="showManageBooking()">Manage Booking</button>
                             <button class="btn-primary" style="width:auto;margin-top:0;" onclick="startNewBooking()">New Booking</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MANAGE BOOKING PAGE -->
+                <div class="step-container" id="stepManage">
+                    <div class="manage-booking-page">
+                        <div class="step-header">
+                            <p class="step-overline">Manage Your Stay</p>
+                            <h2 class="step-title">Manage Booking</h2>
+                            <p class="step-description">Enter your booking details below to retrieve your reservation.</p>
+                        </div>
+                        <div class="manage-booking-form">
+                            <div class="guest-form-grid">
+                                <div class="form-group full-width">
+                                    <label class="form-label">Booking Reference Number</label>
+                                    <input type="text" class="form-input-white" id="manageRefNumber" placeholder="e.g. JWR-2026-04158">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-input-white" id="manageFirstName" placeholder="Enter first name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-input-white" id="manageLastName" placeholder="Enter last name">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label class="form-label">Phone Number or Email</label>
+                                    <input type="text" class="form-input-white" id="manageContact" placeholder="Enter phone number or email address">
+                                </div>
+                            </div>
+                            <button class="btn-primary" onclick="lookupBooking()">Find My Booking</button>
+                        </div>
+                        <div class="manage-booking-result" id="manageBookingResult">
+                            <div class="manage-booking-detail-card" id="manageBookingDetails"></div>
+                            <div class="manage-booking-actions">
+                                <button class="btn-secondary" onclick="showManageBooking()">Back to Search</button>
+                                <button class="btn-danger" onclick="showCancelConfirm()">Cancel Reservation</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1531,6 +1674,18 @@
         </div>
 
     </main>
+
+    <!-- CANCEL CONFIRMATION OVERLAY -->
+    <div class="cancel-confirm-overlay" id="cancelOverlay">
+        <div class="cancel-confirm-box">
+            <h3>Cancel Reservation</h3>
+            <p>Are you sure you want to cancel your reservation? This action cannot be undone. Cancellation charges may apply per our booking policies.</p>
+            <div class="manage-booking-actions">
+                <button class="btn-secondary" onclick="hideCancelConfirm()">Keep Reservation</button>
+                <button class="btn-danger" onclick="confirmCancelBooking()">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <!-- FOOTER (for steps 2-8) -->
     <footer class="footer" id="mainFooter" style="display:none;">
@@ -1568,7 +1723,8 @@
             retreatName: '', retreatPrice: 0,
             roomName: '', roomPricePerNight: 0,
             addons: [],
-            adults: 2, children: 0,
+            adults: 2, children: 0, rooms: 1,
+            additionalGuests: {},
             checkin: '2026-04-15', checkout: '2026-04-22'
         };
 
@@ -1582,7 +1738,7 @@
         function getTotal() {
             const nights = getNights();
             const retreatTotal = booking.retreatPrice * booking.adults;
-            const roomTotal = booking.roomPricePerNight * nights;
+            const roomTotal = booking.roomPricePerNight * nights * booking.rooms;
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             return retreatTotal + roomTotal + addonsTotal;
         }
@@ -1600,6 +1756,7 @@
             if (co) booking.checkout = co.value;
             booking.adults = parseInt(document.getElementById('adultsCount').textContent);
             booking.children = parseInt(document.getElementById('childrenCount').textContent);
+            booking.rooms = parseInt(document.getElementById('roomsCount').textContent);
 
             // Hide all steps
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
@@ -1613,6 +1770,7 @@
             } else {
                 document.getElementById('stepLayout').style.display = 'flex';
                 document.getElementById('mainFooter').style.display = 'block';
+                document.getElementById('verticalStepper').classList.remove('hidden');
                 const stepId = 'step' + step;
                 document.getElementById(stepId).classList.add('active');
             }
@@ -1664,7 +1822,8 @@
         function updateCount(type, delta) {
             const el = document.getElementById(type + 'Count');
             let val = parseInt(el.textContent);
-            val = Math.max(type === 'adults' ? 1 : 0, val + delta);
+            const minVal = (type === 'adults' || type === 'rooms') ? 1 : 0;
+            val = Math.max(minVal, val + delta);
             val = Math.min(10, val);
             el.textContent = val;
             el.style.transform = 'scale(1.3)';
@@ -1677,10 +1836,78 @@
             f.classList.toggle('show');
         }
 
-        // ===== WELLNESS TABS =====
-        function switchWellnessTab(btn, type) {
-            document.querySelectorAll('.wellness-tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
+        // ===== MANAGE BOOKING =====
+        function showManageBooking() {
+            document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
+            document.getElementById('stepLayout').style.display = 'flex';
+            document.getElementById('mainFooter').style.display = 'block';
+            document.getElementById('verticalStepper').classList.add('hidden');
+            document.getElementById('stepManage').classList.add('active');
+            document.getElementById('manageBookingResult').classList.remove('show');
+            document.getElementById('manageRefNumber').value = '';
+            document.getElementById('manageFirstName').value = '';
+            document.getElementById('manageLastName').value = '';
+            document.getElementById('manageContact').value = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function lookupBooking() {
+            const ref = document.getElementById('manageRefNumber').value.trim();
+            const firstName = document.getElementById('manageFirstName').value.trim();
+            const lastName = document.getElementById('manageLastName').value.trim();
+            const contact = document.getElementById('manageContact').value.trim();
+
+            if (!ref || !firstName || !lastName || !contact) {
+                alert(currentLang === 'ar' ? 'يرجى ملء جميع الحقول' : 'Please fill in all fields to find your booking.');
+                return;
+            }
+
+            // Simulate booking lookup with the current booking data
+            const nights = getNights();
+            const total = getTotal();
+            const ci = new Date(booking.checkin);
+            const co = new Date(booking.checkout);
+            const isAr = currentLang === 'ar';
+            const locale = isAr ? 'ar-SA' : 'en-GB';
+            const opts = { day: 'numeric', month: 'long', year: 'numeric' };
+
+            let html = `<h4 class="summary-card-title" style="color:var(--success-green);">Booking Found</h4>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Reference</span><span class="confirmation-detail-value">${ref}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guest</span><span class="confirmation-detail-value">${firstName} ${lastName}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Retreat</span><span class="confirmation-detail-value">${booking.retreatName || 'The Renewal Retreat'}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Room</span><span class="confirmation-detail-value">${booking.roomName || 'Desert View Suite'}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-in</span><span class="confirmation-detail-value">${ci.toLocaleDateString(locale, opts)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-out</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Rooms</span><span class="confirmation-detail-value">${booking.rooms}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">${booking.adults} Adult(s)${booking.children > 0 ? ', ' + booking.children + ' Child(ren)' : ''}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Total</span><span class="confirmation-detail-value">${formatSAR(total || 28500)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Status</span><span class="confirmation-detail-value" style="color:var(--success-green);">Confirmed</span></div>`;
+
+            document.getElementById('manageBookingDetails').innerHTML = html;
+            document.getElementById('manageBookingResult').classList.add('show');
+        }
+
+        function showCancelConfirm() {
+            document.getElementById('cancelOverlay').classList.add('show');
+        }
+
+        function hideCancelConfirm() {
+            document.getElementById('cancelOverlay').classList.remove('show');
+        }
+
+        function confirmCancelBooking() {
+            hideCancelConfirm();
+            const detailCard = document.getElementById('manageBookingDetails');
+            detailCard.innerHTML = `
+                <div style="text-align:center;padding:var(--space-xl);">
+                    <div style="width:64px;height:64px;border-radius:50%;background:rgba(212,114,106,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-lg);">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--error-red)" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </div>
+                    <h4 class="summary-card-title" style="color:var(--error-red);border:none;padding:0;text-align:center;">Reservation Cancelled</h4>
+                    <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:var(--space-md);">Your reservation has been cancelled. A confirmation email will be sent to your registered email address. If you have any questions, please contact us.</p>
+                </div>`;
+            document.querySelector('.manage-booking-actions').innerHTML = `
+                <button class="btn-primary" style="width:auto;margin-top:0;" onclick="startNewBooking()">Make New Booking</button>`;
         }
 
         // ===== RETREAT SELECTION =====
@@ -1733,7 +1960,7 @@
             if (!el) return;
             const nights = getNights();
             const retreatTotal = booking.retreatPrice * booking.adults;
-            const roomTotal = booking.roomPricePerNight * nights;
+            const roomTotal = booking.roomPricePerNight * nights * booking.rooms;
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             const total = retreatTotal + roomTotal + addonsTotal;
 
@@ -1744,7 +1971,7 @@
                 html += `<div class="price-line"><div><div class="price-line-label">${booking.retreatName}</div><div class="price-line-sublabel">${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</div></div><div class="price-line-value">${formatSAR(retreatTotal)}</div></div>`;
             }
             if (booking.roomName) {
-                html += `<div class="price-line"><div><div class="price-line-label">${booking.roomName}</div><div class="price-line-sublabel">${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatSAR(roomTotal)}</div></div>`;
+                html += `<div class="price-line"><div><div class="price-line-label">${booking.roomName}</div><div class="price-line-sublabel">${booking.rooms} ${isAr ? 'غرفة/غرف' : 'room(s)'} &times; ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatSAR(roomTotal)}</div></div>`;
             }
             if (booking.addons.length > 0) {
                 html += `<div class="price-line"><div><div class="price-line-label">${isAr ? t.additionalTreatments : 'Additional Treatments'}</div><div class="price-line-sublabel">${booking.addons.length} ${isAr ? t.selected : 'selected'}</div></div><div class="price-line-value">${formatSAR(addonsTotal)}</div></div>`;
@@ -1760,7 +1987,7 @@
             const el = document.getElementById('priceBreakdownCard');
             const nights = getNights();
             const retreatTotal = booking.retreatPrice * booking.adults;
-            const roomTotal = booking.roomPricePerNight * nights;
+            const roomTotal = booking.roomPricePerNight * nights * booking.rooms;
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             const total = retreatTotal + roomTotal + addonsTotal;
 
@@ -1770,7 +1997,7 @@
             html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.retreat : 'Retreat'}: ${booking.retreatName || (isAr ? t.notSelected : 'Not selected')}</span><span class="summary-row-value">${formatSAR(retreatTotal)}</span></div>`;
             html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatSAR(booking.retreatPrice)} x ${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</span><span class="summary-row-value"></span></div>`;
             html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.room : 'Room'}: ${booking.roomName || (isAr ? t.notSelected : 'Not selected')}</span><span class="summary-row-value">${formatSAR(roomTotal)}</span></div>`;
-            html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatSAR(booking.roomPricePerNight)} x ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</span><span class="summary-row-value"></span></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatSAR(booking.roomPricePerNight)} x ${booking.rooms} ${isAr ? 'غرفة/غرف' : 'room(s)'} x ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</span><span class="summary-row-value"></span></div>`;
 
             booking.addons.forEach(a => {
                 html += `<div class="summary-row"><span class="summary-row-label">${a.name}</span><span class="summary-row-value">${formatSAR(a.price)}</span></div>`;
@@ -1785,45 +2012,102 @@
         // ===== RENDER GUEST FORMS =====
         function renderGuestForms() {
             const container = document.getElementById('guestFormsContainer');
-            let html = '';
             const isAr = currentLang === 'ar'; const t = translations.ar;
+            let html = '';
 
-            for (let i = 0; i < booking.adults; i++) {
-                const isLead = i === 0;
-                const adultLabel = isAr ? `${t.adult} ${i + 1}` : `Adult ${i + 1}`;
-                const leadBadge = isLead ? `<span class="guest-badge">${isAr ? t.leadGuest : 'Lead Guest'}</span>` : '';
-                html += `<div class="guest-form-section">
-                    <h3 class="guest-form-section-title">${adultLabel} ${leadBadge}</h3>
+            for (let r = 0; r < booking.rooms; r++) {
+                const isFirst = r === 0;
+                const roomLabel = isAr ? `غرفة ${r + 1}` : `Room ${r + 1}`;
+                const roomSubLabel = booking.roomName || (isAr ? 'لم يتم الاختيار' : 'Not selected');
+                if (!booking.additionalGuests[r]) booking.additionalGuests[r] = 0;
+
+                html += `<div class="room-accordion">
+                    <div class="room-accordion-header ${isFirst ? 'active' : ''}" onclick="toggleRoomAccordion(${r})">
+                        <div class="room-accordion-title">
+                            ${roomLabel}
+                            <span style="font-size:13px;font-family:'Century Gothic',sans-serif;color:var(--text-muted);font-weight:400;">${roomSubLabel}</span>
+                        </div>
+                        <svg class="room-accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="room-accordion-content ${isFirst ? 'open' : ''}" id="roomAccordion${r}">`;
+
+                // Lead guest for this room
+                const leadLabel = isAr ? `${t.adult} 1` : 'Guest 1';
+                const leadBadge = isFirst ? `<span class="guest-badge">${isAr ? t.leadGuest : 'Lead Guest'}</span>` : '';
+                html += `<div class="guest-form-section" style="margin-bottom:0;border:none;padding:0;">
+                    <h3 class="guest-form-section-title">${leadLabel} ${leadBadge}</h3>
                     <div class="guest-form-grid">
                         <div class="form-group"><label class="form-label">${isAr ? t.title : 'Title'}</label><select class="form-select" style="background:var(--open-white);"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
                         <div class="form-group"><label class="form-label">${isAr ? t.firstName : 'First Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterFirstName : 'Enter first name'}"></div>
                         <div class="form-group"><label class="form-label">${isAr ? t.lastName : 'Last Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterLastName : 'Enter last name'}"></div>
                         <div class="form-group"><label class="form-label">${isAr ? t.emailAddress : 'Email Address'}</label><input type="email" class="form-input-white" placeholder="email@example.com"></div>
                         <div class="form-group"><label class="form-label">${isAr ? t.phoneNumber : 'Phone Number'}</label><input type="tel" class="form-input-white" placeholder="+966 5XX XXX XXXX"></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.dateOfBirth : 'Date of Birth'}</label><input type="date" class="form-input-white"></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.nationality : 'Nationality'}</label><select class="form-select" style="background:var(--open-white);"><option>${isAr ? t.selectNationality : 'Select nationality'}</option><option>Saudi Arabia</option><option>United Arab Emirates</option><option>United Kingdom</option><option>United States</option><option>Other</option></select></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.idPassport : 'ID / Passport Number'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterDocNumber : 'Enter document number'}"></div>`;
-                if (isLead) {
-                    html += `<div class="form-group full-width"><label class="form-label">${isAr ? t.address : 'Address'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.streetAddress : 'Street address'}"></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.city : 'City'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.city : 'City'}"></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.country : 'Country'}</label><select class="form-select" style="background:var(--open-white);"><option>${isAr ? t.selectCountry : 'Select country'}</option><option>Saudi Arabia</option><option>United Arab Emirates</option><option>United Kingdom</option><option>United States</option></select></div>`;
-                }
-                html += `</div></div>`;
-            }
+                        <div class="form-group"><label class="form-label">${isAr ? 'العمر' : 'Age'}</label><input type="number" class="form-input-white" placeholder="${isAr ? 'أدخل العمر' : 'Enter age'}" min="0" max="120"></div>
+                    </div>`;
 
-            for (let i = 0; i < booking.children; i++) {
-                const childLabel = isAr ? `${t.child} ${i + 1}` : `Child ${i + 1}`;
-                html += `<div class="guest-form-section">
-                    <h3 class="guest-form-section-title">${childLabel} <span class="child-badge">${isAr ? t.child : 'Child'}</span></h3>
-                    <div class="guest-form-grid">
-                        <div class="form-group"><label class="form-label">${isAr ? t.firstName : 'First Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterFirstName : 'Enter first name'}"></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.lastName : 'Last Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterLastName : 'Enter last name'}"></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.dateOfBirth : 'Date of Birth'}</label><input type="date" class="form-input-white"></div>
-                        <div class="form-group"><label class="form-label">${isAr ? t.nationality : 'Nationality'}</label><select class="form-select" style="background:var(--open-white);"><option>${isAr ? t.selectNationality : 'Select nationality'}</option><option>Saudi Arabia</option><option>United Arab Emirates</option><option>United Kingdom</option><option>United States</option><option>Other</option></select></div>
-                    </div></div>`;
+                // Additional guest forms for this room
+                const extraCount = booking.additionalGuests[r] || 0;
+                html += `<div id="additionalGuests${r}">`;
+                for (let g = 0; g < extraCount; g++) {
+                    html += renderAdditionalGuestForm(r, g + 2, isAr, t);
+                }
+                html += `</div>`;
+
+                // Add guest button
+                html += `<div class="add-guest-section">
+                        <div class="add-guest-field">
+                            <button class="add-guest-btn" onclick="addGuest(${r})">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                ${isAr ? 'إضافة ضيف' : 'Add Guest'}
+                            </button>
+                        </div>
+                    </div>`;
+
+                html += `</div></div></div>`;
             }
 
             container.innerHTML = html;
+        }
+
+        function renderAdditionalGuestForm(roomIndex, guestNum, isAr, t) {
+            if (!isAr) isAr = currentLang === 'ar';
+            if (!t) t = translations.ar;
+            return `<div class="additional-guest-form" id="room${roomIndex}guest${guestNum}">
+                <button class="remove-guest-btn" onclick="removeGuest(${roomIndex}, ${guestNum})">${isAr ? 'إزالة' : 'Remove'}</button>
+                <h3 class="guest-form-section-title" style="font-size:18px;">${isAr ? 'ضيف' : 'Guest'} ${guestNum}</h3>
+                <div class="guest-form-grid">
+                    <div class="form-group"><label class="form-label">${isAr ? t.title : 'Title'}</label><select class="form-select" style="background:var(--open-white);"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
+                    <div class="form-group"><label class="form-label">${isAr ? t.firstName : 'First Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterFirstName : 'Enter first name'}"></div>
+                    <div class="form-group"><label class="form-label">${isAr ? t.lastName : 'Last Name'}</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterLastName : 'Enter last name'}"></div>
+                    <div class="form-group"><label class="form-label">${isAr ? t.emailAddress : 'Email Address'}</label><input type="email" class="form-input-white" placeholder="email@example.com"></div>
+                    <div class="form-group"><label class="form-label">${isAr ? t.phoneNumber : 'Phone Number'}</label><input type="tel" class="form-input-white" placeholder="+966 5XX XXX XXXX"></div>
+                    <div class="form-group"><label class="form-label">${isAr ? 'العمر' : 'Age'}</label><input type="number" class="form-input-white" placeholder="${isAr ? 'أدخل العمر' : 'Enter age'}" min="0" max="120"></div>
+                </div>
+            </div>`;
+        }
+
+        function toggleRoomAccordion(roomIndex) {
+            const header = document.querySelectorAll('.room-accordion-header')[roomIndex];
+            const content = document.getElementById('roomAccordion' + roomIndex);
+            if (!header || !content) return;
+            header.classList.toggle('active');
+            content.classList.toggle('open');
+        }
+
+        function addGuest(roomIndex) {
+            if (!booking.additionalGuests[roomIndex]) booking.additionalGuests[roomIndex] = 0;
+            booking.additionalGuests[roomIndex]++;
+            const guestNum = booking.additionalGuests[roomIndex] + 1;
+            const container = document.getElementById('additionalGuests' + roomIndex);
+            if (container) {
+                container.insertAdjacentHTML('beforeend', renderAdditionalGuestForm(roomIndex, guestNum));
+            }
+        }
+
+        function removeGuest(roomIndex, guestNum) {
+            const el = document.getElementById('room' + roomIndex + 'guest' + guestNum);
+            if (el) el.remove();
+            booking.additionalGuests[roomIndex] = Math.max(0, (booking.additionalGuests[roomIndex] || 1) - 1);
         }
 
         // ===== RENDER SUMMARY (Step 7) =====
@@ -1842,7 +2126,8 @@
                 <div class="summary-row"><span class="summary-row-label">${isAr ? t.checkin : 'Check-in'}</span><span class="summary-row-value">${ci.toLocaleDateString(locale, opts)}</span></div>
                 <div class="summary-row"><span class="summary-row-label">${isAr ? t.checkout : 'Check-out'}</span><span class="summary-row-value">${co.toLocaleDateString(locale, opts)}</span></div>
                 <div class="summary-row"><span class="summary-row-label">${isAr ? t.duration : 'Duration'}</span><span class="summary-row-value">${nights} ${isAr ? t.nightsLabel : 'Nights'}</span></div>
-                <div class="summary-row"><span class="summary-row-label">${isAr ? t.guests : 'Guests'}</span><span class="summary-row-value">${booking.adults} ${isAr ? t.adultsLabel : 'Adult(s)'}${booking.children > 0 ? ', ' + booking.children + ' ' + (isAr ? t.childrenLabel : 'Child(ren)') : ''}</span></div>`;
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.guests : 'Guests'}</span><span class="summary-row-value">${booking.adults} ${isAr ? t.adultsLabel : 'Adult(s)'}${booking.children > 0 ? ', ' + booking.children + ' ' + (isAr ? t.childrenLabel : 'Child(ren)') : ''}</span></div>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? 'الغرف' : 'Rooms'}</span><span class="summary-row-value">${booking.rooms}</span></div>`;
 
             let selectionsHtml = `<h4 class="summary-card-title">${isAr ? t.yourSelections : 'Your Selections'}</h4>
                 <div class="summary-row"><span class="summary-row-label">${isAr ? t.retreat : 'Retreat'}</span><span class="summary-row-value">${booking.retreatName || (isAr ? t.notSelected : 'Not selected')}</span></div>
@@ -1853,7 +2138,7 @@
             document.getElementById('summarySelectionsCard').innerHTML = selectionsHtml;
 
             const retreatTotal = booking.retreatPrice * booking.adults;
-            const roomTotal = booking.roomPricePerNight * nights;
+            const roomTotal = booking.roomPricePerNight * nights * booking.rooms;
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             let breakdownHtml = `<div style="margin-bottom:var(--space-lg);">
                 <div class="price-line"><div class="price-line-label">${isAr ? t.retreat : 'Retreat'}</div><div class="price-line-value">${formatSAR(retreatTotal)}</div></div>
@@ -1863,10 +2148,6 @@
                 <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatSAR(total)}</span></div>
                 <p class="price-vat-note">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p></div>`;
             document.getElementById('paymentBreakdown').innerHTML = breakdownHtml;
-
-            document.getElementById('fullPaymentAmount').textContent = formatSAR(total);
-            const deposit = Math.round(total * 0.3);
-            document.getElementById('depositPaymentAmount').innerHTML = formatSAR(deposit) + ` <span style="font-size:14px;color:var(--text-muted);font-family:Century Gothic,sans-serif;">${isAr ? t.depositPercent : '(30% deposit)'}</span>`;
         }
 
         // ===== RENDER CONFIRMATION (Step 8) =====
@@ -1893,9 +2174,11 @@
 
         // ===== NEW BOOKING =====
         function startNewBooking() {
-            booking = { retreatName: '', retreatPrice: 0, roomName: '', roomPricePerNight: 0, addons: [], adults: 2, children: 0, checkin: '2026-04-15', checkout: '2026-04-22' };
+            booking = { retreatName: '', retreatPrice: 0, roomName: '', roomPricePerNight: 0, addons: [], adults: 2, children: 0, rooms: 1, additionalGuests: {}, checkin: '2026-04-15', checkout: '2026-04-22' };
             document.getElementById('adultsCount').textContent = '2';
             document.getElementById('childrenCount').textContent = '0';
+            document.getElementById('roomsCount').textContent = '1';
+            document.getElementById('verticalStepper').classList.remove('hidden');
             document.querySelectorAll('.retreat-card').forEach(c => c.classList.remove('selected'));
             document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
             document.querySelectorAll('.addon-card').forEach(c => { c.classList.remove('selected'); const t = c.querySelector('.addon-toggle'); if(t) t.classList.remove('active'); });
