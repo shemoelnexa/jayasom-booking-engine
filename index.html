@@ -1670,8 +1670,113 @@
                             <div class="manage-booking-detail-card" id="manageBookingDetails"></div>
                             <div class="manage-booking-actions">
                                 <button class="btn-secondary" onclick="showManageBooking()">Back to Search</button>
+                                <button class="btn-primary" style="width:auto;margin-top:0;" onclick="showModifyBooking()">Modify Booking</button>
                                 <button class="btn-danger" onclick="showCancelConfirm()">Cancel Reservation</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODIFY BOOKING PAGE -->
+                <div class="step-container" id="stepModify">
+                    <div class="manage-booking-page" style="max-width:800px;">
+                        <div class="step-header">
+                            <p class="step-overline">Modify Your Stay</p>
+                            <h2 class="step-title">Modify Booking</h2>
+                            <p class="step-description">Update your booking details below. Changes are subject to availability.</p>
+                        </div>
+                        <div class="manage-booking-form" style="margin-bottom:var(--space-lg);">
+                            <h4 class="summary-card-title">Stay Details</h4>
+                            <div class="guest-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Check-in</label>
+                                    <input type="date" class="form-input-white" id="modifyCheckin">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Check-out</label>
+                                    <input type="date" class="form-input-white" id="modifyCheckout">
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-md);margin-top:var(--space-md);">
+                                <div class="form-group guest-group">
+                                    <label class="form-label">Adults</label>
+                                    <div class="guest-counter">
+                                        <button class="counter-btn" onclick="updateModifyCount('modifyAdults', -1)">-</button>
+                                        <span class="counter-value" id="modifyAdults">2</span>
+                                        <button class="counter-btn" onclick="updateModifyCount('modifyAdults', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="form-group guest-group">
+                                    <label class="form-label">Children</label>
+                                    <div class="guest-counter">
+                                        <button class="counter-btn" onclick="updateModifyCount('modifyChildren', -1)">-</button>
+                                        <span class="counter-value" id="modifyChildren">0</span>
+                                        <button class="counter-btn" onclick="updateModifyCount('modifyChildren', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="form-group guest-group">
+                                    <label class="form-label">Rooms</label>
+                                    <div class="guest-counter">
+                                        <button class="counter-btn" onclick="updateModifyCount('modifyRooms', -1)">-</button>
+                                        <span class="counter-value" id="modifyRooms">1</span>
+                                        <button class="counter-btn" onclick="updateModifyCount('modifyRooms', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="manage-booking-form" style="margin-bottom:var(--space-lg);">
+                            <h4 class="summary-card-title">Retreat</h4>
+                            <div class="form-group">
+                                <select class="form-select" id="modifyRetreat" style="background:var(--open-white);">
+                                    <option value="The Renewal Retreat|28500">The Renewal Retreat — SAR 28,500</option>
+                                    <option value="The Reset Experience|19200">The Reset Experience — SAR 19,200</option>
+                                    <option value="The Reclaim Journey|52000">The Reclaim Journey — SAR 52,000</option>
+                                    <option value="The Weekend Pause|9800">The Weekend Pause — SAR 9,800</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="manage-booking-form" style="margin-bottom:var(--space-lg);">
+                            <h4 class="summary-card-title">Accommodation</h4>
+                            <div class="form-group">
+                                <select class="form-select" id="modifyRoom" style="background:var(--open-white);">
+                                    <option value="Desert View Suite|3200">Desert View Suite — SAR 3,200 /night</option>
+                                    <option value="Sea View Villa|5800">Sea View Villa — SAR 5,800 /night</option>
+                                    <option value="Presidential Residence|12500">Presidential Residence — SAR 12,500 /night</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="manage-booking-form">
+                            <h4 class="summary-card-title">Lead Guest Details</h4>
+                            <div class="guest-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Title</label>
+                                    <select class="form-select" id="modifyTitle" style="background:var(--open-white);"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-input-white" id="modifyGuestFirst" placeholder="Enter first name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-input-white" id="modifyGuestLast" placeholder="Enter last name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-input-white" id="modifyGuestEmail" placeholder="email@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-input-white" id="modifyGuestPhone" placeholder="+966 5XX XXX XXXX">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Age</label>
+                                    <input type="number" class="form-input-white" id="modifyGuestAge" placeholder="Enter age" min="0" max="120">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="manage-booking-actions" style="margin-top:var(--space-xl);">
+                            <button class="btn-secondary" onclick="backToManageResult()">Cancel Changes</button>
+                            <button class="btn-primary" style="width:auto;margin-top:0;" onclick="saveModifiedBooking()">Save Changes</button>
                         </div>
                     </div>
                 </div>
@@ -1900,6 +2005,130 @@
 
         function hideCancelConfirm() {
             document.getElementById('cancelOverlay').classList.remove('show');
+        }
+
+        function showModifyBooking() {
+            document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
+            document.getElementById('stepModify').classList.add('active');
+            document.getElementById('verticalStepper').classList.add('hidden');
+
+            // Populate fields with current booking data
+            document.getElementById('modifyCheckin').value = booking.checkin;
+            document.getElementById('modifyCheckout').value = booking.checkout;
+            document.getElementById('modifyAdults').textContent = booking.adults;
+            document.getElementById('modifyChildren').textContent = booking.children;
+            document.getElementById('modifyRooms').textContent = booking.rooms;
+
+            // Set retreat dropdown
+            const retreatSelect = document.getElementById('modifyRetreat');
+            for (let i = 0; i < retreatSelect.options.length; i++) {
+                if (retreatSelect.options[i].value.startsWith(booking.retreatName || 'The Renewal Retreat')) {
+                    retreatSelect.selectedIndex = i; break;
+                }
+            }
+
+            // Set room dropdown
+            const roomSelect = document.getElementById('modifyRoom');
+            for (let i = 0; i < roomSelect.options.length; i++) {
+                if (roomSelect.options[i].value.startsWith(booking.roomName || 'Desert View Suite')) {
+                    roomSelect.selectedIndex = i; break;
+                }
+            }
+
+            // Populate guest details from manage booking search
+            document.getElementById('modifyGuestFirst').value = document.getElementById('manageFirstName').value || '';
+            document.getElementById('modifyGuestLast').value = document.getElementById('manageLastName').value || '';
+            const contact = document.getElementById('manageContact').value || '';
+            if (contact.includes('@')) {
+                document.getElementById('modifyGuestEmail').value = contact;
+            } else {
+                document.getElementById('modifyGuestPhone').value = contact;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateModifyCount(id, delta) {
+            const el = document.getElementById(id);
+            let val = parseInt(el.textContent);
+            const minVal = (id === 'modifyAdults' || id === 'modifyRooms') ? 1 : 0;
+            val = Math.max(minVal, val + delta);
+            val = Math.min(10, val);
+            el.textContent = val;
+            el.style.transform = 'scale(1.3)';
+            setTimeout(() => el.style.transform = 'scale(1)', 200);
+        }
+
+        function backToManageResult() {
+            document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
+            document.getElementById('stepManage').classList.add('active');
+            document.getElementById('manageBookingResult').classList.add('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function saveModifiedBooking() {
+            // Update booking state from modify form
+            booking.checkin = document.getElementById('modifyCheckin').value;
+            booking.checkout = document.getElementById('modifyCheckout').value;
+            booking.adults = parseInt(document.getElementById('modifyAdults').textContent);
+            booking.children = parseInt(document.getElementById('modifyChildren').textContent);
+            booking.rooms = parseInt(document.getElementById('modifyRooms').textContent);
+
+            const retreatVal = document.getElementById('modifyRetreat').value.split('|');
+            booking.retreatName = retreatVal[0];
+            booking.retreatPrice = parseInt(retreatVal[1]);
+
+            const roomVal = document.getElementById('modifyRoom').value.split('|');
+            booking.roomName = roomVal[0];
+            booking.roomPricePerNight = parseInt(roomVal[1]);
+
+            // Sync the main booking widget
+            document.getElementById('checkinDate').value = booking.checkin;
+            document.getElementById('checkoutDate').value = booking.checkout;
+            document.getElementById('adultsCount').textContent = booking.adults;
+            document.getElementById('childrenCount').textContent = booking.children;
+            document.getElementById('roomsCount').textContent = booking.rooms;
+
+            // Show success and go back to manage result with updated data
+            document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
+            document.getElementById('stepManage').classList.add('active');
+
+            // Re-run lookup to show updated details
+            const ref = document.getElementById('manageRefNumber').value.trim() || 'JWR-2026-04158';
+            const firstName = document.getElementById('modifyGuestFirst').value;
+            const lastName = document.getElementById('modifyGuestLast').value;
+            const nights = getNights();
+            const total = getTotal();
+            const ci = new Date(booking.checkin);
+            const co = new Date(booking.checkout);
+            const locale = currentLang === 'ar' ? 'ar-SA' : 'en-GB';
+            const opts = { day: 'numeric', month: 'long', year: 'numeric' };
+
+            let html = `<div style="padding:var(--space-md);background:rgba(107,175,123,0.08);border-radius:var(--radius-md);margin-bottom:var(--space-lg);text-align:center;">
+                <p style="font-size:13px;color:var(--success-green);font-weight:700;">Booking updated successfully</p>
+            </div>`;
+            html += `<h4 class="summary-card-title" style="color:var(--success-green);">Updated Booking</h4>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Reference</span><span class="confirmation-detail-value">${ref}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guest</span><span class="confirmation-detail-value">${firstName} ${lastName}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Retreat</span><span class="confirmation-detail-value">${booking.retreatName}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Room</span><span class="confirmation-detail-value">${booking.roomName}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-in</span><span class="confirmation-detail-value">${ci.toLocaleDateString(locale, opts)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-out</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Rooms</span><span class="confirmation-detail-value">${booking.rooms}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">${booking.adults} Adult(s)${booking.children > 0 ? ', ' + booking.children + ' Child(ren)' : ''}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Total</span><span class="confirmation-detail-value">${formatSAR(total)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Status</span><span class="confirmation-detail-value" style="color:var(--success-green);">Confirmed</span></div>`;
+
+            document.getElementById('manageBookingDetails').innerHTML = html;
+            document.getElementById('manageBookingResult').classList.add('show');
+
+            // Restore the action buttons
+            document.querySelector('#manageBookingResult .manage-booking-actions').innerHTML = `
+                <button class="btn-secondary" onclick="showManageBooking()">Back to Search</button>
+                <button class="btn-primary" style="width:auto;margin-top:0;" onclick="showModifyBooking()">Modify Booking</button>
+                <button class="btn-danger" onclick="showCancelConfirm()">Cancel Reservation</button>`;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function confirmCancelBooking() {
