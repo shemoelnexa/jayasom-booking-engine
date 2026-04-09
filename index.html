@@ -49,6 +49,8 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; }
+        html, body { max-width: 100vw; }
 
         body {
             font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', 'Futura', sans-serif;
@@ -120,6 +122,30 @@
             display: flex; flex-direction: column; justify-content: center;
         }
         .vertical-stepper.hidden { display: none; }
+
+        /* MOBILE STEPPER — only visible on mobile ≤768px */
+        .mobile-stepper {
+            display: none !important; background: var(--warm-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: var(--space-sm) var(--space-md);
+            position: sticky; top: 56px; z-index: 50;
+        }
+        .mobile-stepper-inner { max-width: 600px; margin: 0 auto; }
+        .mobile-stepper-label {
+            font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--soft-coral); font-weight: 700; margin-bottom: 6px;
+        }
+        .mobile-stepper-track {
+            height: 4px; background: var(--border-light); border-radius: 2px;
+            overflow: hidden; margin-bottom: 6px;
+        }
+        .mobile-stepper-fill {
+            height: 100%; background: var(--soft-coral); border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+        .mobile-stepper-name {
+            font-size: 12px; color: var(--text-secondary); font-weight: 600;
+        }
 
         .stepper-title {
             font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
@@ -251,6 +277,7 @@
             background-repeat: no-repeat; background-position: right 14px center;
             padding-right: 40px; cursor: pointer;
         }
+        .guest-counters-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md); }
         .guest-counter { display: flex; align-items: center; gap: var(--space-md); justify-content: center; }
         .form-group.guest-group { align-items: center; text-align: center; }
         .counter-btn {
@@ -626,6 +653,7 @@
 
         /* SUMMARY & PAYMENT */
         .summary-layout { display: grid; grid-template-columns: 1fr 400px; gap: var(--space-2xl); }
+        .adjust-layout { grid-template-columns: 1fr 380px; }
         .summary-card {
             background: var(--warm-white); border: 1px solid var(--border-light);
             border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-lg);
@@ -734,6 +762,9 @@
             font-style: italic; padding: var(--space-lg);
             background: rgba(240,160,136,0.06); border-radius: var(--radius-md);
             border-left: 3px solid var(--soft-coral); text-align: left;
+        }
+        .confirmation-actions {
+            margin-top: var(--space-2xl); display: flex; gap: var(--space-md); justify-content: center;
         }
 
         /* NAV BUTTONS */
@@ -853,29 +884,218 @@
         }
         .header-manage-link:hover { color: var(--soft-coral); }
 
-        /* RESPONSIVE */
+        /* ===== RESPONSIVE ===== */
+
+        /* Tablet */
         @media (max-width: 1024px) {
-            .vertical-stepper { display: none; }
             .retreat-grid { grid-template-columns: 1fr; }
             .room-grid { grid-template-columns: repeat(2, 1fr); }
             .addons-layout, .guest-details-layout, .summary-layout { grid-template-columns: 1fr; }
             .price-summary, .payment-choice-container { position: static; }
+            .step-page { padding: var(--space-xl) var(--space-lg); }
+            .manage-booking-page { padding: var(--space-2xl) var(--space-lg); }
+            .confirmation-page { padding: var(--space-2xl) var(--space-lg); }
         }
+
+        /* Mobile */
         @media (max-width: 768px) {
+            /* Header */
             .header-inner { padding: 0 var(--space-md); height: 56px; }
-            .logo-text { font-size: 20px; }
-            .hero-title { font-size: 28px; }
-            .booking-widget { padding: var(--space-lg); }
-            .booking-form-grid { grid-template-columns: 1fr !important; }
-            .room-grid { grid-template-columns: 1fr; }
-            .step-page { padding: var(--space-xl) var(--space-md); }
-            .step-title { font-size: 28px; }
-            .addon-card { flex-direction: column; }
-            .addon-image { width: 100%; height: 160px; }
-            .guest-form-grid { grid-template-columns: 1fr; }
-            .footer-inner { flex-direction: column; gap: var(--space-xl); }
-            .footer-links { flex-direction: column; gap: var(--space-lg); }
+            .logo-text { font-size: 18px; letter-spacing: 0.15em; }
+            .header-phone { display: none; }
+            .header-right { gap: var(--space-sm); }
+            .lang-switch { font-size: 10px; padding: 5px 10px; }
+            .header-manage-link { font-size: 10px; letter-spacing: 0.06em; }
             .main-content { margin-top: 56px; }
+
+            /* Mobile stepper — visible only on mobile */
+            .mobile-stepper.show { display: block !important; }
+            .vertical-stepper { display: none !important; }
+
+            /* Hero / Step 1 */
+            .hero-section { min-height: auto; }
+            .hero-content { padding: var(--space-xl) var(--space-md); }
+            .hero-title { font-size: 26px; letter-spacing: 0.04em; }
+            .hero-subtitle { font-size: 11px; margin-bottom: var(--space-xl); letter-spacing: 0.12em; }
+            .booking-widget { padding: var(--space-lg) var(--space-md); max-width: 100%; border-radius: var(--radius-lg); }
+            .booking-widget-title { font-size: 18px; }
+            .booking-form-grid { grid-template-columns: 1fr !important; }
+            .form-input, .form-select, .form-input-white { font-size: 16px; padding: 14px 16px; }
+            .guest-counters-grid { grid-template-columns: 1fr 1fr 1fr; }
+            .guest-counter { gap: var(--space-sm); }
+            .counter-btn { width: 44px; height: 44px; font-size: 20px; }
+            .counter-value { font-size: 18px; min-width: 28px; }
+
+            /* Step pages */
+            .step-page { padding: var(--space-lg) var(--space-md) var(--space-2xl); }
+            .step-page[style*="max-width"] { max-width: 100% !important; }
+            .step-header { margin-bottom: var(--space-lg); }
+            .step-overline { font-size: 9px; }
+            .step-title { font-size: 24px; }
+            .step-description { font-size: 13px; }
+
+            /* Wellness tabs */
+            .wellness-type-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: var(--space-sm); gap: var(--space-sm); scrollbar-width: none; }
+            .wellness-type-tabs::-webkit-scrollbar { display: none; }
+            .wellness-tab { flex-shrink: 0; padding: 10px 18px; font-size: 10px; }
+
+            /* Retreat cards */
+            .retreat-grid { grid-template-columns: 1fr; gap: var(--space-md); }
+            .retreat-card:hover { transform: none; }
+            .retreat-card-image { height: 200px; }
+            .retreat-card-body { padding: var(--space-md); }
+            .retreat-card-name { font-size: 20px; }
+            .retreat-card-desc { font-size: 12px; margin-bottom: var(--space-sm); }
+            .retreat-card-includes { gap: 4px; }
+            .include-tag { font-size: 9px; padding: 4px 8px; }
+            .retreat-card-footer { flex-direction: column; align-items: flex-start; gap: var(--space-sm); }
+            .retreat-price-value { font-size: 18px; }
+            .retreat-select-btn { padding: 12px 20px; font-size: 10px; width: 100%; text-align: center; }
+
+            /* Room cards */
+            .room-grid { grid-template-columns: 1fr; gap: var(--space-md); }
+            .room-card:hover { transform: none; }
+            .room-card-image { height: 200px; }
+            .room-card-body { padding: var(--space-md); }
+            .room-card-name { font-size: 18px; }
+            .room-card-desc { font-size: 12px; }
+            .room-price-value { font-size: 18px; }
+
+            /* Add-ons */
+            .addons-layout { grid-template-columns: 1fr; gap: var(--space-lg); }
+            .addons-list { gap: var(--space-md); }
+            .addon-card { flex-direction: column; }
+            .addon-card:hover { transform: none; }
+            .addon-image { width: 100%; height: 120px; }
+            .addon-body { padding: var(--space-md); }
+            .addon-name { font-size: 16px; }
+            .addon-desc { font-size: 12px; }
+            .addon-footer { flex-direction: row; }
+            .addon-price { font-size: 14px; }
+            .addon-toggle { width: 44px; height: 26px; }
+
+            /* Guest details */
+            .guest-details-layout { grid-template-columns: 1fr; }
+            .guest-form-grid { grid-template-columns: 1fr; }
+            .guest-form-section { padding: var(--space-md); }
+            .guest-form-section-title { font-size: 18px; flex-wrap: wrap; }
+            .room-accordion-header { padding: var(--space-md); }
+            .room-accordion-title { font-size: 18px; flex-wrap: wrap; }
+            .room-accordion-title span { font-size: 11px !important; display: block; width: 100%; }
+            .room-accordion-content { padding: var(--space-md); }
+
+            /* Price summary */
+            .price-summary { padding: var(--space-md); }
+            .price-summary-title { font-size: 18px; }
+            .price-total-value { font-size: 22px; }
+            .price-line { flex-direction: column; gap: 2px; }
+            .price-line-value { text-align: left; }
+
+            /* Summary & Payment */
+            .summary-layout, .adjust-layout { grid-template-columns: 1fr !important; gap: var(--space-lg); }
+            .summary-card { padding: var(--space-md); }
+            .summary-card-title { font-size: 16px; }
+            .summary-row { gap: var(--space-md); }
+            .summary-row-label { min-width: 90px; font-size: 12px; }
+            .summary-row-value { font-size: 12px; word-break: break-word; }
+            .payment-choice-container { padding: var(--space-md); position: static; }
+            .payment-choice-title { font-size: 18px; }
+            .payment-option { padding: var(--space-md); }
+            .payment-option-radio { top: var(--space-md); right: var(--space-md); width: 24px; height: 24px; }
+            .policies-section { margin-top: var(--space-md); padding-top: var(--space-md); }
+            .policy-check { min-height: 44px; align-items: flex-start; padding: var(--space-xs) 0; }
+            .policy-checkbox { width: 24px; height: 24px; min-width: 24px; }
+            .policy-text { font-size: 12px; }
+
+            /* Confirmation */
+            .confirmation-page { padding: var(--space-xl) var(--space-md); }
+            .confirmation-title { font-size: 26px; }
+            .confirmation-subtitle { font-size: 13px; }
+            .confirmation-icon { width: 64px; height: 64px; }
+            .confirmation-icon svg { width: 28px; height: 28px; }
+            .confirmation-ref { padding: var(--space-sm) var(--space-md); flex-direction: column; text-align: center; }
+            .confirmation-ref-value { font-size: 16px; }
+            .confirmation-details { padding: var(--space-md); }
+            .confirmation-detail-row { gap: var(--space-md); }
+            .confirmation-detail-label { font-size: 12px; min-width: 80px; flex-shrink: 0; }
+            .confirmation-detail-value { font-size: 12px; text-align: right; word-break: break-word; }
+            .confirmation-message { font-size: 12px; padding: var(--space-md); }
+            .confirmation-actions { flex-direction: column; align-items: stretch; }
+            .confirmation-actions .btn-primary,
+            .confirmation-actions .btn-secondary { width: 100%; text-align: center; margin-top: 0; }
+
+            /* Navigation buttons — next on top for thumb reach */
+            .step-navigation { flex-direction: column-reverse; gap: var(--space-md); align-items: stretch; }
+            .step-nav-back { justify-content: center; padding: var(--space-md) 0; min-height: 44px; }
+            .step-nav-next { justify-content: center; padding: 16px; font-size: 11px; letter-spacing: 0.15em; min-height: 48px; }
+
+            /* Buttons — larger touch targets */
+            .btn-primary { padding: 16px 24px; font-size: 11px; letter-spacing: 0.15em; min-height: 48px; }
+            .btn-secondary { padding: 14px 20px; font-size: 11px; letter-spacing: 0.1em; min-height: 44px; }
+            .btn-danger { padding: 14px 20px; font-size: 11px; letter-spacing: 0.1em; min-height: 44px; }
+
+            /* Manage booking */
+            .manage-booking-page { padding: var(--space-xl) var(--space-md); max-width: 100%; }
+            .manage-booking-form { padding: var(--space-md); }
+            .manage-booking-actions { flex-direction: column; align-items: stretch; gap: var(--space-sm); }
+            .manage-booking-actions .btn-primary,
+            .manage-booking-actions .btn-secondary,
+            .manage-booking-actions .btn-danger { width: 100%; text-align: center; margin-top: 0; }
+            .manage-booking-detail-card { padding: var(--space-md); }
+
+            /* Modify booking */
+            #stepModify .step-page { max-width: 100% !important; }
+            #stepModify .retreat-grid { grid-template-columns: 1fr; }
+            #stepModify .room-grid { grid-template-columns: 1fr; }
+            #stepModify .addons-list { gap: var(--space-sm); }
+            #stepModify .manage-booking-form { padding: var(--space-md); }
+            #stepModify .manage-booking-actions { flex-direction: column; align-items: stretch; }
+
+            /* Payment adjustment */
+            #stepPaymentAdjust .summary-layout { grid-template-columns: 1fr !important; }
+            #stepPaymentAdjust .step-page { max-width: 100% !important; }
+
+            /* Inline grid overrides — force stacking for any inline 2+ column grids inside forms */
+            #stepModify [style*="grid-template-columns:1fr 1fr"],
+            #stepPaymentAdjust [style*="grid-template-columns:1fr 1fr"],
+            #cardDetailsForm [style*="grid-template-columns:1fr 1fr"],
+            #adjustCardForm [style*="grid-template-columns:1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Footer */
+            .footer { padding: var(--space-2xl) var(--space-md); }
+            .footer-inner { flex-direction: column; gap: var(--space-xl); align-items: center; text-align: center; }
+            .footer-logo-text { font-size: 22px; }
+            .footer-tagline { font-size: 14px; }
+            .footer-links { flex-direction: column; gap: var(--space-lg); align-items: center; }
+            .footer-bottom { flex-direction: column; gap: var(--space-sm); text-align: center; }
+
+            /* Cancel confirm modal */
+            .cancel-confirm-box { padding: var(--space-lg); width: 92%; }
+            .cancel-confirm-box h3 { font-size: 20px; }
+            .cancel-confirm-box .manage-booking-actions { flex-direction: column; }
+
+            /* Disable hover effects on touch */
+            .retreat-card:hover, .room-card:hover, .addon-card:hover { box-shadow: none; }
+        }
+
+        /* Small mobile */
+        @media (max-width: 400px) {
+            .header-inner { gap: var(--space-xs); }
+            .logo-text { font-size: 16px; letter-spacing: 0.1em; }
+            .hero-title { font-size: 22px; }
+            .hero-content { padding: var(--space-lg) var(--space-sm); }
+            .booking-widget { padding: var(--space-md) var(--space-sm); }
+            .step-page { padding: var(--space-md) var(--space-sm) var(--space-xl); }
+            .step-title { font-size: 22px; }
+            .retreat-card-image { height: 160px; }
+            .room-card-image { height: 160px; }
+            .guest-counters-grid { grid-template-columns: 1fr 1fr; }
+            .summary-row-label { min-width: 70px; }
+            .confirmation-title { font-size: 22px; }
+            .mobile-stepper { padding: var(--space-xs) var(--space-sm); }
+            .mobile-stepper-name { font-size: 11px; }
         }
         /* ===== IMAGES IN PLACEHOLDERS ===== */
         .retreat-card-image, .room-card-image, .addon-image {
@@ -1303,7 +1523,7 @@
                                 <input type="date" class="form-input" id="checkoutDate" value="2026-04-22">
                             </div>
                             <div class="form-group full-width">
-                                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-md);">
+                                <div class="guest-counters-grid">
                                     <div class="form-group guest-group">
                                         <label class="form-label" data-i18n="adults">Adults</label>
                                         <div class="guest-counter">
@@ -1368,6 +1588,16 @@
             <div class="vertical-stepper" id="verticalStepper">
                 <div class="stepper-title" data-i18n="stepperTitle">Your Booking Progress</div>
                 <div id="stepperContent"></div>
+            </div>
+            <!-- MOBILE STEPPER -->
+            <div class="mobile-stepper" id="mobileStepper">
+                <div class="mobile-stepper-inner">
+                    <div class="mobile-stepper-label" id="mobileStepLabel">Step 1 of 7</div>
+                    <div class="mobile-stepper-track">
+                        <div class="mobile-stepper-fill" id="mobileStepFill" style="width:14.28%"></div>
+                    </div>
+                    <div class="mobile-stepper-name" id="mobileStepName">Choose Retreat</div>
+                </div>
             </div>
             <div class="step-content-area">
 
@@ -1675,7 +1905,7 @@
                         </div>
                         <div class="confirmation-details" id="confirmationDetails"></div>
                         <div class="confirmation-message">"Your time in Jayasom will come as a pause, a gentle intermission in your everyday life, that will allow you to reclaim the best in you. We look forward to welcoming you."</div>
-                        <div style="margin-top:var(--space-2xl);display:flex;gap:var(--space-md);justify-content:center;">
+                        <div class="confirmation-actions">
                             <button class="btn-secondary" onclick="showManageBooking()">Manage Booking</button>
                             <button class="btn-primary" style="width:auto;margin-top:0;" onclick="startNewBooking()">New Booking</button>
                         </div>
@@ -1936,7 +2166,7 @@
                             <p class="step-description">Your booking modifications have resulted in a price change. Please review the adjustment below.</p>
                         </div>
 
-                        <div class="summary-layout" style="grid-template-columns:1fr 380px;">
+                        <div class="summary-layout adjust-layout">
                             <!-- Left: Breakdown -->
                             <div>
                                 <div class="summary-card" id="adjustOriginalCard"></div>
@@ -2106,8 +2336,9 @@
                 document.getElementById(stepId).classList.add('active');
             }
 
-            // Update stepper
+            // Update steppers
             updateStepper(step);
+            updateMobileStepper(step);
 
             // Build dynamic content
             if (step === 4) renderPriceSummary('priceSummaryStep4');
@@ -2149,6 +2380,27 @@
             container.innerHTML = html;
         }
 
+        function hideMobileStepper() {
+            const ms = document.getElementById('mobileStepper');
+            if (ms) ms.classList.remove('show');
+        }
+
+        function updateMobileStepper(step) {
+            const ms = document.getElementById('mobileStepper');
+            if (!ms) return;
+            if (step <= 1 || step > 8) { hideMobileStepper(); return; }
+            ms.classList.add('show');
+            const idx = step - 2; // 0-based
+            const total = stepNames.length;
+            const pct = ((idx + 1) / total) * 100;
+            const label = document.getElementById('mobileStepLabel');
+            const fill = document.getElementById('mobileStepFill');
+            const name = document.getElementById('mobileStepName');
+            if (label) label.textContent = `Step ${idx + 1} of ${total}`;
+            if (fill) fill.style.width = pct + '%';
+            if (name) name.textContent = stepNames[idx] ? stepNames[idx].label : '';
+        }
+
         // ===== GUEST COUNTER =====
         function updateCount(type, delta) {
             const el = document.getElementById(type + 'Count');
@@ -2173,6 +2425,7 @@
             document.getElementById('stepLayout').style.display = 'flex';
             document.getElementById('mainFooter').style.display = 'block';
             document.getElementById('verticalStepper').classList.add('hidden');
+            hideMobileStepper();
             document.getElementById('stepManage').classList.add('active');
             document.getElementById('manageBookingResult').classList.remove('show');
             document.getElementById('manageRefNumber').value = '';
@@ -2235,6 +2488,7 @@
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
             document.getElementById('stepModify').classList.add('active');
             document.getElementById('verticalStepper').classList.add('hidden');
+            hideMobileStepper();
 
             // Populate stay details
             document.getElementById('modifyCheckin').value = booking.checkin;
@@ -2425,6 +2679,7 @@
             // Navigate to the adjustment screen
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
             document.getElementById('stepPaymentAdjust').classList.add('active');
+            hideMobileStepper();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -2861,7 +3116,7 @@
             document.getElementById('adultsCount').textContent = '2';
             document.getElementById('childrenCount').textContent = '0';
             document.getElementById('roomsCount').textContent = '1';
-            document.getElementById('verticalStepper').classList.remove('hidden');
+
             document.querySelectorAll('.retreat-card').forEach(c => c.classList.remove('selected'));
             document.querySelectorAll('.room-card').forEach(c => c.classList.remove('selected'));
             document.querySelectorAll('.addon-card').forEach(c => { c.classList.remove('selected'); const t = c.querySelector('.addon-toggle'); if(t) t.classList.remove('active'); });
