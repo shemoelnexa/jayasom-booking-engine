@@ -1057,9 +1057,7 @@
 
             /* Inline grid overrides — force stacking for any inline 2+ column grids inside forms */
             #stepModify [style*="grid-template-columns:1fr 1fr"],
-            #stepPaymentAdjust [style*="grid-template-columns:1fr 1fr"],
-            #cardDetailsForm [style*="grid-template-columns:1fr 1fr"],
-            #adjustCardForm [style*="grid-template-columns:1fr 1fr"] {
+            #stepPaymentAdjust [style*="grid-template-columns:1fr 1fr"] {
                 grid-template-columns: 1fr !important;
             }
 
@@ -1836,41 +1834,6 @@
                                     <h3 class="payment-choice-title">Confirm Booking</h3>
                                     <div id="paymentBreakdown"></div>
 
-                                    <!-- Payment Method Selection -->
-                                    <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--space-md);margin-top:var(--space-lg);">Payment Method</p>
-                                    <div class="payment-option selected" onclick="selectPaymentOption(this, 'card')" style="border-radius:var(--radius-md);padding:var(--space-md);cursor:pointer;margin-bottom:0;">
-                                        <div style="display:flex;align-items:center;gap:var(--space-md);">
-                                            <div class="payment-option-radio"></div>
-                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--soft-coral)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                                            <div>
-                                                <div style="font-size:14px;font-weight:600;color:var(--inner-black);">Credit / Debit Card</div>
-                                                <div style="font-size:11px;color:var(--text-muted);">Visa, Mastercard, AMEX</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card Details Form -->
-                                    <div id="cardDetailsForm" style="margin-top:var(--space-md);padding:var(--space-lg);background:var(--open-white);border:1px solid var(--border-light);border-radius:var(--radius-md);">
-                                        <div style="margin-bottom:var(--space-md);">
-                                            <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">Card Number</label>
-                                            <input type="text" class="form-input-white" id="cardNumber" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCardNumber(this)">
-                                        </div>
-                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-bottom:var(--space-md);">
-                                            <div>
-                                                <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">Expiry Date</label>
-                                                <input type="text" class="form-input-white" id="cardExpiry" placeholder="MM / YY" maxlength="7" oninput="formatCardExpiry(this)">
-                                            </div>
-                                            <div>
-                                                <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">CVV</label>
-                                                <input type="text" class="form-input-white" id="cardCvv" placeholder="123" maxlength="4">
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">Cardholder Name</label>
-                                            <input type="text" class="form-input-white" id="cardName" placeholder="Name on card">
-                                        </div>
-                                    </div>
-
                                     <div class="policies-section" style="border-top:none;padding-top:0;margin-top:var(--space-lg);">
                                         <div class="policy-check" onclick="toggleCheck(this)">
                                             <div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
@@ -2120,35 +2083,11 @@
                             </div>
                         </div>
 
-                        <!-- Lead Guest Details -->
-                        <div class="manage-booking-form">
-                            <h4 class="summary-card-title">Lead Guest Details</h4>
-                            <div class="guest-form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">Title</label>
-                                    <select class="form-select" id="modifyTitle" style="background:var(--open-white);"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" class="form-input-white" id="modifyGuestFirst" placeholder="Enter first name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-input-white" id="modifyGuestLast" placeholder="Enter last name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" class="form-input-white" id="modifyGuestEmail" placeholder="email@example.com">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-input-white" id="modifyGuestPhone" placeholder="+966 5XX XXX XXXX">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Age</label>
-                                    <input type="number" class="form-input-white" id="modifyGuestAge" placeholder="Enter age" min="0" max="120">
-                                </div>
-                            </div>
+                        <!-- Guest Details (per-room accordion) -->
+                        <div style="margin-bottom:var(--space-2xl);">
+                            <h4 class="summary-card-title">Guest Information</h4>
+                            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-lg);">Review and update guest details for each room.</p>
+                            <div id="modifyGuestFormsContainer"></div>
                         </div>
                         <div class="manage-booking-actions" style="margin-top:var(--space-xl);">
                             <button class="btn-secondary" onclick="backToManageResult()">Cancel Changes</button>
@@ -2178,43 +2117,6 @@
                                 <div class="payment-choice-container" id="adjustPaymentContainer">
                                     <h3 class="payment-choice-title">Payment Adjustment</h3>
                                     <div id="adjustSummaryBlock"></div>
-                                    <div id="adjustPaymentMethod" style="display:none;">
-                                        <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--space-md);margin-top:var(--space-lg);">Payment Method</p>
-                                        <div id="adjustCardSaved" style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-md);border:1px solid var(--soft-coral);border-radius:var(--radius-md);background:rgba(240,160,136,0.03);">
-                                            <div style="display:flex;align-items:center;gap:var(--space-md);">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--soft-coral)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                                                <div>
-                                                    <div style="font-size:13px;font-weight:600;color:var(--inner-black);">Credit / Debit Card</div>
-                                                    <div style="font-size:11px;color:var(--text-muted);" id="adjustCardLabel">Card ending in •••• 4242</div>
-                                                </div>
-                                            </div>
-                                            <button onclick="toggleAdjustCardEdit()" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--soft-coral);background:none;border:none;cursor:pointer;font-weight:700;font-family:'Century Gothic',sans-serif;">Edit</button>
-                                        </div>
-                                        <div id="adjustCardForm" style="display:none;margin-top:var(--space-md);padding:var(--space-lg);background:var(--open-white);border:1px solid var(--border-light);border-radius:var(--radius-md);">
-                                            <div style="margin-bottom:var(--space-md);">
-                                                <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">Card Number</label>
-                                                <input type="text" class="form-input-white" id="adjustCardNumber" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCardNumber(this)">
-                                            </div>
-                                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-bottom:var(--space-md);">
-                                                <div>
-                                                    <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">Expiry Date</label>
-                                                    <input type="text" class="form-input-white" id="adjustCardExpiry" placeholder="MM / YY" maxlength="7" oninput="formatCardExpiry(this)">
-                                                </div>
-                                                <div>
-                                                    <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">CVV</label>
-                                                    <input type="text" class="form-input-white" id="adjustCardCvv" placeholder="123" maxlength="4">
-                                                </div>
-                                            </div>
-                                            <div style="margin-bottom:var(--space-md);">
-                                                <label class="form-label" style="font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;display:block;">Cardholder Name</label>
-                                                <input type="text" class="form-input-white" id="adjustCardName" placeholder="Name on card">
-                                            </div>
-                                            <div style="display:flex;gap:var(--space-sm);justify-content:flex-end;">
-                                                <button onclick="toggleAdjustCardEdit()" style="font-size:12px;color:var(--text-secondary);background:none;border:1px solid var(--border-light);border-radius:var(--radius-md);padding:8px 16px;cursor:pointer;font-family:'Century Gothic',sans-serif;">Cancel</button>
-                                                <button onclick="saveAdjustCard()" style="font-size:12px;color:var(--open-white);background:var(--soft-coral);border:none;border-radius:var(--radius-md);padding:8px 16px;cursor:pointer;font-family:'Century Gothic',sans-serif;font-weight:600;">Save Card</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div style="margin-top:var(--space-lg);">
                                         <button class="btn-primary" onclick="confirmPaymentAdjustment()">Confirm Changes</button>
                                     </div>
@@ -2523,14 +2425,21 @@
                 }
             });
 
-            // Populate guest details from manage booking search
-            document.getElementById('modifyGuestFirst').value = document.getElementById('manageFirstName').value || '';
-            document.getElementById('modifyGuestLast').value = document.getElementById('manageLastName').value || '';
+            // Render per-room guest accordion
+            renderModifyGuestForms();
+
+            // Pre-populate lead guest (Room 1) from manage booking search
+            const firstNameEl = document.getElementById('modifyRoom0Guest1First');
+            const lastNameEl = document.getElementById('modifyRoom0Guest1Last');
+            if (firstNameEl) firstNameEl.value = document.getElementById('manageFirstName').value || '';
+            if (lastNameEl) lastNameEl.value = document.getElementById('manageLastName').value || '';
             const contact = document.getElementById('manageContact').value || '';
             if (contact.includes('@')) {
-                document.getElementById('modifyGuestEmail').value = contact;
+                const emailEl = document.getElementById('modifyRoom0Guest1Email');
+                if (emailEl) emailEl.value = contact;
             } else {
-                document.getElementById('modifyGuestPhone').value = contact;
+                const phoneEl = document.getElementById('modifyRoom0Guest1Phone');
+                if (phoneEl) phoneEl.value = contact;
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2549,6 +2458,100 @@
             card.classList.toggle('selected');
             const toggle = card.querySelector('.addon-toggle');
             if (toggle) toggle.classList.toggle('active');
+        }
+
+        function renderModifyGuestForms() {
+            const container = document.getElementById('modifyGuestFormsContainer');
+            if (!container) return;
+            const rooms = booking.selectedRooms.length || booking.rooms || 1;
+            let html = '';
+
+            for (let r = 0; r < rooms; r++) {
+                const isFirst = r === 0;
+                const roomName = (booking.selectedRooms[r] && booking.selectedRooms[r].name) || 'Room ' + (r + 1);
+                if (!booking.additionalGuests[r]) booking.additionalGuests[r] = 0;
+
+                html += `<div class="room-accordion">
+                    <div class="room-accordion-header ${isFirst ? 'active' : ''}" onclick="toggleModifyRoomAccordion(${r})">
+                        <div class="room-accordion-title">
+                            Room ${r + 1}
+                            <span style="font-size:13px;font-family:'Century Gothic',sans-serif;color:var(--text-muted);font-weight:400;">${roomName}</span>
+                        </div>
+                        <svg class="room-accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="room-accordion-content ${isFirst ? 'open' : ''}" id="modifyRoomAccordion${r}">`;
+
+                // Lead guest for this room
+                html += `<div class="guest-form-section" style="margin-bottom:0;border:none;padding:0;">
+                    <h3 class="guest-form-section-title">Guest 1 <span class="guest-badge">Lead Guest</span></h3>
+                    <div class="guest-form-grid">
+                        <div class="form-group"><label class="form-label">Title</label><select class="form-select" style="background:var(--open-white);" id="modifyRoom${r}Guest1Title"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
+                        <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input-white" id="modifyRoom${r}Guest1First" placeholder="Enter first name"></div>
+                        <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input-white" id="modifyRoom${r}Guest1Last" placeholder="Enter last name"></div>
+                        <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input-white" id="modifyRoom${r}Guest1Email" placeholder="email@example.com"></div>
+                        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input-white" id="modifyRoom${r}Guest1Phone" placeholder="+966 5XX XXX XXXX"></div>
+                        <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input-white" id="modifyRoom${r}Guest1Age" placeholder="Enter age" min="0" max="120"></div>
+                    </div>`;
+
+                // Additional guests
+                const extraCount = booking.additionalGuests[r] || 0;
+                html += `<div id="modifyAdditionalGuests${r}">`;
+                for (let g = 0; g < extraCount; g++) {
+                    html += renderModifyAdditionalGuest(r, g + 2);
+                }
+                html += `</div>`;
+
+                // Add guest button
+                html += `<div class="add-guest-section">
+                    <div class="add-guest-field">
+                        <button class="add-guest-btn" onclick="addModifyGuest(${r})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Add Guest
+                        </button>
+                    </div>
+                </div>`;
+
+                html += `</div></div></div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function renderModifyAdditionalGuest(roomIndex, guestNum) {
+            return `<div class="additional-guest-form" id="modifyRoom${roomIndex}guest${guestNum}">
+                <button class="remove-guest-btn" onclick="removeModifyGuest(${roomIndex}, ${guestNum})">Remove</button>
+                <h3 class="guest-form-section-title" style="font-size:18px;">Guest ${guestNum}</h3>
+                <div class="guest-form-grid">
+                    <div class="form-group"><label class="form-label">Title</label><select class="form-select" style="background:var(--open-white);"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
+                    <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input-white" placeholder="Enter first name"></div>
+                    <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input-white" placeholder="Enter last name"></div>
+                    <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input-white" placeholder="email@example.com"></div>
+                    <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input-white" placeholder="+966 5XX XXX XXXX"></div>
+                    <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input-white" placeholder="Enter age" min="0" max="120"></div>
+                </div>
+            </div>`;
+        }
+
+        function toggleModifyRoomAccordion(roomIndex) {
+            const header = document.querySelectorAll('#modifyGuestFormsContainer .room-accordion-header')[roomIndex];
+            const content = document.getElementById('modifyRoomAccordion' + roomIndex);
+            if (!header || !content) return;
+            header.classList.toggle('active');
+            content.classList.toggle('open');
+        }
+
+        function addModifyGuest(roomIndex) {
+            if (!booking.additionalGuests[roomIndex]) booking.additionalGuests[roomIndex] = 0;
+            booking.additionalGuests[roomIndex]++;
+            const guestNum = booking.additionalGuests[roomIndex] + 1;
+            const container = document.getElementById('modifyAdditionalGuests' + roomIndex);
+            if (container) container.insertAdjacentHTML('beforeend', renderModifyAdditionalGuest(roomIndex, guestNum));
+        }
+
+        function removeModifyGuest(roomIndex, guestNum) {
+            const el = document.getElementById('modifyRoom' + roomIndex + 'guest' + guestNum);
+            if (el) el.remove();
+            booking.additionalGuests[roomIndex] = Math.max(0, (booking.additionalGuests[roomIndex] || 0) - 1);
         }
 
         function updateModifyCount(id, delta) {
@@ -2652,29 +2655,15 @@
 
             if (diff > 0) {
                 adjHtml += `<div class="price-total-line"><span class="price-total-label" style="color:var(--soft-coral);">Additional Charge</span><span class="price-total-value" style="color:var(--soft-coral);">+ ${formatSAR(diff)}</span></div>`;
-                adjHtml += `<p style="font-size:11px;color:var(--text-muted);margin-top:var(--space-sm);">The additional amount will be charged to your payment method on file.</p>`;
-                document.getElementById('adjustPaymentMethod').style.display = 'block';
+                adjHtml += `<p style="font-size:11px;color:var(--text-muted);margin-top:var(--space-sm);">The additional amount will be charged via your payment gateway.</p>`;
             } else if (diff < 0) {
                 adjHtml += `<div class="price-total-line"><span class="price-total-label" style="color:var(--success-green);">Refund Amount</span><span class="price-total-value" style="color:var(--success-green);">- ${formatSAR(Math.abs(diff))}</span></div>`;
                 adjHtml += `<p style="font-size:11px;color:var(--text-muted);margin-top:var(--space-sm);">The refund will be processed to your original payment method within 5-7 business days.</p>`;
-                document.getElementById('adjustPaymentMethod').style.display = 'none';
             } else {
                 adjHtml += `<div class="price-total-line"><span class="price-total-label">No Price Change</span><span class="price-total-value">${formatSAR(0)}</span></div>`;
                 adjHtml += `<p style="font-size:11px;color:var(--text-muted);margin-top:var(--space-sm);">Your modifications do not affect the total price. No additional payment or refund is required.</p>`;
-                document.getElementById('adjustPaymentMethod').style.display = 'none';
             }
             document.getElementById('adjustSummaryBlock').innerHTML = adjHtml;
-
-            // Populate adjust card with saved card info from main booking
-            const mainCardNum = document.getElementById('cardNumber');
-            if (mainCardNum && mainCardNum.value) {
-                const num = mainCardNum.value.replace(/\D/g, '');
-                const last4 = num.slice(-4);
-                document.getElementById('adjustCardLabel').textContent = 'Card ending in •••• ' + last4;
-            }
-            // Reset to saved view (not edit)
-            document.getElementById('adjustCardSaved').style.display = 'flex';
-            document.getElementById('adjustCardForm').style.display = 'none';
 
             // Navigate to the adjustment screen
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
@@ -2724,8 +2713,10 @@
             document.getElementById('stepManage').classList.add('active');
 
             const ref = document.getElementById('manageRefNumber').value.trim() || 'JWR-2026-04158';
-            const firstName = document.getElementById('modifyGuestFirst').value;
-            const lastName = document.getElementById('modifyGuestLast').value;
+            const firstNameEl = document.getElementById('modifyRoom0Guest1First');
+            const lastNameEl = document.getElementById('modifyRoom0Guest1Last');
+            const firstName = firstNameEl ? firstNameEl.value : '';
+            const lastName = lastNameEl ? lastNameEl.value : '';
             const nights = getNights();
             const total = getTotal();
             const diff = total - originalBookingTotal;
@@ -2846,43 +2837,6 @@
         function selectPayment(option, type) {
             document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
             option.classList.add('selected');
-        }
-
-        function selectPaymentOption(option, type) {
-            // For the main booking flow payment selection
-            option.classList.add('selected');
-            const form = document.getElementById('cardDetailsForm');
-            if (form) form.style.display = 'block';
-        }
-
-        function formatCardNumber(input) {
-            let val = input.value.replace(/\D/g, '').substring(0, 16);
-            input.value = val.replace(/(\d{4})(?=\d)/g, '$1  ');
-        }
-
-        function formatCardExpiry(input) {
-            let val = input.value.replace(/\D/g, '').substring(0, 4);
-            if (val.length >= 3) val = val.substring(0, 2) + ' / ' + val.substring(2);
-            input.value = val;
-        }
-
-        function toggleAdjustCardEdit() {
-            const saved = document.getElementById('adjustCardSaved');
-            const form = document.getElementById('adjustCardForm');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-                saved.style.display = 'none';
-            } else {
-                form.style.display = 'none';
-                saved.style.display = 'flex';
-            }
-        }
-
-        function saveAdjustCard() {
-            const num = document.getElementById('adjustCardNumber').value.replace(/\D/g, '');
-            const last4 = num.slice(-4) || '4242';
-            document.getElementById('adjustCardLabel').textContent = 'Card ending in •••• ' + last4;
-            toggleAdjustCardEdit();
         }
 
         function toggleCheck(el) {
