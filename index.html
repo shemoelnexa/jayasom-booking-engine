@@ -2425,7 +2425,7 @@
                                 <div style="margin-bottom:var(--space-2xl);">
                                     <h4 class="summary-card-title">Choose Retreat</h4>
                                     <div class="retreat-grid" id="modifyRetreatGrid">
-                                        <div class="retreat-card" onclick="selectModifyRetreat(this, 'The Renewal Retreat', 28500)">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Renewal Retreat', 28500, 'modify')">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/Rectangle 13-3.png" alt="The Renewal Retreat"></div>
                                             <div class="retreat-card-body">
@@ -2433,11 +2433,11 @@
                                                 <p class="retreat-card-desc">A transformative seven-night journey combining ancient healing traditions with modern wellness science.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 28,500 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn">Select</button>
+                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="selectModifyRetreat(this, 'The Reset Experience', 19200)">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reset Experience', 19200, 'modify')">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/Rectangle 13-4.png" alt="The Reset Experience"></div>
                                             <div class="retreat-card-body">
@@ -2445,11 +2445,11 @@
                                                 <p class="retreat-card-desc">A focused five-night program designed to restore your natural rhythm with targeted spa therapies.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 19,200 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn">Select</button>
+                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Reset Experience', 19200)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="selectModifyRetreat(this, 'The Reclaim Journey', 52000)">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reclaim Journey', 52000, 'modify')">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/Rectangle 13-5.png" alt="The Reclaim Journey"></div>
                                             <div class="retreat-card-body">
@@ -2457,11 +2457,11 @@
                                                 <p class="retreat-card-desc">Our most comprehensive two-week transformation addressing body, mind and spirit.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 52,000 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn">Select</button>
+                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="selectModifyRetreat(this, 'The Weekend Pause', 9800)">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Weekend Pause', 9800, 'modify')">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/image 20.png" alt="The Weekend Pause"></div>
                                             <div class="retreat-card-body">
@@ -2469,7 +2469,7 @@
                                                 <p class="retreat-card-desc">A brief yet meaningful three-night retreat for a restorative pause by the Red Sea.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 9,800 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn">Select</button>
+                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2481,7 +2481,7 @@
                                     <h4 class="summary-card-title">Select Accommodation</h4>
                                     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-lg);">Select room types and quantities.</p>
                                     <div class="room-grid" id="modifyRoomGrid" style="grid-template-columns:1fr;">
-                                        <div class="room-card" style="cursor:default;">
+                                        <div class="room-card" style="cursor:pointer;" onclick="openRoomDrawer('Desert View Suite', 'modify')">
                                             <div style="display:flex;" class="room-card-inner">
                                                 <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><img src="images/Rectangle 13-2.png" alt="Desert View Suite"></div>
                                                 <div class="room-card-body" style="flex:1;">
@@ -2490,15 +2490,15 @@
                                                     <div class="room-card-footer">
                                                         <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 3,200 <span>/night</span></span></div>
                                                         <div class="guest-counter">
-                                                            <button class="counter-btn" onclick="updateModifyRoomQty('modifyDesert', -1)">-</button>
+                                                            <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifyDesert', -1)">-</button>
                                                             <span class="counter-value" id="modifyDesert">0</span>
-                                                            <button class="counter-btn" onclick="updateModifyRoomQty('modifyDesert', 1)">+</button>
+                                                            <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifyDesert', 1)">+</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="room-card" style="cursor:default;">
+                                        <div class="room-card" style="cursor:pointer;" onclick="openRoomDrawer('Sea View Villa', 'modify')">
                                             <div style="display:flex;" class="room-card-inner">
                                                 <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><img src="images/Rectangle 33.png" alt="Sea View Villa"></div>
                                                 <div class="room-card-body" style="flex:1;">
@@ -2507,15 +2507,15 @@
                                                     <div class="room-card-footer">
                                                         <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 5,800 <span>/night</span></span></div>
                                                         <div class="guest-counter">
-                                                            <button class="counter-btn" onclick="updateModifyRoomQty('modifySea', -1)">-</button>
+                                                            <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifySea', -1)">-</button>
                                                             <span class="counter-value" id="modifySea">0</span>
-                                                            <button class="counter-btn" onclick="updateModifyRoomQty('modifySea', 1)">+</button>
+                                                            <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifySea', 1)">+</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="room-card" style="cursor:default;">
+                                        <div class="room-card" style="cursor:pointer;" onclick="openRoomDrawer('Presidential Residence', 'modify')">
                                             <div style="display:flex;" class="room-card-inner">
                                                 <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><img src="images/image 9.png" alt="Presidential Residence"></div>
                                                 <div class="room-card-body" style="flex:1;">
@@ -2524,9 +2524,9 @@
                                                     <div class="room-card-footer">
                                                         <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 12,500 <span>/night</span></span></div>
                                                         <div class="guest-counter">
-                                                            <button class="counter-btn" onclick="updateModifyRoomQty('modifyPresidential', -1)">-</button>
+                                                            <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifyPresidential', -1)">-</button>
                                                             <span class="counter-value" id="modifyPresidential">0</span>
-                                                            <button class="counter-btn" onclick="updateModifyRoomQty('modifyPresidential', 1)">+</button>
+                                                            <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifyPresidential', 1)">+</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2540,28 +2540,28 @@
                                     <h4 class="summary-card-title">Enhance Your Experience</h4>
                                     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-lg);">Add personalized treatments to deepen your wellness journey.</p>
                                     <div class="addons-list" id="modifyAddonsList">
-                                        <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="850" data-name="Deep Tissue Massage">
+                                        <div class="addon-card" onclick="openTreatmentDrawer(this, 'Deep Tissue Massage', 850, 'modify')" data-price="850" data-name="Deep Tissue Massage">
                                             <div class="addon-image"><img src="images/image 18.png" alt="Deep Tissue Massage"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Deep Tissue Massage</h3><p class="addon-desc">A therapeutic massage targeting deep muscle layers to release chronic tension. 90 minutes of focused recovery.</p></div>
                                                 <div class="addon-footer"><span class="addon-price">SAR 850 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
-                                        <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="600" data-name="Ayurvedic Consultation">
+                                        <div class="addon-card" onclick="openTreatmentDrawer(this, 'Ayurvedic Consultation', 600, 'modify')" data-price="600" data-name="Ayurvedic Consultation">
                                             <div class="addon-image"><img src="images/image 19.png" alt="Ayurvedic Consultation"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Ayurvedic Consultation</h3><p class="addon-desc">A comprehensive dosha assessment with personalized lifestyle and nutrition recommendations rooted in ancient Ayurvedic wisdom.</p></div>
                                                 <div class="addon-footer"><span class="addon-price">SAR 600 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
-                                        <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="750" data-name="Hydrating Facial Treatment">
+                                        <div class="addon-card" onclick="openTreatmentDrawer(this, 'Hydrating Facial Treatment', 750, 'modify')" data-price="750" data-name="Hydrating Facial Treatment">
                                             <div class="addon-image"><img src="images/image 31.png" alt="Hydrating Facial Treatment"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Hydrating Facial Treatment</h3><p class="addon-desc">A luxurious facial using marine-based ingredients and advanced hydration techniques to restore skin luminosity.</p></div>
                                                 <div class="addon-footer"><span class="addon-price">SAR 750 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
-                                        <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="450" data-name="Sound Healing Session">
+                                        <div class="addon-card" onclick="openTreatmentDrawer(this, 'Sound Healing Session', 450, 'modify')" data-price="450" data-name="Sound Healing Session">
                                             <div class="addon-image"><img src="images/Rectangle 50.png" alt="Sound Healing Session"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Sound Healing Session</h3><p class="addon-desc">An immersive sonic meditation using Tibetan singing bowls and tuning forks for deep relaxation and inner stillness.</p></div>
@@ -3458,10 +3458,11 @@
 
         let currentDrawerCarouselIndex = 0;
 
-        function openRetreatDrawer(card, name, price) {
+        function openRetreatDrawer(card, name, price, context) {
             if (event) event.stopPropagation();
             const details = retreatDetails[name];
             if (!details) return;
+            context = context || 'booking';
 
             document.getElementById('drawerTitle').textContent = name;
 
@@ -3509,21 +3510,37 @@
             document.getElementById('drawerBody').innerHTML = bodyHTML;
 
             const isSelected = card.classList.contains('selected');
+            const selectHandler = context === 'modify'
+                ? `selectModifyRetreatFromDrawer('${name.replace(/'/g, "\\'")}', ${price})`
+                : `selectRetreatFromDrawer('${name.replace(/'/g, "\\'")}', ${price})`;
             document.getElementById('drawerFooter').innerHTML = `
                 <div class="drawer-price">
                     <span class="drawer-price-label">Starting from</span>
                     <span class="drawer-price-value">SAR ${price.toLocaleString()} <span>/ person</span></span>
                 </div>
-                <button class="drawer-select-btn" onclick="selectRetreatFromDrawer('${name}', ${price})">${isSelected ? 'Selected' : 'Select Retreat'}</button>`;
+                <button class="drawer-select-btn" onclick="${selectHandler}">${isSelected ? 'Selected' : 'Select Retreat'}</button>`;
 
             showDetailDrawer();
         }
 
-        function openRoomDrawer(roomName) {
+        const modifyRoomCounterIds = {
+            'Desert View Suite': 'modifyDesert',
+            'Sea View Villa': 'modifySea',
+            'Presidential Residence': 'modifyPresidential'
+        };
+
+        function openRoomDrawer(roomName, context) {
             if (event) event.stopPropagation();
             const details = roomDetails[roomName];
             const data = roomData[roomName];
             if (!details || !data) return;
+            context = context || 'booking';
+            let currentQty = data.qty;
+            if (context === 'modify') {
+                const modId = modifyRoomCounterIds[roomName];
+                const modEl = modId && document.getElementById(modId);
+                if (modEl) currentQty = parseInt(modEl.textContent) || 0;
+            }
 
             document.getElementById('drawerTitle').textContent = roomName;
 
@@ -3563,24 +3580,26 @@
 
             document.getElementById('drawerBody').innerHTML = bodyHTML;
 
+            const roomUpdater = context === 'modify' ? 'updateModifyRoomFromDrawer' : 'updateRoomFromDrawer';
             document.getElementById('drawerFooter').innerHTML = `
                 <div class="drawer-price">
                     <span class="drawer-price-label">Per night</span>
                     <span class="drawer-price-value">SAR ${data.price.toLocaleString()} <span>/night</span></span>
                 </div>
                 <div class="drawer-room-counter">
-                    <button class="drawer-counter-btn" onclick="updateRoomFromDrawer('${roomName}', -1)">-</button>
-                    <span class="drawer-counter-value" id="drawerRoomQty">${data.qty}</span>
-                    <button class="drawer-counter-btn" onclick="updateRoomFromDrawer('${roomName}', 1)">+</button>
+                    <button class="drawer-counter-btn" onclick="${roomUpdater}('${roomName.replace(/'/g, "\\'")}', -1)">-</button>
+                    <span class="drawer-counter-value" id="drawerRoomQty">${currentQty}</span>
+                    <button class="drawer-counter-btn" onclick="${roomUpdater}('${roomName.replace(/'/g, "\\'")}', 1)">+</button>
                 </div>`;
 
             showDetailDrawer();
         }
 
-        function openTreatmentDrawer(card, treatmentName, price) {
+        function openTreatmentDrawer(card, treatmentName, price, context) {
             if (event) event.stopPropagation();
             const details = treatmentDetails[treatmentName];
             if (!details) return;
+            context = context || 'booking';
 
             document.getElementById('drawerTitle').textContent = treatmentName;
 
@@ -3614,12 +3633,13 @@
 
             const isSelected = card.classList.contains('selected');
             const priceDisplay = price === 0 ? 'Complimentary' : `SAR ${price.toLocaleString()} <span>/ session</span>`;
+            const treatmentHandler = context === 'modify' ? 'selectModifyTreatmentFromDrawer' : 'selectTreatmentFromDrawer';
             document.getElementById('drawerFooter').innerHTML = `
                 <div class="drawer-price">
                     <span class="drawer-price-label">${price === 0 ? '' : 'Per session'}</span>
                     <span class="drawer-price-value" ${price === 0 ? 'style="font-size:16px;font-weight:400;color:var(--text-secondary);"' : ''}>${priceDisplay}</span>
                 </div>
-                <button class="drawer-select-btn" onclick="selectTreatmentFromDrawer(this)" data-card-name="${treatmentName}">${isSelected ? 'Remove' : 'Add Treatment'}</button>`;
+                <button class="drawer-select-btn" onclick="${treatmentHandler}(this)" data-card-name="${treatmentName}">${isSelected ? 'Remove' : 'Add Treatment'}</button>`;
 
             showDetailDrawer();
         }
@@ -3697,6 +3717,40 @@
             const card = document.querySelector(`#step4 .addon-card[data-name="${treatmentName}"]`);
             if (card) {
                 toggleAddon(card);
+                const isNowSelected = card.classList.contains('selected');
+                btn.textContent = isNowSelected ? 'Remove' : 'Add Treatment';
+            }
+        }
+
+        function selectModifyRetreatFromDrawer(name, price) {
+            const cards = document.querySelectorAll('#modifyRetreatGrid .retreat-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            let target = null;
+            cards.forEach(c => {
+                const cardName = c.querySelector('.retreat-card-name');
+                if (cardName && cardName.textContent === name) target = c;
+            });
+            if (target) {
+                target.classList.add('selected');
+                selectModifyRetreat(target, name, price);
+            }
+            closeDetailDrawer();
+        }
+
+        function updateModifyRoomFromDrawer(roomName, delta) {
+            const modId = modifyRoomCounterIds[roomName];
+            if (!modId) return;
+            updateModifyRoomQty(modId, delta);
+            const el = document.getElementById('drawerRoomQty');
+            const modEl = document.getElementById(modId);
+            if (el && modEl) el.textContent = modEl.textContent;
+        }
+
+        function selectModifyTreatmentFromDrawer(btn) {
+            const treatmentName = btn.dataset.cardName;
+            const card = document.querySelector(`#modifyAddonsList .addon-card[data-name="${treatmentName}"]`);
+            if (card) {
+                toggleModifyAddon(card);
                 const isNowSelected = card.classList.contains('selected');
                 btn.textContent = isNowSelected ? 'Remove' : 'Add Treatment';
             }
@@ -3941,6 +3995,25 @@
                     </div>`;
                 }
 
+                // Additional guests (rendered from prior state)
+                const baseGuests = Math.max(1, guestsInThisRoom);
+                const extraCount = booking.additionalGuests[r] || 0;
+                html += `<div id="additionalGuests${r}">`;
+                for (let g = 0; g < extraCount; g++) {
+                    html += renderAdditionalGuestForm(r, baseGuests + g + 1, isAr, t);
+                }
+                html += `</div>`;
+
+                // Add guest button
+                html += `<div class="add-guest-section">
+                    <div class="add-guest-field">
+                        <button class="add-guest-btn" onclick="addGuest(${r})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            ${isAr ? 'إضافة ضيف' : 'Add Guest'}
+                        </button>
+                    </div>
+                </div>`;
+
                 html += `</div></div>`;
             }
 
@@ -3976,7 +4049,9 @@
         function addGuest(roomIndex) {
             if (!booking.additionalGuests[roomIndex]) booking.additionalGuests[roomIndex] = 0;
             booking.additionalGuests[roomIndex]++;
-            const guestNum = booking.additionalGuests[roomIndex] + 1;
+            const adultsPerRoom = Math.ceil(booking.adults / booking.rooms);
+            const baseGuests = Math.max(1, (roomIndex < booking.rooms - 1) ? adultsPerRoom : (booking.adults - adultsPerRoom * roomIndex));
+            const guestNum = baseGuests + booking.additionalGuests[roomIndex];
             const container = document.getElementById('additionalGuests' + roomIndex);
             if (container) {
                 container.insertAdjacentHTML('beforeend', renderAdditionalGuestForm(roomIndex, guestNum));
