@@ -975,9 +975,8 @@
             .room-grid { grid-template-columns: 1fr; }
             .room-card-inner { flex-direction: column !important; }
             .room-card-inner .room-card-image { width: 100% !important; min-width: 100% !important; height: 200px !important; }
-            .addons-layout, .guest-details-layout, .summary-layout { grid-template-columns: 1fr; }
-            .price-summary, .payment-choice-container { position: static !important; }
-            .sidebar-sticky-group { position: static !important; }
+            .addons-layout, .guest-details-layout, .summary-layout { grid-template-columns: 1fr 300px; }
+            .sidebar-sticky-group { position: sticky !important; top: 80px; }
             .step-page { padding: var(--space-xl) var(--space-lg); }
             .manage-booking-page { padding: var(--space-2xl) var(--space-lg); }
             .confirmation-page { padding: var(--space-2xl) var(--space-lg); }
@@ -1057,6 +1056,7 @@
 
             /* Add-ons */
             .addons-layout { grid-template-columns: 1fr; gap: var(--space-lg); }
+            .sidebar-sticky-group { position: sticky !important; top: 64px; }
             .addons-list { gap: var(--space-md); }
             .addon-card { flex-direction: column; }
             .addon-card:hover { transform: none; }
