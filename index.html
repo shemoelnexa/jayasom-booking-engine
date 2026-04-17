@@ -4774,13 +4774,15 @@
             }
         }
 
-        // Close calendar dropdown when clicking outside
+        // Close calendar dropdown when clicking outside — only if both dates selected
         document.addEventListener('click', function(e) {
             const dropdown = document.getElementById('calendarDropdown');
             const field = document.getElementById('datePickerField');
             if (dropdown && dropdown.classList.contains('show')) {
                 if (!dropdown.contains(e.target) && !field.contains(e.target)) {
-                    closeCalendarDropdown();
+                    if (calendarCheckin && calendarCheckout) {
+                        closeCalendarDropdown();
+                    }
                 }
             }
         });
