@@ -2425,7 +2425,7 @@
                                 <div style="margin-bottom:var(--space-2xl);">
                                     <h4 class="summary-card-title">Choose Retreat</h4>
                                     <div class="retreat-grid" id="modifyRetreatGrid">
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Renewal Retreat', 28500, 'modify')">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Renewal Retreat', 28500, 'modify')" data-price="28500">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/Rectangle 13-3.png" alt="The Renewal Retreat"></div>
                                             <div class="retreat-card-body">
@@ -2437,7 +2437,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reset Experience', 19200, 'modify')">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reset Experience', 19200, 'modify')" data-price="19200">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/Rectangle 13-4.png" alt="The Reset Experience"></div>
                                             <div class="retreat-card-body">
@@ -2449,7 +2449,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reclaim Journey', 52000, 'modify')">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reclaim Journey', 52000, 'modify')" data-price="52000">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/Rectangle 13-5.png" alt="The Reclaim Journey"></div>
                                             <div class="retreat-card-body">
@@ -2461,7 +2461,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Weekend Pause', 9800, 'modify')">
+                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Weekend Pause', 9800, 'modify')" data-price="9800">
                                             <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                             <div class="retreat-card-image"><img src="images/image 20.png" alt="The Weekend Pause"></div>
                                             <div class="retreat-card-body">
@@ -3165,7 +3165,7 @@
             const selectedRetreatCard = document.querySelector('#modifyRetreatGrid .retreat-card.selected');
             if (selectedRetreatCard) {
                 booking.retreatName = selectedRetreatCard.querySelector('.retreat-card-name').textContent;
-                booking.retreatPrice = parseInt(selectedRetreatCard.getAttribute('onclick').match(/(\d+)\)$/)[1]);
+                booking.retreatPrice = parseInt(selectedRetreatCard.dataset.price, 10);
             }
 
             booking.selectedRooms = [];
