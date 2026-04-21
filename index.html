@@ -165,16 +165,17 @@
         }
 
         .v-step {
-            display: flex; align-items: flex-start; gap: var(--space-md);
+            display: flex; align-items: center; gap: var(--space-md);
             cursor: pointer; position: relative; padding-bottom: 0;
+            min-height: 40px;
         }
 
         .v-step-connector {
             display: flex; justify-content: center; width: 36px; flex-shrink: 0;
-            padding: 4px 0;
+            padding: 6px 0;
         }
         .v-step-connector .v-line {
-            width: 2px; height: 28px; background: var(--border-light);
+            width: 2px; height: 36px; background: var(--border-light);
             transition: background 0.3s ease;
         }
         .v-step.completed + .v-step-connector .v-line,
@@ -196,7 +197,7 @@
             background: var(--soft-coral); border-color: var(--soft-coral); color: white;
         }
 
-        .v-step-text { padding-top: 6px; }
+        .v-step-text { padding-top: 0; }
         .v-step-label {
             font-size: 13px; font-weight: 700; color: var(--text-muted);
             line-height: 1.3; transition: color 0.3s ease;
@@ -2000,7 +2001,7 @@
                 <div class="step-container" id="step2">
                     <div class="step-page">
                         <div class="step-header">
-                            <p class="step-overline" data-i18n="step1of5">Step 1 of 5</p>
+                            <p class="step-overline" data-i18n="step1of4">Step 1 of 4</p>
                             <h2 class="step-title" data-i18n="chooseRetreat">Choose Your Retreat</h2>
                             <p class="step-description" data-i18n="chooseRetreatDesc">Each retreat is a curated journey designed to guide you back to your inner self. Select the experience that speaks to your needs.</p>
                         </div>
@@ -2079,12 +2080,13 @@
                 <div class="step-container" id="step3">
                     <div class="step-page">
                         <div class="step-header">
-                            <p class="step-overline">Step 2 of 5</p>
+                            <p class="step-overline">Step 2 of 4</p>
                             <h2 class="step-title">Select Your Accommodation</h2>
                             <p class="step-description">Every room is a sanctuary. Select room types and quantities to suit your group.</p>
                         </div>
                         <div id="roomCapacityWarning" style="display:none;padding:var(--space-md);background:rgba(236,198,129,0.15);border:1px solid var(--kind-yellow);border-radius:var(--radius-md);margin-bottom:var(--space-lg);font-size:13px;color:var(--text-secondary);"></div>
                         <div class="addons-layout">
+                            <div style="min-width:0;">
                             <div class="room-grid" style="grid-template-columns:1fr;">
                                 <!-- Desert View Suite -->
                                 <div class="room-card" style="cursor:pointer;" data-room-name="Desert View Suite" data-room-price="3200" data-room-capacity="2" onclick="openRoomDrawer('Desert View Suite')">
@@ -2144,16 +2146,70 @@
                                     </div>
                                 </div>
                             </div>
+
+                                <!-- Airport Transfer & Travel (moved from treatments step) -->
+                                <div class="addons-list" style="margin-top: var(--space-lg);">
+                                    <div class="addon-card" onclick="toggleAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
+                                        <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
+                                            <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
+                                        </div>
+                                        <div class="addon-body">
+                                            <div>
+                                                <h3 class="addon-name">Airport Transfer &amp; Travel</h3>
+                                                <p class="addon-desc">Amaala is a dedicated destination — airport pickup is recommended. Let us know your travel plans to coordinate a seamless arrival.</p>
+                                            </div>
+                                            <div class="addon-footer">
+                                                <span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span>
+                                                <button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button>
+                                            </div>
+                                        </div>
+                                        <div id="airportTransferFields" style="display:none;width:100%;padding:var(--space-md) var(--space-lg) var(--space-lg);border-top:1px solid var(--border-light);" onclick="event.stopPropagation();">
+                                            <div class="guest-form-grid">
+                                                <div class="form-group">
+                                                    <label class="form-label">Do you need airport pickup?</label>
+                                                    <select class="form-select" style="background:var(--open-white);" id="needsPickup" onchange="booking.needsPickup=this.value">
+                                                        <option value="">Select</option>
+                                                        <option value="yes">Yes, please arrange pickup</option>
+                                                        <option value="no">No, I have my own transport</option>
+                                                        <option value="later">I'll confirm later</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Do you know your flight details?</label>
+                                                    <select class="form-select" style="background:var(--open-white);" id="knowFlightDetails" onchange="document.getElementById('flightNumberFields').style.display=this.value==='yes'?'block':'none';">
+                                                        <option value="">Select</option>
+                                                        <option value="yes">Yes</option>
+                                                        <option value="no">Not yet</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div id="flightNumberFields" style="display:none;margin-top:var(--space-md);">
+                                                <div class="guest-form-grid">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Flight Number</label>
+                                                        <input type="text" class="form-input-white" id="flightNumber" placeholder="e.g. SV 1234" onchange="booking.flightNumber=this.value">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Arrival Date &amp; Time</label>
+                                                        <input type="datetime-local" class="form-input-white" id="arrivalTime" onchange="booking.arrivalTime=this.value">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep3"></div></div>
                         </div>
                         <div class="step-navigation">
                             <button class="step-nav-back" onclick="goToStep(2)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Retreats</button>
-                            <button class="step-nav-next" onclick="goToStep(4)">Continue to Treatments <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                            <button class="step-nav-next" onclick="goToStep(5)">Continue to Guest Details <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- STEP 4: ADD-ONS & TRANSPORT -->
+                <!-- STEP 4: ADD-ONS & TRANSPORT — ARCHIVED (to revert, remove the <script> wrapper tags below) -->
+                <script type="text/html" id="archived-step4-treatments">
                 <div class="step-container" id="step4">
                     <div class="step-page">
                         <div class="step-header">
@@ -2251,12 +2307,14 @@
                         </div>
                     </div>
                 </div>
+                </script>
+                <!-- END ARCHIVED STEP 4 -->
 
                 <!-- STEP 5: GUEST DETAILS + SUMMARY + PAYMENT (MERGED) -->
                 <div class="step-container" id="step5">
                     <div class="step-page">
                         <div class="step-header">
-                            <p class="step-overline">Step 4 of 5</p>
+                            <p class="step-overline">Step 3 of 4</p>
                             <h2 class="step-title">Guest Information & Payment</h2>
                             <p class="step-description">Provide guest details, review your booking, and confirm your reservation.</p>
                         </div>
@@ -2300,7 +2358,7 @@
                             </div>
                         </div>
                         <div class="step-navigation">
-                            <button class="step-nav-back" onclick="goToStep(4)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Treatments</button>
+                            <button class="step-nav-back" onclick="goToStep(3)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Rooms</button>
                             <div></div>
                         </div>
                     </div>
@@ -2668,8 +2726,7 @@
         const stepNames = [
             { label: 'Select Retreat', sub: 'Choose your journey' },
             { label: 'Select Room', sub: 'Pick accommodation' },
-            { label: 'Treatments & Transport', sub: 'Add-ons & travel' },
-            { label: 'Guest Details & Payment', sub: 'Complete booking' },
+            { label: 'Guest Details', sub: 'Details & payment' },
             { label: 'Confirmation', sub: 'Booking confirmed' }
         ];
 
@@ -2748,8 +2805,15 @@
         }
 
         // ===== STEPPER =====
+        // Visible steps: 2 (retreat), 3 (room), 5 (guest), 6 (confirmation). Step 4 archived.
+        function stepperIndexFromStep(step) {
+            return step - 2 - (step >= 5 ? 1 : 0);
+        }
+        function stepFromStepperIndex(idx) {
+            return idx < 2 ? idx + 2 : idx + 3; // 0→2, 1→3, 2→5, 3→6
+        }
         function updateStepper(step) {
-            const activeIdx = step - 2; // steps 2-6 map to indices 0-4
+            const activeIdx = stepperIndexFromStep(step);
             const container = document.getElementById('stepperContent');
             if (!container) return;
             let html = '';
@@ -2762,7 +2826,7 @@
                     ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
                     : (i + 1);
 
-                html += `<div class="v-step ${cls}" onclick="goToStep(${i + 2})">
+                html += `<div class="v-step ${cls}" onclick="goToStep(${stepFromStepperIndex(i)})">
                     <div class="v-step-circle">${circleContent}</div>
                     <div class="v-step-text">
                         <div class="v-step-label">${stepNames[i].label}</div>
@@ -2785,9 +2849,9 @@
         function updateMobileStepper(step) {
             const ms = document.getElementById('mobileStepper');
             if (!ms) return;
-            if (step <= 1 || step > 6) { hideMobileStepper(); return; }
+            if (step <= 1 || step > 6 || step === 4) { hideMobileStepper(); return; }
             ms.classList.add('show');
-            const idx = step - 2; // 0-based
+            const idx = stepperIndexFromStep(step);
             const total = stepNames.length;
             const pct = ((idx + 1) / total) * 100;
             const label = document.getElementById('mobileStepLabel');
@@ -3852,15 +3916,16 @@
                 if (fieldsDiv) fieldsDiv.style.display = card.classList.contains('selected') ? 'block' : 'none';
             }
 
-            // Rebuild addons list
+            // Rebuild addons list (cards live in step 3 or step 4)
             booking.addons = [];
-            document.querySelectorAll('#step4 .addon-card.selected').forEach(c => {
+            document.querySelectorAll('#step3 .addon-card.selected, #step4 .addon-card.selected').forEach(c => {
                 booking.addons.push({
                     name: c.dataset.name,
                     price: parseInt(c.dataset.price)
                 });
             });
 
+            if (currentStep === 3) renderPriceSummary('priceSummaryStep3');
             if (currentStep === 4) renderPriceSummary('priceSummaryStep4');
         }
 
