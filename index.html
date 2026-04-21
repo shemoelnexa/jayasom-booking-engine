@@ -417,7 +417,7 @@
         .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: var(--space-xs); }
         .calendar-weekday { text-align: center; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 6px 0; }
         .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-        .calendar-day { text-align: center; padding: 7px 2px; font-size: 12px; color: var(--text-primary); cursor: pointer; border-radius: var(--radius-sm); transition: all 0.2s ease; position: relative; }
+        .calendar-day { text-align: center; padding: 6px 2px 5px; font-size: 12px; color: var(--text-primary); cursor: pointer; border-radius: var(--radius-sm); transition: all 0.2s ease; position: relative; }
         .calendar-day:hover:not(.empty):not(.disabled) { background: var(--purifying-beige); }
         .calendar-day.empty { cursor: default; }
         .calendar-day.disabled { color: var(--border-light); cursor: not-allowed; }
@@ -431,6 +431,10 @@
         .avail-dot.available { background: var(--success-green); }
         .avail-dot.limited { background: var(--kind-yellow); }
         .calendar-day.range-start .calendar-day-name, .calendar-day.range-end .calendar-day-name { color: rgba(255,255,255,0.7); }
+        .calendar-day-price { display: block; font-size: 8.5px; font-weight: 600; color: var(--text-muted); letter-spacing: 0; margin-top: 2px; white-space: nowrap; }
+        .calendar-day.range-start .calendar-day-price, .calendar-day.range-end .calendar-day-price { color: rgba(255,255,255,0.9); }
+        .calendar-day.in-range .calendar-day-price { color: var(--text-secondary); }
+        .calendar-day.disabled .calendar-day-price { display: none; }
         .calendar-selection-info { display: flex; justify-content: space-between; margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary); }
         .calendar-selection-info strong { color: var(--inner-black); }
 
@@ -3798,6 +3802,7 @@
             rebuildSelectedRooms();
             validateRoomCapacity();
             renderPriceSummary('priceSummaryStep3');
+            if (document.getElementById('bookingCalendar')) renderCalendar();
         }
 
         function rebuildSelectedRooms() {
@@ -4688,6 +4693,7 @@
             el.style.transform = 'scale(1.3)';
             setTimeout(() => el.style.transform = 'scale(1)', 200);
             renderModifyPriceSummary();
+            if (document.getElementById('modifyBookingCalendar')) renderModifyCalendar();
         }
 
         // ===== CUSTOM CALENDAR =====
@@ -4696,6 +4702,48 @@
         let calendarCheckin = null;
         let calendarCheckout = null;
         let calendarSelectMode = 'checkin'; // 'checkin' or 'checkout'
+
+        function getCalendarBaseRate(context) {
+            if (context === 'modify') {
+                const modifyRooms = [
+                    { id: 'modifyDesert', price: 3200 },
+                    { id: 'modifySea', price: 5800 },
+                    { id: 'modifyPresidential', price: 12500 }
+                ];
+                const selected = [];
+                for (const r of modifyRooms) {
+                    const el = document.getElementById(r.id);
+                    const qty = el ? parseInt(el.textContent) || 0 : 0;
+                    if (qty > 0) selected.push(r.price);
+                }
+                if (selected.length > 0) return Math.min(...selected);
+                if (booking.selectedRooms && booking.selectedRooms.length > 0) return booking.selectedRooms[0].pricePerNight;
+                return 3200;
+            }
+            if (booking.selectedRooms && booking.selectedRooms.length > 0) return booking.selectedRooms[0].pricePerNight;
+            return 3200;
+        }
+
+        function getCellPrice(date, context) {
+            const base = getCalendarBaseRate(context);
+            const dow = date.getDay();
+            const weekend = (dow === 5 || dow === 6) ? 1.20 : 1.0; // Fri/Sat premium
+            const month = date.getMonth();
+            let seasonal;
+            if (month === 11 || month === 0 || month === 1) seasonal = 1.15;       // Dec–Feb peak
+            else if (month === 2 || month === 3 || month === 9 || month === 10) seasonal = 1.05; // Mar/Apr/Oct/Nov shoulder
+            else seasonal = 0.95;                                                    // May–Sep off-peak
+            return Math.round((base * weekend * seasonal) / 50) * 50;
+        }
+
+        function formatCellPrice(n) {
+            if (n >= 1000) {
+                const k = n / 1000;
+                const str = (k % 1 === 0) ? k.toString() : k.toFixed(1);
+                return 'SAR ' + str + 'k';
+            }
+            return 'SAR ' + n;
+        }
 
         function renderCalendar() {
             const container = document.getElementById('bookingCalendar');
@@ -4738,11 +4786,13 @@
 
                 const clickable = date >= today ? `onclick="selectCalendarDate(${calendarYear},${calendarMonth},${d})"` : '';
                 let dotHtml = '';
+                let priceHtml = '';
                 if (date >= today) {
                     const isLimited = (d % 7 === 0 || d % 11 === 0);
                     dotHtml = isLimited ? '<span class="avail-dot limited"></span>' : '<span class="avail-dot available"></span>';
+                    priceHtml = `<span class="calendar-day-price">${formatCellPrice(getCellPrice(date, 'new'))}</span>`;
                 }
-                html += `<div class="${cls}" ${clickable}>${d}<span class="calendar-day-name">${dayOfWeek}</span>${dotHtml}</div>`;
+                html += `<div class="${cls}" ${clickable}>${d}<span class="calendar-day-name">${dayOfWeek}</span>${dotHtml}${priceHtml}</div>`;
             }
             html += '</div>';
 
@@ -4912,11 +4962,13 @@
 
                 const clickable = date >= today ? ' onclick="selectModifyCalendarDate(' + modifyCalendarYear + ',' + modifyCalendarMonth + ',' + d + ')"' : '';
                 let dotHtml = '';
+                let priceHtml = '';
                 if (date >= today) {
                     const isLimited = (d % 7 === 0 || d % 11 === 0);
                     dotHtml = isLimited ? '<span class="avail-dot limited"></span>' : '<span class="avail-dot available"></span>';
+                    priceHtml = '<span class="calendar-day-price">' + formatCellPrice(getCellPrice(date, 'modify')) + '</span>';
                 }
-                html += '<div class="' + cls + '"' + clickable + '>' + d + '<span class="calendar-day-name">' + dayOfWeek + '</span>' + dotHtml + '</div>';
+                html += '<div class="' + cls + '"' + clickable + '>' + d + '<span class="calendar-day-name">' + dayOfWeek + '</span>' + dotHtml + priceHtml + '</div>';
             }
             html += '</div>';
 
