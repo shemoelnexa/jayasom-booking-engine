@@ -2597,7 +2597,23 @@
                                     </div>
                                 </div>
 
-                                <!-- Treatments -->
+                                <!-- Airport Transfer & Travel (moved from treatments block) -->
+                                <div style="margin-bottom:var(--space-2xl);">
+                                    <div class="addons-list" id="modifyAddonsList">
+                                        <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
+                                            <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
+                                                <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
+                                            </div>
+                                            <div class="addon-body">
+                                                <div><h3 class="addon-name">Airport Transfer &amp; Travel</h3><p class="addon-desc">Complimentary airport pickup coordination for your arrival at Amaala.</p></div>
+                                                <div class="addon-footer"><span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ARCHIVED: Modify booking treatments — to revert, remove the <script> wrapper tags below -->
+                                <script type="text/html" id="archived-modify-treatments">
                                 <div style="margin-bottom:var(--space-2xl);">
                                     <h4 class="summary-card-title">Enhance Your Experience</h4>
                                     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-lg);">Add personalized treatments to deepen your wellness journey.</p>
@@ -2635,12 +2651,14 @@
                                                 <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
                                             </div>
                                             <div class="addon-body">
-                                                <div><h3 class="addon-name">Airport Transfer & Travel</h3><p class="addon-desc">Complimentary airport pickup coordination for your arrival at Amaala.</p></div>
+                                                <div><h3 class="addon-name">Airport Transfer &amp; Travel</h3><p class="addon-desc">Complimentary airport pickup coordination for your arrival at Amaala.</p></div>
                                                 <div class="addon-footer"><span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                </script>
+                                <!-- END ARCHIVED MODIFY TREATMENTS -->
 
                                 <!-- Guest Details (per-room accordion) -->
                                 <div style="margin-bottom:var(--space-2xl);">
