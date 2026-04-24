@@ -2646,7 +2646,7 @@
                             <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep3"></div></div>
                         </div>
                         <div class="step-navigation">
-                            <button class="step-nav-back" onclick="goToStep(prevStepFrom(currentStep))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Retreats</button>
+                            <button class="step-nav-back" onclick="goToStep(prevStepFrom(currentStep))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> <span data-i18n="backLabel">Back</span></button>
                             <button class="step-nav-next" data-continue-btn="true" onclick="goToStep(nextStepFrom(currentStep))">Continue to Guest Details <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                         </div>
                     </div>
@@ -2746,7 +2746,7 @@
                             <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep4"></div></div>
                         </div>
                         <div class="step-navigation">
-                            <button class="step-nav-back" onclick="goToStep(3)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Rooms</button>
+                            <button class="step-nav-back" onclick="goToStep(prevStepFrom(currentStep))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> <span data-i18n="backLabel">Back</span></button>
                             <button class="step-nav-next" onclick="goToStep(5)">Continue to Guest Details <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                         </div>
                     </div>
@@ -3326,9 +3326,8 @@
         };
 
         function getFlowOrder() {
-            return booking.destination === 'jayala'
-                ? [1, 3, 2, 5, 6]
-                : [1, 2, 3, 5, 6];
+            // Both destinations now follow rooms-first: dates → room → retreat → guests → confirmation
+            return [1, 3, 2, 5, 6];
         }
 
         function nextStepFrom(current) {
@@ -3353,11 +3352,8 @@
         }
 
         function refreshContinueButtonLabels() {
-            const next = nextStepFrom(currentStep);
             const lang = getLang();
-            const labels = STEP_LABELS[lang] || STEP_LABELS.en;
-            const prefix = lang === 'ar' ? 'متابعة إلى' : 'Continue to';
-            const label = next && labels[next] ? `${prefix} ${labels[next]}` : (lang === 'ar' ? 'متابعة' : 'Continue');
+            const label = lang === 'ar' ? 'متابعة' : 'Continue';
             document.querySelectorAll('[data-continue-btn]').forEach(btn => {
                 btn.textContent = label;
             });
