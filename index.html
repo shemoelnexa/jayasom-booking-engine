@@ -3008,47 +3008,63 @@
                                 <div style="margin-bottom:var(--space-2xl);">
                                     <h4 class="summary-card-title">Choose Retreat</h4>
                                     <div class="retreat-grid" id="modifyRetreatGrid">
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Renewal Retreat', 28500, 'modify')" data-price="28500">
-                                                        <div class="retreat-card-image"><img src="images/Rectangle 13-3.png" alt="The Renewal Retreat"></div>
+                                        <div class="retreat-card" data-price="28500">
+                                            <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Renewal Retreat', 28500, 'modify')">View Details</button>
+                                            <div class="retreat-card-image">
+                                                <button class="card-zoom-btn" onclick="openCardCarousel('retreat', 'The Renewal Retreat')" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button>
+                                                <img src="images/Rectangle 13-3.png" alt="The Renewal Retreat">
+                                            </div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Renewal Retreat</h3>
                                                 <p class="retreat-card-desc">A transformative seven-night journey combining ancient healing traditions with modern wellness science.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="28500">SAR 28,500 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">Select</button>
+                                                    <button class="retreat-select-btn" onclick="selectModifyRetreat(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reset Experience', 19200, 'modify')" data-price="19200">
-                                                        <div class="retreat-card-image"><img src="images/Rectangle 13-4.png" alt="The Reset Experience"></div>
+                                        <div class="retreat-card" data-price="19200">
+                                            <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Reset Experience', 19200, 'modify')">View Details</button>
+                                            <div class="retreat-card-image">
+                                                <button class="card-zoom-btn" onclick="openCardCarousel('retreat', 'The Reset Experience')" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button>
+                                                <img src="images/Rectangle 13-4.png" alt="The Reset Experience">
+                                            </div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Reset Experience</h3>
                                                 <p class="retreat-card-desc">A focused five-night program designed to restore your natural rhythm with targeted spa therapies.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="19200">SAR 19,200 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Reset Experience', 19200)">Select</button>
+                                                    <button class="retreat-select-btn" onclick="selectModifyRetreat(this.closest('.retreat-card'), 'The Reset Experience', 19200)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reclaim Journey', 52000, 'modify')" data-price="52000">
-                                                        <div class="retreat-card-image"><img src="images/Rectangle 13-5.png" alt="The Reclaim Journey"></div>
+                                        <div class="retreat-card" data-price="52000">
+                                            <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Reclaim Journey', 52000, 'modify')">View Details</button>
+                                            <div class="retreat-card-image">
+                                                <button class="card-zoom-btn" onclick="openCardCarousel('retreat', 'The Reclaim Journey')" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button>
+                                                <img src="images/Rectangle 13-5.png" alt="The Reclaim Journey">
+                                            </div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Reclaim Journey</h3>
                                                 <p class="retreat-card-desc">Our most comprehensive two-week transformation addressing body, mind and spirit.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="52000">SAR 52,000 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">Select</button>
+                                                    <button class="retreat-select-btn" onclick="selectModifyRetreat(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Weekend Pause', 9800, 'modify')" data-price="9800">
-                                                        <div class="retreat-card-image"><img src="images/image 20.png" alt="The Weekend Pause"></div>
+                                        <div class="retreat-card" data-price="9800">
+                                            <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Weekend Pause', 9800, 'modify')">View Details</button>
+                                            <div class="retreat-card-image">
+                                                <button class="card-zoom-btn" onclick="openCardCarousel('retreat', 'The Weekend Pause')" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button>
+                                                <img src="images/image 20.png" alt="The Weekend Pause">
+                                            </div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Weekend Pause</h3>
                                                 <p class="retreat-card-desc">A brief yet meaningful three-night retreat for a restorative pause by the Red Sea.</p>
                                                 <div class="retreat-card-footer">
                                                     <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="9800">SAR 9,800 <span>/ person</span></span></div>
-                                                    <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">Select</button>
+                                                    <button class="retreat-select-btn" onclick="selectModifyRetreat(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">Select</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3060,9 +3076,10 @@
                                     <h4 class="summary-card-title">Select Accommodation</h4>
                                     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-lg);">Select room types and quantities.</p>
                                     <div class="room-grid" id="modifyRoomGrid" style="grid-template-columns:1fr;">
-                                        <div class="room-card" style="cursor:pointer;" onclick="openRoomDrawer('Desert View Suite', 'modify')">
+                                        <div class="room-card">
+                                            <button class="view-details-btn" onclick="openRoomDrawer('Desert View Suite', 'modify')">View Details</button>
                                             <div style="display:flex;" class="room-card-inner">
-                                                <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><img src="images/Rectangle 13-2.png" alt="Desert View Suite"></div>
+                                                <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><button class="card-zoom-btn" onclick="openCardCarousel('room', 'Desert View Suite')" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button><img src="images/Rectangle 13-2.png" alt="Desert View Suite"></div>
                                                 <div class="room-card-body" style="flex:1;">
                                                     <h3 class="room-card-name">Desert View Suite</h3>
                                                     <p class="room-card-size">72 m&sup2; &middot; King Bed &middot; Max 2 Guests</p>
@@ -3077,9 +3094,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="room-card" style="cursor:pointer;" onclick="openRoomDrawer('Sea View Villa', 'modify')">
+                                        <div class="room-card">
+                                            <button class="view-details-btn" onclick="openRoomDrawer('Sea View Villa', 'modify')">View Details</button>
                                             <div style="display:flex;" class="room-card-inner">
-                                                <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><img src="images/Rectangle 33.png" alt="Sea View Villa"></div>
+                                                <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><button class="card-zoom-btn" onclick="openCardCarousel('room', 'Sea View Villa')" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button><img src="images/Rectangle 33.png" alt="Sea View Villa"></div>
                                                 <div class="room-card-body" style="flex:1;">
                                                     <h3 class="room-card-name">Sea View Villa</h3>
                                                     <p class="room-card-size">120 m&sup2; &middot; King Bed &middot; Max 3 Guests</p>
@@ -3094,9 +3112,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="room-card" style="cursor:pointer;" onclick="openRoomDrawer('Presidential Residence', 'modify')">
+                                        <div class="room-card">
+                                            <button class="view-details-btn" onclick="openRoomDrawer('Presidential Residence', 'modify')">View Details</button>
                                             <div style="display:flex;" class="room-card-inner">
-                                                <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><img src="images/image 9.png" alt="Presidential Residence"></div>
+                                                <div class="room-card-image" style="width:200px;min-width:200px;height:auto;min-height:160px;"><button class="card-zoom-btn" onclick="openCardCarousel('room', 'Presidential Residence')" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button><img src="images/image 9.png" alt="Presidential Residence"></div>
                                                 <div class="room-card-body" style="flex:1;">
                                                     <h3 class="room-card-name">Presidential Residence</h3>
                                                     <p class="room-card-size">240 m&sup2; &middot; 2 Bedrooms &middot; Max 4 Guests</p>
@@ -3117,13 +3136,11 @@
                                 <!-- Airport Transfer & Travel (moved from treatments block) -->
                                 <div style="margin-bottom:var(--space-2xl);">
                                     <div class="addons-list" id="modifyAddonsList">
-                                        <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
-                                            <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
-                                                <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
-                                            </div>
-                                            <div class="addon-body">
+                                        <div class="addon-card" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
+                                            <button class="view-details-btn" onclick="openTreatmentDrawer(this.closest('.addon-card'), 'Airport Transfer', 0, 'modify')">View Details</button>
+                                            <div class="addon-body" style="width:100%;">
                                                 <div><h3 class="addon-name">Airport Transfer &amp; Travel</h3><p class="addon-desc">Complimentary airport pickup coordination for your arrival at Amaala.</p></div>
-                                                <div class="addon-footer"><span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                                <div class="addon-footer"><span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span><button class="addon-toggle" onclick="toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
                                     </div>
@@ -3163,13 +3180,11 @@
                                                 <div class="addon-footer"><span class="addon-price" data-price-sar="450">SAR 450 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
-                                        <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
-                                            <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
-                                                <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
-                                            </div>
-                                            <div class="addon-body">
+                                        <div class="addon-card" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
+                                            <button class="view-details-btn" onclick="openTreatmentDrawer(this.closest('.addon-card'), 'Airport Transfer', 0, 'modify')">View Details</button>
+                                            <div class="addon-body" style="width:100%;">
                                                 <div><h3 class="addon-name">Airport Transfer &amp; Travel</h3><p class="addon-desc">Complimentary airport pickup coordination for your arrival at Amaala.</p></div>
-                                                <div class="addon-footer"><span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                                <div class="addon-footer"><span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span><button class="addon-toggle" onclick="toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
                                     </div>
@@ -3691,8 +3706,24 @@
         }
 
         function selectModifyRetreat(card, name, price) {
-            document.querySelectorAll('#modifyRetreatGrid .retreat-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
+            const isAr = getLang() === 'ar';
+            const wasSelected = card.classList.contains('selected');
+            document.querySelectorAll('#modifyRetreatGrid .retreat-card').forEach(c => {
+                c.classList.remove('selected');
+                const btn = c.querySelector('.retreat-select-btn');
+                if (btn) {
+                    btn.textContent = isAr ? 'اختيار' : 'Select';
+                    btn.classList.remove('is-selected');
+                }
+            });
+            if (!wasSelected) {
+                card.classList.add('selected');
+                const btn = card.querySelector('.retreat-select-btn');
+                if (btn) {
+                    btn.textContent = isAr ? 'إلغاء التحديد' : 'Clear Selection';
+                    btn.classList.add('is-selected');
+                }
+            }
             renderModifyPriceSummary();
         }
 
