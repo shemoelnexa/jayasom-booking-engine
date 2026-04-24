@@ -5717,6 +5717,8 @@
             }
             if (typeof renderMergedSummaryPayment === 'function' && currentStep === 5) renderMergedSummaryPayment();
             if (typeof renderConfirmation === 'function' && typeof currentStep !== 'undefined' && currentStep === 6) renderConfirmation();
+            if (typeof renderCalendar === 'function' && document.getElementById('bookingCalendar')) renderCalendar();
+            if (typeof renderModifyCalendar === 'function' && document.getElementById('modifyBookingCalendar')) renderModifyCalendar();
             document.querySelectorAll('[data-price-sar]').forEach(el => {
                 const sar = parseFloat(el.dataset.priceSar);
                 if (isNaN(sar)) return;
@@ -5816,13 +5818,19 @@
             return Math.round((base * weekend * seasonal) / 50) * 50;
         }
 
-        function formatCellPrice(n) {
-            if (n >= 1000) {
-                const k = n / 1000;
-                const str = (k % 1 === 0) ? k.toString() : k.toFixed(1);
-                return 'SAR ' + str + 'k';
+        function formatCellPrice(sarAmount) {
+            const converted = (typeof convertFromSAR === 'function') ? convertFromSAR(sarAmount) : sarAmount;
+            const code = (booking && booking.currency) || 'SAR';
+            const sym = (typeof CURRENCY_SYMBOLS !== 'undefined' && CURRENCY_SYMBOLS[code]) ? CURRENCY_SYMBOLS[code] : code;
+            let display;
+            if (converted >= 1000) {
+                const k = converted / 1000;
+                display = (k % 1 === 0) ? k.toString() : k.toFixed(1);
+                display += 'k';
+            } else {
+                display = String(converted);
             }
-            return 'SAR ' + n;
+            return code === 'SAR' ? 'SAR ' + display : sym + display;
         }
 
         function renderCalendarMonthBlock(year, month, today, dayNames, monthNames, context) {
