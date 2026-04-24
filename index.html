@@ -280,7 +280,7 @@
           align-items: center;
           gap: 10px;
           padding: 14px 16px;
-          border: 1.5px solid var(--border);
+          border: 1.5px solid var(--border-light);
           border-radius: 12px;
           cursor: pointer;
           background: #fff;
@@ -288,29 +288,29 @@
           font-size: 14px;
           color: var(--text-primary);
         }
-        .destination-radio:hover { border-color: var(--accent); }
+        .destination-radio:hover { border-color: var(--soft-coral); }
         .destination-radio.selected {
-          border-color: var(--accent);
+          border-color: var(--soft-coral);
           background: var(--accent-light, #f8f5f0);
           box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .destination-radio-circle {
           width: 18px;
           height: 18px;
-          border: 2px solid var(--border);
+          border: 2px solid var(--border-light);
           border-radius: 50%;
           flex-shrink: 0;
           position: relative;
           transition: border-color 0.2s;
         }
         .destination-radio.selected .destination-radio-circle {
-          border-color: var(--accent);
+          border-color: var(--soft-coral);
         }
         .destination-radio.selected .destination-radio-circle::after {
           content: '';
           position: absolute;
           inset: 3px;
-          background: var(--accent);
+          background: var(--soft-coral);
           border-radius: 50%;
         }
         .destination-radio-label {
@@ -4500,7 +4500,7 @@
                 destJayana: 'جايانا',
                 destJayanaSub: 'للبالغين فقط',
                 destJayala: 'جايالا',
-                destJayalaSub: 'عافلة العائلة',
+                destJayalaSub: 'عافية العائلة',
                 duration: 'المدة',
                 nightsLabel: 'ليالٍ',
                 adultsLabel: 'بالغ/بالغين',
