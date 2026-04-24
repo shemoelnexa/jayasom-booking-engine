@@ -4963,7 +4963,15 @@
             if (typeof renderConfirmation === 'function' && typeof currentStep !== 'undefined' && currentStep === 6) renderConfirmation();
             document.querySelectorAll('[data-price-sar]').forEach(el => {
                 const sar = parseFloat(el.dataset.priceSar);
-                if (!isNaN(sar)) el.textContent = formatCurrency(sar);
+                if (isNaN(sar)) return;
+                const suffixNode = el.querySelector('span');
+                if (suffixNode) {
+                    while (el.firstChild) el.removeChild(el.firstChild);
+                    el.appendChild(document.createTextNode(formatCurrency(sar) + ' '));
+                    el.appendChild(suffixNode);
+                } else {
+                    el.textContent = formatCurrency(sar);
+                }
             });
         }
 
