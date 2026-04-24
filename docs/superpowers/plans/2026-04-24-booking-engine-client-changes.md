@@ -251,23 +251,21 @@ function selectDestination(value) {
 
 Stub `applyDestinationVisibility` with `function applyDestinationVisibility(){}` just above `selectDestination` so step 4 doesn't error. Task 2 will fill it in.
 
-- [ ] **Step 4: Add i18n entries**
+- [ ] **Step 4: Add i18n entries (Arabic only)**
 
-In both `en` and `ar` language objects (search for `destinationLabel` and the surrounding keys, ~line 4260+), add:
+This codebase has **only an `ar` translation object** — English text comes from the default `data-i18n` innerHTML captured at load time. Do not add an `en` object. Add to the `ar` object (search for `destinationLabel` ~line 4260+):
 
 ```javascript
-// en object
-destJayana: 'Jayana',
-destJayanaSub: 'Adults only',
-destJayala: 'Jayala',
-destJayalaSub: 'Family wellness',
-
-// ar object
+// Inside the ar object:
 destJayana: 'جايانا',
 destJayanaSub: 'للبالغين فقط',
 destJayala: 'جايالا',
-destJayalaSub: 'عافلة العائلة',
+destJayalaSub: 'عافية العائلة',
 ```
+
+The English labels ("Jayana", "Adults only", "Jayala", "Family wellness") live as the default text of the `data-i18n` spans added in Step 2.
+
+**i18n guidance for ALL later tasks in this plan:** anywhere the plan says "add to both en and ar", treat it as "add to ar only; English is default innerHTML".
 
 - [ ] **Step 5: Manual verification**
 
