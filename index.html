@@ -2019,6 +2019,14 @@
                                             <button class="counter-btn" onclick="updateCount('infants', 1)">+</button>
                                         </div>
                                     </div>
+                                    <div class="form-group guest-group" id="caretakersCounterGroup">
+                                        <label class="form-label" data-i18n="caretakersLabel">Caretakers</label>
+                                        <div class="guest-counter">
+                                            <button class="counter-btn" onclick="updateCount('caretakers', -1)">-</button>
+                                            <span class="counter-value" id="caretakersCount">0</span>
+                                            <button class="counter-btn" onclick="updateCount('caretakers', 1)">+</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group full-width" id="childAgesContainer" style="display:none;"></div>
@@ -3460,6 +3468,8 @@
             document.getElementById('childrenCount').textContent = booking.children;
             const infSyncEl = document.getElementById('infantsCount');
             if (infSyncEl) infSyncEl.textContent = booking.infants || 0;
+            const careSyncEl = document.getElementById('caretakersCount');
+            if (careSyncEl) careSyncEl.textContent = booking.caretakers || 0;
 
             // Sync main flow cards to match
             document.querySelectorAll('#retreatGrid .retreat-card').forEach(function(c) {
@@ -4326,6 +4336,8 @@
             document.getElementById('childrenCount').textContent = '0';
             const infCount = document.getElementById('infantsCount');
             if (infCount) infCount.textContent = '0';
+            const careCount = document.getElementById('caretakersCount');
+            if (careCount) careCount.textContent = '0';
             // Reset calendar
             calendarCheckin = null;
             calendarCheckout = null;
@@ -4510,6 +4522,7 @@
                 stayDetails: 'تفاصيل الإقامة',
                 destinationLabel: 'الوجهة',
                 infantsLabel: 'الرضع',
+                caretakersLabel: 'مرافقون',
                 destJayana: 'جايانا',
                 destJayanaSub: 'للبالغين فقط',
                 destJayala: 'جايالا',
