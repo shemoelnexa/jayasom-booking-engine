@@ -269,6 +269,57 @@
         }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-group.full-width { grid-column: 1 / -1; }
+        .destination-radio-group {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-top: 6px;
+        }
+        .destination-radio {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 14px 16px;
+          border: 1.5px solid var(--border);
+          border-radius: 12px;
+          cursor: pointer;
+          background: #fff;
+          transition: all 0.2s ease;
+          font-size: 14px;
+          color: var(--text-primary);
+        }
+        .destination-radio:hover { border-color: var(--accent); }
+        .destination-radio.selected {
+          border-color: var(--accent);
+          background: var(--accent-light, #f8f5f0);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .destination-radio-circle {
+          width: 18px;
+          height: 18px;
+          border: 2px solid var(--border);
+          border-radius: 50%;
+          flex-shrink: 0;
+          position: relative;
+          transition: border-color 0.2s;
+        }
+        .destination-radio.selected .destination-radio-circle {
+          border-color: var(--accent);
+        }
+        .destination-radio.selected .destination-radio-circle::after {
+          content: '';
+          position: absolute;
+          inset: 3px;
+          background: var(--accent);
+          border-radius: 50%;
+        }
+        .destination-radio-label {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .destination-radio-title { font-weight: 600; }
+        .destination-radio-sub { font-size: 11px; color: var(--text-muted); }
         .form-label {
             font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
             color: var(--text-muted); font-weight: 700;
@@ -1897,11 +1948,23 @@
                         <h2 class="booking-widget-title" data-i18n="widgetTitle">Plan your <span>journey</span></h2>
                         <div class="booking-form-grid">
                             <div class="form-group full-width">
-                                <label class="form-label" data-i18n="destination">Destination</label>
-                                <select class="form-select" id="destinationSelect" onchange="booking.destination=this.value">
-                                    <option value="jayasom" selected>Jayasom - Wellness Resort (Adults)</option>
-                                    <option value="jayala">Jayala - Family Wellness</option>
-                                </select>
+                                <label data-i18n="destinationLabel">Destination</label>
+                                <div class="destination-radio-group" id="destinationRadioGroup">
+                                    <div class="destination-radio selected" data-value="jayasom" onclick="selectDestination('jayasom')">
+                                        <div class="destination-radio-circle"></div>
+                                        <div class="destination-radio-label">
+                                            <span class="destination-radio-title" data-i18n="destJayana">Jayana</span>
+                                            <span class="destination-radio-sub" data-i18n="destJayanaSub">Adults only</span>
+                                        </div>
+                                    </div>
+                                    <div class="destination-radio" data-value="jayala" onclick="selectDestination('jayala')">
+                                        <div class="destination-radio-circle"></div>
+                                        <div class="destination-radio-label">
+                                            <span class="destination-radio-title" data-i18n="destJayala">Jayala</span>
+                                            <span class="destination-radio-sub" data-i18n="destJayalaSub">Family wellness</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group full-width" style="position:relative;">
                                 <label class="form-label">Select Your Dates</label>
@@ -4434,6 +4497,10 @@
                 reviewConfirmDesc: 'يرجى مراجعة تفاصيل الحجز واختيار طريقة الدفع المفضلة.',
                 stayDetails: 'تفاصيل الإقامة',
                 destinationLabel: 'الوجهة',
+                destJayana: 'جايانا',
+                destJayanaSub: 'للبالغين فقط',
+                destJayala: 'جايالا',
+                destJayalaSub: 'عافلة العائلة',
                 duration: 'المدة',
                 nightsLabel: 'ليالٍ',
                 adultsLabel: 'بالغ/بالغين',
@@ -4770,6 +4837,16 @@
                 stepNames[3] = { label: 'Guest Details & Payment', sub: 'Complete booking' };
                 stepNames[4] = { label: 'Confirmation', sub: 'Booking confirmed' };
             }
+        }
+
+        function applyDestinationVisibility() {}
+
+        function selectDestination(value) {
+            booking.destination = value;
+            document.querySelectorAll('.destination-radio').forEach(el => {
+                el.classList.toggle('selected', el.dataset.value === value);
+            });
+            applyDestinationVisibility();
         }
 
         function toggleLanguage() {
