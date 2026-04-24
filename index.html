@@ -4416,9 +4416,9 @@
             if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
             booking.retreatsByGuest[guestKey] = retreatName;
             document.querySelectorAll(`.guest-retreat-chips[data-guest-key="${guestKey}"] .guest-retreat-chip`).forEach(b => {
-                b.classList.toggle('active', b.textContent.trim() === retreatName);
+                b.classList.toggle('active', b.dataset.retreat === retreatName);
             });
-            if (typeof renderPriceSummary === 'function') renderPriceSummary();
+            if (typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
         function selectRetreat(card, name, price) {
@@ -4709,8 +4709,9 @@
             const labelText = isAr ? (t && t.retreatForGuest ? t.retreatForGuest : 'الباقة لهذا الضيف') : 'Retreat for this guest';
             const chipsHtml = retreatOptions.map(function(opt) {
                 const activeClass = opt === currentRetreat ? ' active' : '';
+                const optAttr = opt.replace(/"/g, '&quot;');
                 const optEsc = opt.replace(/'/g, "\\'");
-                return '<button type="button" class="guest-retreat-chip' + activeClass + '" onclick="setGuestRetreat(\'' + guestKey + '\', \'' + optEsc + '\')">' + opt + '</button>';
+                return '<button type="button" class="guest-retreat-chip' + activeClass + '" data-retreat="' + optAttr + '" onclick="setGuestRetreat(\'' + guestKey + '\', \'' + optEsc + '\')">' + opt + '</button>';
             }).join('');
             return '<div class="guest-retreat-row">' +
                 '<label class="guest-retreat-label" data-i18n="retreatForGuest">' + labelText + '</label>' +
