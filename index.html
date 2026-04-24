@@ -4475,8 +4475,7 @@
             if (typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
-        function setLeadGuest(roomIndex, guestNum) {
-            if (!booking.leadGuests) booking.leadGuests = {};
+        function rerenderGuestFormsPreservingInputs() {
             const container = document.getElementById('guestFormsContainer');
             const snapshot = container
                 ? Array.from(container.querySelectorAll('input, select, textarea')).map(el => ({
@@ -4485,7 +4484,6 @@
                     value: el.value
                 }))
                 : [];
-            booking.leadGuests[roomIndex] = guestNum;
             renderGuestForms();
             if (container && snapshot.length) {
                 const refreshed = Array.from(container.querySelectorAll('input, select, textarea'));
@@ -4496,6 +4494,12 @@
                     }
                 });
             }
+        }
+
+        function setLeadGuest(roomIndex, guestNum) {
+            if (!booking.leadGuests) booking.leadGuests = {};
+            booking.leadGuests[roomIndex] = guestNum;
+            rerenderGuestFormsPreservingInputs();
         }
 
         function selectRetreat(card, name, price) {
@@ -4697,9 +4701,13 @@
             if (!booking.childrenByRoom || typeof booking.childrenByRoom !== 'object') {
                 booking.childrenByRoom = {};
             }
-            // Initial distribution: distribute booking.children evenly across rooms
-            // ONLY if nothing has been allocated yet (subsequent add/remove persists)
-            const currentAllocated = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+            // Distribute booking.children evenly across rooms. Reseed if allocated total
+            // drifts from booking.children (e.g., user went back to Screen 1 and changed count).
+            let currentAllocated = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+            if (currentAllocated > booking.children) {
+                booking.childrenByRoom = {};
+                currentAllocated = 0;
+            }
             if (currentAllocated === 0 && booking.children > 0) {
                 const base = Math.floor(booking.children / booking.rooms);
                 const extra = booking.children % booking.rooms;
@@ -4777,7 +4785,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">${isAr ? 'العمر' : 'Age'}</label>
-                                    <input type="number" min="0" max="17" class="form-input-white" id="r${r}_child${c}_age" value="${childAge}">
+                                    <input type="number" min="0" max="17" class="form-input-white" id="r${r}_child${c}_age" value="${childAge}" onchange="if(!booking.childAges) booking.childAges=[]; booking.childAges[${(r * 10) + (c - 1)}] = this.value;">
                                 </div>
                             </div>
                         </div>
@@ -4888,13 +4896,13 @@
             const used = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
             if (used >= booking.children) return;
             booking.childrenByRoom[roomIndex] = (booking.childrenByRoom[roomIndex] || 0) + 1;
-            renderGuestForms();
+            rerenderGuestFormsPreservingInputs();
         }
 
         function removeChild(roomIndex, c) {
             if (!booking.childrenByRoom) booking.childrenByRoom = {};
             booking.childrenByRoom[roomIndex] = Math.max(0, (booking.childrenByRoom[roomIndex] || 0) - 1);
-            renderGuestForms();
+            rerenderGuestFormsPreservingInputs();
         }
 
         // ===== RENDER SUMMARY (Step 7) =====
