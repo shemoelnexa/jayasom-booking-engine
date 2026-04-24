@@ -5011,26 +5011,17 @@
                     `;
                 }
 
-                // Add guest / Add child action row
-                let canAddMoreChildren = false;
-                if (booking.children > 0) {
-                    const used = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
-                    canAddMoreChildren = used < booking.children;
-                }
-
                 html += `<div class="add-guest-section">
                     <div class="guest-actions-row">
                         <button class="add-guest-btn" onclick="addGuest(${r})" data-i18n="addGuestBtn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             ${isAr ? 'إضافة ضيف' : '+ Add Guest'}
-                        </button>`;
-                if (booking.children > 0) {
-                    html += `<button class="add-guest-btn add-child-btn" onclick="addChild(${r})" ${canAddMoreChildren ? '' : 'disabled'} data-i18n="addChildBtn">
+                        </button>
+                        <button class="add-guest-btn add-child-btn" onclick="addChild(${r})" data-i18n="addChildBtn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            ${isAr ? (canAddMoreChildren ? 'إضافة طفل' : 'تم الوصول للحد الأقصى') : (canAddMoreChildren ? '+ Add Child' : '+ Add Child (limit reached)')}
-                        </button>`;
-                }
-                html += `</div>
+                            ${isAr ? '+ إضافة طفل' : '+ Add Child'}
+                        </button>
+                    </div>
                 </div>`;
 
                 html += `</div></div>`;
@@ -5159,16 +5150,22 @@
 
         function addChild(roomIndex) {
             if (!booking.childrenByRoom) booking.childrenByRoom = {};
-            const used = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
-            if (used >= booking.children) return;
             booking.childrenByRoom[roomIndex] = (booking.childrenByRoom[roomIndex] || 0) + 1;
+            booking.children = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+            const el = document.getElementById('childrenCount');
+            if (el) el.textContent = booking.children;
             rerenderGuestFormsPreservingInputs();
+            if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
         function removeChild(roomIndex, c) {
             if (!booking.childrenByRoom) booking.childrenByRoom = {};
             booking.childrenByRoom[roomIndex] = Math.max(0, (booking.childrenByRoom[roomIndex] || 0) - 1);
+            booking.children = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+            const el = document.getElementById('childrenCount');
+            if (el) el.textContent = booking.children;
             rerenderGuestFormsPreservingInputs();
+            if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
         // ===== RENDER SUMMARY (Step 7) =====
