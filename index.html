@@ -2898,6 +2898,10 @@
             if (co) booking.checkout = co.value;
             booking.adults = parseInt(document.getElementById('adultsCount').textContent);
             booking.children = parseInt(document.getElementById('childrenCount').textContent);
+            const infEl = document.getElementById('infantsCount');
+            if (infEl) booking.infants = parseInt(infEl.textContent) || 0;
+            const careEl = document.getElementById('caretakersCount');
+            if (careEl) booking.caretakers = parseInt(careEl.textContent) || 0;
 
             // Sync child ages from age selectors
             syncChildAges();
