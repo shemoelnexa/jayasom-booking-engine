@@ -506,11 +506,31 @@
         }
         .date-picker-field:hover .date-picker-icon { color: var(--gentle-beige); }
         .calendar-dropdown {
-            display: none; position: absolute; top: 100%; left: 0; right: 0;
+            display: none; position: absolute; top: 100%; left: 0; right: auto;
+            min-width: min(640px, 95vw);
             z-index: 100; margin-top: var(--space-xs);
             box-shadow: 0 12px 40px rgba(16, 24, 32, 0.12);
         }
         .calendar-dropdown.show { display: block; }
+        .calendar-two-months { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+        .calendar-month-label {
+            font-family: 'Century Gothic', 'CenturyGothic', sans-serif;
+            letter-spacing: 2px; font-size: 13px; color: var(--inner-black);
+            text-align: center; margin-bottom: var(--space-sm);
+            text-transform: uppercase;
+        }
+        .calendar-footer-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--border-light); }
+        .calendar-done-btn {
+            background: var(--soft-coral); color: #fff;
+            border: none; padding: 10px 24px; border-radius: var(--radius-md);
+            font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+            text-transform: uppercase; cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .calendar-done-btn:hover { opacity: 0.88; }
+        @media (max-width: 720px) {
+            .calendar-two-months { grid-template-columns: 1fr; }
+        }
 
         /* CUSTOM CALENDAR */
         .calendar-container { background: var(--warm-white); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--space-md); }
@@ -5802,66 +5822,77 @@
             return 'SAR ' + n;
         }
 
+        function renderCalendarMonthBlock(year, month, today, dayNames, monthNames, context) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let html = `<div class="calendar-month-block">`;
+            html += `<div class="calendar-month-label">${monthNames[month]} ${year}</div>`;
+            html += '<div class="calendar-weekdays">';
+            dayNames.forEach(d => { html += `<div class="calendar-weekday">${d}</div>`; });
+            html += '</div>';
+            html += '<div class="calendar-days">';
+            for (let i = 0; i < firstDay; i++) html += '<div class="calendar-day empty"></div>';
+            const ci = context === 'modify' ? modifyCalendarCheckin : calendarCheckin;
+            const co = context === 'modify' ? modifyCalendarCheckout : calendarCheckout;
+            const clickHandler = context === 'modify' ? 'selectModifyCalendarDate' : 'selectCalendarDate';
+            for (let d = 1; d <= daysInMonth; d++) {
+                const date = new Date(year, month, d);
+                const dayOfWeek = dayNames[date.getDay()];
+                let cls = 'calendar-day';
+                if (date < today) cls += ' disabled';
+                if (date.getTime() === today.getTime()) cls += ' today';
+                if (ci && date.getTime() === ci.getTime()) cls += ' range-start';
+                if (co && date.getTime() === co.getTime()) cls += ' range-end';
+                if (ci && co && date > ci && date < co) cls += ' in-range';
+                const clickable = date >= today ? `onclick="${clickHandler}(${year},${month},${d})"` : '';
+                let dotHtml = '';
+                let priceHtml = '';
+                if (date >= today) {
+                    const isLimited = (d % 7 === 0 || d % 11 === 0);
+                    dotHtml = isLimited ? '<span class="avail-dot limited"></span>' : '<span class="avail-dot available"></span>';
+                    priceHtml = `<span class="calendar-day-price">${formatCellPrice(getCellPrice(date, context === 'modify' ? 'modify' : 'new'))}</span>`;
+                }
+                html += `<div class="${cls}" ${clickable}>${d}<span class="calendar-day-name">${dayOfWeek}</span>${dotHtml}${priceHtml}</div>`;
+            }
+            html += '</div></div>';
+            return html;
+        }
+
         function renderCalendar() {
             const container = document.getElementById('bookingCalendar');
             if (!container) return;
 
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-            const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
-            const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
             const today = new Date();
             today.setHours(0,0,0,0);
 
+            // Second month (month + 1, wrap year if needed)
+            const nextMonth = calendarMonth === 11 ? 0 : calendarMonth + 1;
+            const nextYear = calendarMonth === 11 ? calendarYear + 1 : calendarYear;
+
             let html = `<div class="calendar-header">
                 <button class="calendar-nav-btn" onclick="changeCalendarMonth(-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                <h4>${monthNames[calendarMonth]} ${calendarYear}</h4>
+                <h4>${monthNames[calendarMonth]} ${calendarYear} &nbsp;·&nbsp; ${monthNames[nextMonth]} ${nextYear}</h4>
                 <button class="calendar-nav-btn" onclick="changeCalendarMonth(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
             </div>`;
 
-            html += '<div class="calendar-weekdays">';
-            dayNames.forEach(d => { html += `<div class="calendar-weekday">${d}</div>`; });
+            html += '<div class="calendar-two-months">';
+            html += renderCalendarMonthBlock(calendarYear, calendarMonth, today, dayNames, monthNames, 'new');
+            html += renderCalendarMonthBlock(nextYear, nextMonth, today, dayNames, monthNames, 'new');
             html += '</div>';
 
-            html += '<div class="calendar-days">';
-            // Empty cells before first day
-            for (let i = 0; i < firstDay; i++) {
-                html += '<div class="calendar-day empty"></div>';
-            }
-            // Day cells
-            for (let d = 1; d <= daysInMonth; d++) {
-                const date = new Date(calendarYear, calendarMonth, d);
-                const dayOfWeek = dayNames[date.getDay()];
-                let cls = 'calendar-day';
-                if (date < today) cls += ' disabled';
-                if (date.getTime() === today.getTime()) cls += ' today';
-
-                if (calendarCheckin && date.getTime() === calendarCheckin.getTime()) cls += ' range-start';
-                if (calendarCheckout && date.getTime() === calendarCheckout.getTime()) cls += ' range-end';
-                if (calendarCheckin && calendarCheckout && date > calendarCheckin && date < calendarCheckout) cls += ' in-range';
-
-                const clickable = date >= today ? `onclick="selectCalendarDate(${calendarYear},${calendarMonth},${d})"` : '';
-                let dotHtml = '';
-                let priceHtml = '';
-                if (date >= today) {
-                    const isLimited = (d % 7 === 0 || d % 11 === 0);
-                    dotHtml = isLimited ? '<span class="avail-dot limited"></span>' : '<span class="avail-dot available"></span>';
-                    priceHtml = `<span class="calendar-day-price">${formatCellPrice(getCellPrice(date, 'new'))}</span>`;
-                }
-                html += `<div class="${cls}" ${clickable}>${d}<span class="calendar-day-name">${dayOfWeek}</span>${dotHtml}${priceHtml}</div>`;
-            }
-            html += '</div>';
-
-            // Selection info
             const ciStr = calendarCheckin ? calendarCheckin.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short', year:'numeric'}) : '—';
             const coStr = calendarCheckout ? calendarCheckout.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short', year:'numeric'}) : '—';
             const nights = (calendarCheckin && calendarCheckout) ? Math.round((calendarCheckout - calendarCheckin) / (1000*60*60*24)) : 0;
 
-            html += `<div class="calendar-selection-info">
-                <div><span style="display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:2px;">Check-in</span><strong>${ciStr}</strong></div>
-                <div style="text-align:center;"><span style="display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:2px;">Nights</span><strong>${nights > 0 ? nights : '—'}</strong></div>
-                <div style="text-align:right;"><span style="display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:2px;">Check-out</span><strong>${coStr}</strong></div>
+            html += `<div class="calendar-footer-row">
+                <div class="calendar-selection-info" style="flex:1;margin:0;padding:0;border:none;">
+                    <div><span style="display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:2px;">Check-in</span><strong>${ciStr}</strong></div>
+                    <div style="text-align:center;"><span style="display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:2px;">Nights</span><strong>${nights > 0 ? nights : '—'}</strong></div>
+                    <div style="text-align:right;"><span style="display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:2px;">Check-out</span><strong>${coStr}</strong></div>
+                </div>
+                <button class="calendar-done-btn" onclick="closeCalendarDropdown()">Done</button>
             </div>`;
 
             container.innerHTML = html;
@@ -5898,11 +5929,7 @@
 
             updateDatePickerField();
             renderCalendar();
-
-            // Auto-close after both dates selected
-            if (calendarCheckin && calendarCheckout) {
-                setTimeout(() => closeCalendarDropdown(), 400);
-            }
+            // Calendar stays open until user clicks Done (or clicks the date field to toggle)
         }
 
         function toggleCalendarDropdown() {
@@ -5956,17 +5983,11 @@
             }
         }
 
-        // Close calendar dropdown when clicking outside — only if both dates selected
-        document.addEventListener('click', function(e) {
+        // Calendar dropdown is closed only by clicking Done, toggling the date field, or Escape.
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Escape') return;
             const dropdown = document.getElementById('calendarDropdown');
-            const field = document.getElementById('datePickerField');
-            if (dropdown && dropdown.classList.contains('show')) {
-                if (!dropdown.contains(e.target) && !field.contains(e.target)) {
-                    if (calendarCheckin && calendarCheckout) {
-                        closeCalendarDropdown();
-                    }
-                }
-            }
+            if (dropdown && dropdown.classList.contains('show')) closeCalendarDropdown();
         });
 
         function changeCalendarMonth(delta) {
@@ -5989,44 +6010,21 @@
 
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-            const firstDay = new Date(modifyCalendarYear, modifyCalendarMonth, 1).getDay();
-            const daysInMonth = new Date(modifyCalendarYear, modifyCalendarMonth + 1, 0).getDate();
             const today = new Date();
             today.setHours(0,0,0,0);
 
+            const nextMonth = modifyCalendarMonth === 11 ? 0 : modifyCalendarMonth + 1;
+            const nextYear = modifyCalendarMonth === 11 ? modifyCalendarYear + 1 : modifyCalendarYear;
+
             let html = '<div class="calendar-header">';
             html += '<button class="calendar-nav-btn" onclick="changeModifyCalendarMonth(-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
-            html += '<h4>' + monthNames[modifyCalendarMonth] + ' ' + modifyCalendarYear + '</h4>';
+            html += '<h4>' + monthNames[modifyCalendarMonth] + ' ' + modifyCalendarYear + ' &nbsp;·&nbsp; ' + monthNames[nextMonth] + ' ' + nextYear + '</h4>';
             html += '<button class="calendar-nav-btn" onclick="changeModifyCalendarMonth(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
             html += '</div>';
 
-            html += '<div class="calendar-weekdays">';
-            dayNames.forEach(function(d) { html += '<div class="calendar-weekday">' + d + '</div>'; });
-            html += '</div>';
-
-            html += '<div class="calendar-days">';
-            for (let i = 0; i < firstDay; i++) { html += '<div class="calendar-day empty"></div>'; }
-            for (let d = 1; d <= daysInMonth; d++) {
-                const date = new Date(modifyCalendarYear, modifyCalendarMonth, d);
-                const dayOfWeek = dayNames[date.getDay()];
-                let cls = 'calendar-day';
-                if (date < today) cls += ' disabled';
-                if (date.getTime() === today.getTime()) cls += ' today';
-                if (modifyCalendarCheckin && date.getTime() === modifyCalendarCheckin.getTime()) cls += ' range-start';
-                if (modifyCalendarCheckout && date.getTime() === modifyCalendarCheckout.getTime()) cls += ' range-end';
-                if (modifyCalendarCheckin && modifyCalendarCheckout && date > modifyCalendarCheckin && date < modifyCalendarCheckout) cls += ' in-range';
-
-                const clickable = date >= today ? ' onclick="selectModifyCalendarDate(' + modifyCalendarYear + ',' + modifyCalendarMonth + ',' + d + ')"' : '';
-                let dotHtml = '';
-                let priceHtml = '';
-                if (date >= today) {
-                    const isLimited = (d % 7 === 0 || d % 11 === 0);
-                    dotHtml = isLimited ? '<span class="avail-dot limited"></span>' : '<span class="avail-dot available"></span>';
-                    priceHtml = '<span class="calendar-day-price">' + formatCellPrice(getCellPrice(date, 'modify')) + '</span>';
-                }
-                html += '<div class="' + cls + '"' + clickable + '>' + d + '<span class="calendar-day-name">' + dayOfWeek + '</span>' + dotHtml + priceHtml + '</div>';
-            }
+            html += '<div class="calendar-two-months">';
+            html += renderCalendarMonthBlock(modifyCalendarYear, modifyCalendarMonth, today, dayNames, monthNames, 'modify');
+            html += renderCalendarMonthBlock(nextYear, nextMonth, today, dayNames, monthNames, 'modify');
             html += '</div>';
 
             const ciStr = modifyCalendarCheckin ? modifyCalendarCheckin.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short', year:'numeric'}) : '—';
