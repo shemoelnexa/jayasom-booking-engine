@@ -635,8 +635,12 @@
             transition: all 0.3s ease;
         }
         .retreat-select-btn:hover { background: #464547; color: var(--open-white); }
-        .retreat-card.selected .retreat-select-btn {
+        .retreat-card.selected .retreat-select-btn,
+        .retreat-select-btn.is-selected {
             background: #464547; border-color: #464547; color: white;
+        }
+        .retreat-select-btn.is-selected:hover {
+            background: transparent; border-color: var(--soft-coral); color: var(--soft-coral);
         }
         .selected-check {
             display: none; position: absolute; top: var(--space-md); right: var(--space-md);
@@ -2488,7 +2492,6 @@
                         <div class="addons-layout"><div class="retreat-grid" id="retreatGrid">
                             <div class="retreat-card" data-price="28500">
                                 <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">View Details</button>
-                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Renewal Retreat');" aria-label="View images">
                                         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -2511,7 +2514,6 @@
                             </div>
                             <div class="retreat-card" data-price="19200">
                                 <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Reset Experience', 19200)">View Details</button>
-                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Reset Experience');" aria-label="View images">
                                         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -2534,7 +2536,6 @@
                             </div>
                             <div class="retreat-card" data-price="52000">
                                 <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">View Details</button>
-                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Reclaim Journey');" aria-label="View images">
                                         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -2557,7 +2558,6 @@
                             </div>
                             <div class="retreat-card" data-price="9800">
                                 <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">View Details</button>
-                                <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
                                     <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Weekend Pause');" aria-label="View images">
                                         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -3003,8 +3003,7 @@
                                     <h4 class="summary-card-title">Choose Retreat</h4>
                                     <div class="retreat-grid" id="modifyRetreatGrid">
                                         <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Renewal Retreat', 28500, 'modify')" data-price="28500">
-                                            <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-                                            <div class="retreat-card-image"><img src="images/Rectangle 13-3.png" alt="The Renewal Retreat"></div>
+                                                        <div class="retreat-card-image"><img src="images/Rectangle 13-3.png" alt="The Renewal Retreat"></div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Renewal Retreat</h3>
                                                 <p class="retreat-card-desc">A transformative seven-night journey combining ancient healing traditions with modern wellness science.</p>
@@ -3015,8 +3014,7 @@
                                             </div>
                                         </div>
                                         <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reset Experience', 19200, 'modify')" data-price="19200">
-                                            <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-                                            <div class="retreat-card-image"><img src="images/Rectangle 13-4.png" alt="The Reset Experience"></div>
+                                                        <div class="retreat-card-image"><img src="images/Rectangle 13-4.png" alt="The Reset Experience"></div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Reset Experience</h3>
                                                 <p class="retreat-card-desc">A focused five-night program designed to restore your natural rhythm with targeted spa therapies.</p>
@@ -3027,8 +3025,7 @@
                                             </div>
                                         </div>
                                         <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Reclaim Journey', 52000, 'modify')" data-price="52000">
-                                            <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-                                            <div class="retreat-card-image"><img src="images/Rectangle 13-5.png" alt="The Reclaim Journey"></div>
+                                                        <div class="retreat-card-image"><img src="images/Rectangle 13-5.png" alt="The Reclaim Journey"></div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Reclaim Journey</h3>
                                                 <p class="retreat-card-desc">Our most comprehensive two-week transformation addressing body, mind and spirit.</p>
@@ -3039,8 +3036,7 @@
                                             </div>
                                         </div>
                                         <div class="retreat-card" onclick="openRetreatDrawer(this, 'The Weekend Pause', 9800, 'modify')" data-price="9800">
-                                            <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-                                            <div class="retreat-card-image"><img src="images/image 20.png" alt="The Weekend Pause"></div>
+                                                        <div class="retreat-card-image"><img src="images/image 20.png" alt="The Weekend Pause"></div>
                                             <div class="retreat-card-body">
                                                 <h3 class="retreat-card-name">The Weekend Pause</h3>
                                                 <p class="retreat-card-desc">A brief yet meaningful three-night retreat for a restorative pause by the Red Sea.</p>
@@ -4568,6 +4564,7 @@
                 return `<button type="button" class="retreat-guest-tab${active}" onclick="setActiveRetreatGuest('${g.key}')">${g.label}${meta}</button>`;
             }).join('');
             highlightSelectedRetreatForActiveGuest();
+            refreshRetreatSelectButtons();
         }
 
         function setActiveRetreatGuest(key) {
@@ -4586,15 +4583,39 @@
 
         function selectRetreatDirect(card, name, price) {
             if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
-            booking.retreatsByGuest[activeRetreatGuestKey] = name;
-            // Keep lead guest's retreat as the primary for pricing & summary
-            if (activeRetreatGuestKey === 'r0g1' || !booking.retreatName) {
-                booking.retreatName = name;
-                booking.retreatPrice = price;
+            if (booking.retreatsByGuest[activeRetreatGuestKey] === name) {
+                // Same retreat clicked again for this guest → clear it
+                delete booking.retreatsByGuest[activeRetreatGuestKey];
+                if (activeRetreatGuestKey === 'r0g1') {
+                    booking.retreatName = '';
+                    booking.retreatPrice = 0;
+                }
+            } else {
+                booking.retreatsByGuest[activeRetreatGuestKey] = name;
+                if (activeRetreatGuestKey === 'r0g1' || !booking.retreatName) {
+                    booking.retreatName = name;
+                    booking.retreatPrice = price;
+                }
             }
             highlightSelectedRetreatForActiveGuest();
             renderRetreatGuestTabs();
+            refreshRetreatSelectButtons();
             renderPriceSummary('priceSummaryStep2');
+        }
+
+        function refreshRetreatSelectButtons() {
+            const picked = (booking.retreatsByGuest || {})[activeRetreatGuestKey] || '';
+            const isAr = getLang() === 'ar';
+            document.querySelectorAll('#retreatGrid .retreat-card').forEach(card => {
+                const nameEl = card.querySelector('.retreat-card-name');
+                const btn = card.querySelector('.retreat-select-btn');
+                if (!nameEl || !btn) return;
+                const isSelected = nameEl.textContent.trim() === picked;
+                btn.textContent = isSelected
+                    ? (isAr ? 'إلغاء التحديد' : 'Clear Selection')
+                    : (isAr ? 'اختيار' : 'Select');
+                btn.classList.toggle('is-selected', isSelected);
+            });
         }
 
         function setGuestRetreat(guestKey, retreatName) {
