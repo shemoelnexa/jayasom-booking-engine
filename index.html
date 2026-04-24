@@ -3547,7 +3547,7 @@
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-in</span><span class="confirmation-detail-value">${ci.toLocaleDateString(locale, opts)}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-out</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Rooms</span><span class="confirmation-detail-value">${booking.selectedRooms.length || booking.rooms}</span></div>`;
-            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">${booking.adults} Adult(s)${booking.children > 0 ? ', ' + booking.children + ' Child(ren)' : ''}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">${guestsSummaryText()}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Total</span><span class="confirmation-detail-value">${formatCurrency(total || 28500)}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Status</span><span class="confirmation-detail-value" style="color:var(--success-green);">Confirmed</span></div>`;
 
@@ -3861,7 +3861,7 @@
             var html = '<h3 class="price-summary-title">Your Journey Summary</h3>';
             if (booking.retreatName) {
                 var retreatChanged = orig && (booking.retreatName !== orig.retreatName || booking.retreatPrice !== orig.retreatPrice || booking.adults !== orig.adults);
-                html += '<div class="price-line"><div><div class="price-line-label">' + booking.retreatName + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + booking.adults + ' guest(s)</div></div><div class="price-line-value">' + formatCurrency(retreatTotal) + '</div></div>';
+                html += '<div class="price-line"><div><div class="price-line-label">' + booking.retreatName + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + guestsSummaryText() + '</div></div><div class="price-line-value">' + formatCurrency(retreatTotal) + '</div></div>';
             }
             booking.selectedRooms.forEach(function(r) {
                 var isNew = orig && !orig.rooms.some(function(or) { return or.name === r.name; });
@@ -3969,7 +3969,7 @@
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-in</span><span class="confirmation-detail-value">' + booking.checkin + '</span></div>';
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-out</span><span class="confirmation-detail-value">' + booking.checkout + '</span></div>';
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Nights</span><span class="confirmation-detail-value">' + nights + '</span></div>';
-            detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">' + booking.adults + ' Adult(s)' + (booking.children > 0 ? ', ' + booking.children + ' Child(ren)' : '') + '</span></div>';
+            detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">' + guestsSummaryText() + '</span></div>';
             booking.selectedRooms.forEach(function(r) {
                 detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">' + r.name + '</span><span class="confirmation-detail-value">' + formatCurrency(r.pricePerNight * nights) + '</span></div>';
             });
@@ -4678,6 +4678,27 @@
             return { total: sum, count };
         }
 
+        function guestsSummaryText() {
+            const isAr = currentLang === 'ar';
+            const parts = [];
+            const a = booking.adults || 0;
+            const c = booking.children || 0;
+            const i = booking.infants || 0;
+            const k = booking.caretakers || 0;
+            if (isAr) {
+                parts.push(`${a} ${a === 1 ? 'بالغ' : 'بالغين'}`);
+                if (c > 0) parts.push(`${c} ${c === 1 ? 'طفل' : 'أطفال'}`);
+                if (i > 0) parts.push(`${i} ${i === 1 ? 'رضيع' : 'رضع'}`);
+                if (k > 0) parts.push(`${k} ${k === 1 ? 'مرافق' : 'مرافقين'}`);
+            } else {
+                parts.push(`${a} ${a === 1 ? 'adult' : 'adults'}`);
+                if (c > 0) parts.push(`${c} ${c === 1 ? 'child' : 'children'}`);
+                if (i > 0) parts.push(`${i} ${i === 1 ? 'infant' : 'infants'}`);
+                if (k > 0) parts.push(`${k} ${k === 1 ? 'caretaker' : 'caretakers'}`);
+            }
+            return parts.join(', ');
+        }
+
         function renderPriceSummary(containerId) {
             const el = document.getElementById(containerId);
             if (!el) return;
@@ -4692,7 +4713,7 @@
             const t = translations.ar;
             let html = `<h3 class="price-summary-title">${isAr ? t.journeySummary : 'Your Journey Summary'}</h3>`;
             if (booking.retreatName) {
-                html += `<div class="price-line"><div><div class="price-line-label">${booking.retreatName}</div><div class="price-line-sublabel">${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</div></div><div class="price-line-value">${formatCurrency(retreatTotal)}</div></div>`;
+                html += `<div class="price-line"><div><div class="price-line-label">${booking.retreatName}</div><div class="price-line-sublabel">${guestsSummaryText()}</div></div><div class="price-line-value">${formatCurrency(retreatTotal)}</div></div>`;
             }
             booking.selectedRooms.forEach(r => {
                 html += `<div class="price-line"><div><div class="price-line-label">${r.name}</div><div class="price-line-sublabel">1 ${isAr ? 'غرفة' : 'room'} &times; ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatCurrency(r.pricePerNight * nights)}</div></div>`;
@@ -5045,7 +5066,7 @@
                 <div class="summary-row"><span class="summary-row-label">${isAr ? t.checkin : 'Check-in'}</span><span class="summary-row-value">${ci.toLocaleDateString(locale, opts)}</span></div>
                 <div class="summary-row"><span class="summary-row-label">${isAr ? t.checkout : 'Check-out'}</span><span class="summary-row-value">${co.toLocaleDateString(locale, opts)}</span></div>
                 <div class="summary-row"><span class="summary-row-label">${isAr ? t.duration : 'Duration'}</span><span class="summary-row-value">${nights} ${isAr ? t.nightsLabel : 'Nights'}</span></div>
-                <div class="summary-row"><span class="summary-row-label">${isAr ? t.guests : 'Guests'}</span><span class="summary-row-value">${booking.adults} ${isAr ? t.adultsLabel : 'Adult(s)'}${booking.children > 0 ? ', ' + booking.children + ' ' + (isAr ? t.childrenLabel : 'Child(ren)') : ''}</span></div>
+                <div class="summary-row"><span class="summary-row-label">${isAr ? t.guests : 'Guests'}</span><span class="summary-row-value">${guestsSummaryText()}</span></div>
                 <div class="summary-row"><span class="summary-row-label">${isAr ? 'الغرف' : 'Rooms'}</span><span class="summary-row-value">${booking.rooms}</span></div>`;
 
             let selectionsHtml = `<h4 class="summary-card-title">${isAr ? t.yourSelections : 'Your Selections'}</h4>
@@ -5084,7 +5105,7 @@
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.room : 'Room(s)'}</span><span class="confirmation-detail-value">${getRoomNames()}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkin : 'Check-in'}</span><span class="confirmation-detail-value">${ci.toLocaleDateString(locale, opts)}, 3:00 PM</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkout : 'Check-out'}</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}, 12:00 PM</span></div>`;
-            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.guests : 'Guests'}</span><span class="confirmation-detail-value">${booking.adults} ${isAr ? t.adultsLabel : 'Adult(s)'}${booking.children > 0 ? ', ' + booking.children + ' ' + (isAr ? t.childrenLabel : 'Child(ren)') : ''}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.guests : 'Guests'}</span><span class="confirmation-detail-value">${guestsSummaryText()}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.totalPaid : 'Total Paid'}</span><span class="confirmation-detail-value">${formatCurrency(total)}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.paymentStatus : 'Payment Status'}</span><span class="confirmation-detail-value" style="color:var(--success-green);">${isAr ? t.confirmed : 'Confirmed'}</span></div>`;
 
