@@ -4212,7 +4212,7 @@
             document.getElementById('drawerFooter').innerHTML = `
                 <div class="drawer-price">
                     <span class="drawer-price-label">Starting from</span>
-                    <span class="drawer-price-value">SAR ${price.toLocaleString()} <span>/ person</span></span>
+                    <span class="drawer-price-value">${formatCurrency(price)} <span>/ person</span></span>
                 </div>
                 <button class="drawer-select-btn" onclick="${selectHandler}">${isSelected ? 'Selected' : 'Select Retreat'}</button>`;
 
@@ -4280,7 +4280,7 @@
             document.getElementById('drawerFooter').innerHTML = `
                 <div class="drawer-price">
                     <span class="drawer-price-label">Per night</span>
-                    <span class="drawer-price-value">SAR ${data.price.toLocaleString()} <span>/night</span></span>
+                    <span class="drawer-price-value">${formatCurrency(data.price)} <span>/night</span></span>
                 </div>
                 <div class="drawer-room-counter">
                     <button class="drawer-counter-btn" onclick="${roomUpdater}('${roomName.replace(/'/g, "\\'")}', -1)">-</button>
