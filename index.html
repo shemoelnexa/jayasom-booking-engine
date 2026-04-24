@@ -2494,7 +2494,7 @@
                             </div>
                         </div>
                         <div class="step-navigation">
-                            <button class="step-nav-back" onclick="goToStep(3)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Rooms</button>
+                            <button class="step-nav-back" onclick="goToStep(prevStepFrom(currentStep))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> <span data-i18n="backLabel">Back</span></button>
                             <div></div>
                         </div>
                     </div>
@@ -2939,11 +2939,20 @@
 
         // ===== NAVIGATION =====
         const STEP_LABELS = {
-            1: 'Dates & Guests',
-            2: 'Select Retreat',
-            3: 'Select Room',
-            5: 'Guest Details',
-            6: 'Confirmation'
+            en: {
+                1: 'Dates & Guests',
+                2: 'Select Retreat',
+                3: 'Select Room',
+                5: 'Guest Details',
+                6: 'Confirmation'
+            },
+            ar: {
+                1: 'التواريخ والضيوف',
+                2: 'اختر الباقة',
+                3: 'اختر الغرفة',
+                5: 'تفاصيل الضيوف',
+                6: 'التأكيد'
+            }
         };
 
         function getFlowOrder() {
@@ -2965,12 +2974,17 @@
         }
 
         function currentStepNames() {
-            return getFlowOrder().map(s => STEP_LABELS[s]);
+            const lang = (typeof currentLang !== 'undefined' && currentLang === 'ar') ? 'ar' : 'en';
+            const labels = STEP_LABELS[lang] || STEP_LABELS.en;
+            return getFlowOrder().map(s => labels[s]);
         }
 
         function refreshContinueButtonLabels() {
             const next = nextStepFrom(currentStep);
-            const label = next && STEP_LABELS[next] ? `Continue to ${STEP_LABELS[next]}` : 'Continue';
+            const lang = (typeof currentLang !== 'undefined' && currentLang === 'ar') ? 'ar' : 'en';
+            const labels = STEP_LABELS[lang] || STEP_LABELS.en;
+            const prefix = lang === 'ar' ? 'متابعة إلى' : 'Continue to';
+            const label = next && labels[next] ? `${prefix} ${labels[next]}` : (lang === 'ar' ? 'متابعة' : 'Continue');
             document.querySelectorAll('[data-continue-btn]').forEach(btn => {
                 btn.textContent = label;
             });
@@ -4951,23 +4965,6 @@
             });
         }
 
-        function updateStepNamesLang() {
-            if (currentLang === 'ar') {
-                const t = translations.ar;
-                stepNames[0] = { label: t.sn_selectRetreat, sub: t.sn_chooseJourney };
-                stepNames[1] = { label: t.sn_selectRoom, sub: t.sn_pickAccommodation };
-                stepNames[2] = { label: t.sn_treatments, sub: t.sn_addonServices };
-                stepNames[3] = { label: 'بيانات الضيوف والدفع', sub: 'إكمال الحجز' };
-                stepNames[4] = { label: t.sn_confirmation, sub: t.sn_bookingConfirmed };
-            } else {
-                stepNames[0] = { label: 'Select Retreat', sub: 'Choose your journey' };
-                stepNames[1] = { label: 'Select Room', sub: 'Pick accommodation' };
-                stepNames[2] = { label: 'Treatments & Transport', sub: 'Add-ons & travel' };
-                stepNames[3] = { label: 'Guest Details & Payment', sub: 'Complete booking' };
-                stepNames[4] = { label: 'Confirmation', sub: 'Booking confirmed' };
-            }
-        }
-
         function applyDestinationVisibility() {
             const childrenGroup = document.getElementById('childrenCounterGroup');
             const childAgesContainer = document.getElementById('childAgesContainer');
@@ -5052,8 +5049,9 @@
                 applyTranslations('en');
             }
 
-            updateStepNamesLang();
             updateStepper(currentStep);
+            updateMobileStepper(currentStep);
+            refreshContinueButtonLabels();
 
             // Re-render dynamic steps if visible
             if (currentStep === 2) renderPriceSummary('priceSummaryStep2');
