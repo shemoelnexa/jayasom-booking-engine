@@ -765,6 +765,15 @@
             color: var(--inner-black); margin-bottom: var(--space-lg);
             display: flex; align-items: center; gap: var(--space-md);
         }
+        .guest-details-section { margin-bottom: 28px; }
+        .section-subtitle {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         .guest-badge {
             font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 4px 12px; background: var(--soft-coral); color: white;
@@ -2282,58 +2291,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                                <!-- Airport Transfer & Travel (moved from treatments step) -->
-                                <div class="addons-list" style="margin-top: var(--space-lg);">
-                                    <div class="addon-card" onclick="toggleAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
-                                        <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
-                                            <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
-                                        </div>
-                                        <div class="addon-body">
-                                            <div>
-                                                <h3 class="addon-name">Airport Transfer &amp; Travel</h3>
-                                                <p class="addon-desc">Amaala is a dedicated destination — airport pickup is recommended. Let us know your travel plans to coordinate a seamless arrival.</p>
-                                            </div>
-                                            <div class="addon-footer">
-                                                <span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span>
-                                                <button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button>
-                                            </div>
-                                        </div>
-                                        <div id="airportTransferFields" style="display:none;width:100%;padding:var(--space-md) var(--space-lg) var(--space-lg);border-top:1px solid var(--border-light);" onclick="event.stopPropagation();">
-                                            <div class="guest-form-grid">
-                                                <div class="form-group">
-                                                    <label class="form-label">Do you need airport pickup?</label>
-                                                    <select class="form-select" style="background:var(--open-white);" id="needsPickup" onchange="booking.needsPickup=this.value">
-                                                        <option value="">Select</option>
-                                                        <option value="yes">Yes, please arrange pickup</option>
-                                                        <option value="no">No, I have my own transport</option>
-                                                        <option value="later">I'll confirm later</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label">Do you know your flight details?</label>
-                                                    <select class="form-select" style="background:var(--open-white);" id="knowFlightDetails" onchange="document.getElementById('flightNumberFields').style.display=this.value==='yes'?'block':'none';">
-                                                        <option value="">Select</option>
-                                                        <option value="yes">Yes</option>
-                                                        <option value="no">Not yet</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div id="flightNumberFields" style="display:none;margin-top:var(--space-md);">
-                                                <div class="guest-form-grid">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Flight Number</label>
-                                                        <input type="text" class="form-input-white" id="flightNumber" placeholder="e.g. SV 1234" onchange="booking.flightNumber=this.value">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="form-label">Arrival Date &amp; Time</label>
-                                                        <input type="datetime-local" class="form-input-white" id="arrivalTime" onchange="booking.arrivalTime=this.value">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep3"></div></div>
                         </div>
@@ -2457,6 +2414,60 @@
                         <div class="addons-layout">
                             <!-- Left: Guest Forms + Policies -->
                             <div style="min-width:0;">
+                                <!-- Airport Transfer & Travel (moved from room selection step) -->
+                                <div class="guest-details-section" id="airportTransferSection">
+                                    <h3 class="section-subtitle" data-i18n="arrivalTransferTitle">Arrival &amp; Transfer</h3>
+                                    <div class="addons-list">
+                                        <div class="addon-card" onclick="toggleAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
+                                            <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
+                                                <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
+                                            </div>
+                                            <div class="addon-body">
+                                                <div>
+                                                    <h3 class="addon-name">Airport Transfer &amp; Travel</h3>
+                                                    <p class="addon-desc">Amaala is a dedicated destination — airport pickup is recommended. Let us know your travel plans to coordinate a seamless arrival.</p>
+                                                </div>
+                                                <div class="addon-footer">
+                                                    <span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span>
+                                                    <button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button>
+                                                </div>
+                                            </div>
+                                            <div id="airportTransferFields" style="display:none;width:100%;padding:var(--space-md) var(--space-lg) var(--space-lg);border-top:1px solid var(--border-light);" onclick="event.stopPropagation();">
+                                                <div class="guest-form-grid">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Do you need airport pickup?</label>
+                                                        <select class="form-select" style="background:var(--open-white);" id="needsPickup" onchange="booking.needsPickup=this.value">
+                                                            <option value="">Select</option>
+                                                            <option value="yes">Yes, please arrange pickup</option>
+                                                            <option value="no">No, I have my own transport</option>
+                                                            <option value="later">I'll confirm later</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Do you know your flight details?</label>
+                                                        <select class="form-select" style="background:var(--open-white);" id="knowFlightDetails" onchange="document.getElementById('flightNumberFields').style.display=this.value==='yes'?'block':'none';">
+                                                            <option value="">Select</option>
+                                                            <option value="yes">Yes</option>
+                                                            <option value="no">Not yet</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div id="flightNumberFields" style="display:none;margin-top:var(--space-md);">
+                                                    <div class="guest-form-grid">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Flight Number</label>
+                                                            <input type="text" class="form-input-white" id="flightNumber" placeholder="e.g. SV 1234" onchange="booking.flightNumber=this.value">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label">Arrival Date &amp; Time</label>
+                                                            <input type="datetime-local" class="form-input-white" id="arrivalTime" onchange="booking.arrivalTime=this.value">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div id="guestFormsContainer"></div>
 
                                 <div class="summary-card" style="margin-top:var(--space-lg);">
@@ -4591,6 +4602,7 @@
                 step5of7: 'الخطوة ٥ من ٧',
                 guestInformation: 'معلومات الضيوف',
                 guestInfoDesc: 'يرجى تقديم البيانات لكل ضيف. سيتم استخدام معلومات الضيف الرئيسي للمراسلات.',
+                arrivalTransferTitle: 'الوصول والنقل',
                 adult: 'بالغ',
                 child: 'طفل',
                 leadGuest: 'الضيف الرئيسي',
