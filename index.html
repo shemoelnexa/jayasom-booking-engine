@@ -3257,7 +3257,8 @@
             const retreatTotal = booking.retreatPrice * booking.adults;
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
-            return retreatTotal + roomTotal + addonsTotal;
+            const treatmentsTotal = typeof computeGuestTreatmentsTotal === 'function' ? computeGuestTreatmentsTotal().total : 0;
+            return retreatTotal + roomTotal + addonsTotal + treatmentsTotal;
         }
 
         const CURRENCY_RATES = { SAR: 1, USD: 0.267, EUR: 0.245, GBP: 0.210 };
@@ -4533,23 +4534,25 @@
 
         function rerenderGuestFormsPreservingInputs() {
             const container = document.getElementById('guestFormsContainer');
-            const snapshot = container
-                ? Array.from(container.querySelectorAll('input, select, textarea')).map(el => ({
-                    tag: el.tagName,
-                    type: el.type || '',
-                    value: el.value
-                }))
-                : [];
+            if (!container) { renderGuestForms(); return; }
+            const byId = {};
+            const byPosition = [];
+            Array.from(container.querySelectorAll('input, select, textarea')).forEach(el => {
+                const entry = { tag: el.tagName, type: el.type || '', value: el.value };
+                if (el.id) byId[el.id] = entry; else byPosition.push(entry);
+            });
             renderGuestForms();
-            if (container && snapshot.length) {
-                const refreshed = Array.from(container.querySelectorAll('input, select, textarea'));
-                snapshot.forEach((s, i) => {
-                    const el = refreshed[i];
-                    if (el && el.tagName === s.tag && (el.type || '') === s.type) {
-                        el.value = s.value;
-                    }
-                });
-            }
+            const refreshed = Array.from(container.querySelectorAll('input, select, textarea'));
+            let posIdx = 0;
+            refreshed.forEach(el => {
+                if (el.id && byId[el.id]) {
+                    const s = byId[el.id];
+                    if (el.tagName === s.tag && (el.type || '') === s.type) el.value = s.value;
+                } else if (!el.id) {
+                    const s = byPosition[posIdx++];
+                    if (s && el.tagName === s.tag && (el.type || '') === s.type) el.value = s.value;
+                }
+            });
         }
 
         function setLeadGuest(roomIndex, guestNum) {
@@ -5114,7 +5117,7 @@
 
         // ===== NEW BOOKING =====
         function startNewBooking() {
-            booking = { destination: 'jayasom', currency: 'SAR', retreatName: '', retreatPrice: 0, retreatsByGuest: {}, leadGuests: {}, treatmentsByGuest: {}, selectedRooms: [], addons: [], adults: 2, children: 0, infants: 0, caretakers: 0, rooms: 1, childAges: [], additionalGuests: {}, checkin: '', checkout: '', flightNumber: '', arrivalTime: '', needsPickup: '' };
+            booking = { destination: 'jayasom', currency: 'SAR', retreatName: '', retreatPrice: 0, retreatsByGuest: {}, leadGuests: {}, treatmentsByGuest: {}, childrenByRoom: {}, selectedRooms: [], addons: [], adults: 2, children: 0, infants: 0, caretakers: 0, rooms: 1, childAges: [], additionalGuests: {}, checkin: '', checkout: '', flightNumber: '', arrivalTime: '', needsPickup: '' };
             document.getElementById('adultsCount').textContent = '2';
             document.getElementById('childrenCount').textContent = '0';
             const infCount = document.getElementById('infantsCount');
@@ -5669,8 +5672,13 @@
         }
 
         function rerenderAllPrices() {
-            if (typeof renderPriceSummary === 'function') renderPriceSummary();
-            if (typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
+            if (typeof renderPriceSummary === 'function' && typeof currentStep !== 'undefined') {
+                if (currentStep === 2) renderPriceSummary('priceSummaryStep2');
+                if (currentStep === 3) renderPriceSummary('priceSummaryStep3');
+                if (currentStep === 4) renderPriceSummary('priceSummaryStep4');
+                if (currentStep === 5) renderPriceSummary('priceSummaryStep5');
+            }
+            if (typeof renderMergedSummaryPayment === 'function' && currentStep === 5) renderMergedSummaryPayment();
             if (typeof renderConfirmation === 'function' && typeof currentStep !== 'undefined' && currentStep === 6) renderConfirmation();
             document.querySelectorAll('[data-price-sar]').forEach(el => {
                 const sar = parseFloat(el.dataset.priceSar);
