@@ -320,6 +320,7 @@
         .destination-radio {
           display: flex;
           align-items: center;
+          justify-content: flex-start;
           gap: 10px;
           padding: 14px 16px;
           border: 1.5px solid var(--border-light);
@@ -329,6 +330,7 @@
           transition: all 0.2s ease;
           font-size: 14px;
           color: var(--text-primary);
+          text-align: start;
         }
         .destination-radio:hover { border-color: var(--soft-coral); }
         .destination-radio.selected {
@@ -359,6 +361,9 @@
           display: flex;
           flex-direction: column;
           gap: 2px;
+          text-align: start;
+          align-items: flex-start;
+          min-width: 0;
         }
         .destination-radio-title { font-weight: 600; }
         .destination-radio-sub { font-size: 11px; color: var(--text-muted); }
