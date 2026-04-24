@@ -290,7 +290,12 @@
             background-repeat: no-repeat; background-position: right 14px center;
             padding-right: 40px; cursor: pointer;
         }
-        .guest-counters-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md); }
+        .guest-counters-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          gap: 16px;
+          margin-top: 8px;
+        }
         .guest-counter { display: flex; align-items: center; gap: var(--space-md); justify-content: center; }
         .form-group.guest-group { align-items: center; text-align: center; }
         .counter-btn {
@@ -2749,15 +2754,27 @@
         ];
 
         let booking = {
-            destination: 'jayasom',
-            retreatName: '', retreatPrice: 0,
-            selectedRooms: [],
-            addons: [],
-            adults: 2, children: 0, rooms: 1,
-            childAges: [],
-            additionalGuests: {},
-            checkin: '', checkout: '',
-            flightNumber: '', arrivalTime: '', needsPickup: ''
+          destination: 'jayasom',
+          currency: 'SAR',
+          retreatName: '',
+          retreatPrice: 0,
+          retreatsByGuest: {},       // { 'r0g1': 'Retreat Name', ... }
+          leadGuests: {},            // { [roomIndex]: guestNumber } — one lead per room
+          treatmentsByGuest: {},     // { 'r0g1': ['Treatment A', ...] }
+          selectedRooms: [],
+          addons: [],
+          adults: 2,
+          children: 0,
+          infants: 0,
+          caretakers: 0,
+          rooms: 1,
+          childAges: [],
+          additionalGuests: {},
+          checkin: '',
+          checkout: '',
+          flightNumber: '',
+          arrivalTime: '',
+          needsPickup: ''
         };
 
         function getNights() {
@@ -2772,6 +2789,21 @@
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             return retreatTotal + roomTotal + addonsTotal;
+        }
+
+        const CURRENCY_RATES = { SAR: 1, USD: 0.267, EUR: 0.245, GBP: 0.210 };
+        const CURRENCY_SYMBOLS = { SAR: 'SAR', USD: '$', EUR: '€', GBP: '£' };
+
+        function convertFromSAR(amountSAR) {
+          const rate = CURRENCY_RATES[booking.currency] || 1;
+          return Math.round(amountSAR * rate);
+        }
+
+        function formatCurrency(amountSAR) {
+          const code = booking.currency || 'SAR';
+          const sym = CURRENCY_SYMBOLS[code];
+          const val = convertFromSAR(amountSAR).toLocaleString();
+          return code === 'SAR' ? `SAR ${val}` : `${sym}${val}`;
         }
 
         function formatSAR(num) {
