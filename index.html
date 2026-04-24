@@ -324,7 +324,7 @@
           gap: 10px;
           padding: 14px 16px;
           border: 1.5px solid var(--border-light);
-          border-radius: 12px;
+          border-radius: 0;
           cursor: pointer;
           background: #fff;
           transition: all 0.2s ease;
@@ -6087,5 +6087,21 @@
             <div class="icm-dots" id="icmDots"></div>
         </div>
     </div>
+
+    <!-- DEV-ONLY auto-reload: polls Last-Modified and refreshes on change. Skipped off localhost. -->
+    <script>
+    (function () {
+        if (!['localhost', '127.0.0.1', ''].includes(location.hostname)) return;
+        let lastSig = null;
+        setInterval(async function () {
+            try {
+                const r = await fetch(location.pathname + '?_t=' + Date.now(), { method: 'HEAD', cache: 'no-store' });
+                const sig = r.headers.get('last-modified') || r.headers.get('etag') || '';
+                if (lastSig !== null && sig && sig !== lastSig) location.reload();
+                lastSig = sig;
+            } catch (e) { /* ignore transient failures */ }
+        }, 1000);
+    })();
+    </script>
 </body>
 </html>
