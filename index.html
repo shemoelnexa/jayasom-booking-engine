@@ -4244,7 +4244,8 @@
 
         function closeImageCarouselModal() {
             document.getElementById('imageCarouselModalOverlay').classList.remove('show');
-            document.body.style.overflow = '';
+            const drawerOpen = document.querySelector('.detail-drawer-overlay.show');
+            if (!drawerOpen) document.body.style.overflow = '';
         }
 
         function icmGoTo(i) {
