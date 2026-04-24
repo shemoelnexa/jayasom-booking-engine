@@ -724,6 +724,48 @@
         .addon-toggle.active { background: var(--soft-coral); }
         .addon-toggle.active::after { transform: translateX(24px); }
 
+        /* GUEST TREATMENTS (Task 13) */
+        .guest-treatments-row {
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px dashed var(--border-light);
+        }
+        .guest-treatments-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-sm);
+        }
+        .guest-treatments-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .guest-treatments-count {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .guest-treatments-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        .guest-treatment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--warm-white);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+        .treatment-meta { display: flex; flex-direction: column; gap: 2px; }
+        .treatment-name { font-size: 13px; color: var(--text-primary); }
+        .treatment-sub { font-size: 11px; color: var(--text-muted); }
+
         /* CARD DETAILS BUTTON (Task 8) */
         .card-details-btn {
             display: inline-flex;
@@ -4051,25 +4093,29 @@
                 image: 'images/image 18.png',
                 description: 'A therapeutic massage targeting deep muscle layers to release chronic tension. Our expert therapists use firm pressure and slow strokes to reach deeper layers of muscle and fascia, helping to break up scar tissue and physically break down muscle knots.\n\nThis 90-minute session begins with a consultation to identify your areas of tension, followed by a full-body treatment that focuses on your specific needs. Ideal for those with chronic pain, postural problems, or recovering from physical activity.',
                 duration: '90 minutes',
-                category: 'Body Treatment'
+                category: 'Body Treatment',
+                price: 850
             },
             'Ayurvedic Consultation': {
                 image: 'images/image 19.png',
                 description: 'A comprehensive dosha assessment with personalized lifestyle and nutrition recommendations rooted in ancient Ayurvedic wisdom.\n\nOur Ayurvedic practitioner will evaluate your constitution (Prakriti) and current state (Vikriti) through pulse diagnosis, observation, and detailed questioning. You will receive a personalized wellness plan including dietary guidelines, herbal recommendations, and daily routine suggestions tailored to your unique constitution.',
                 duration: '60 minutes',
-                category: 'Consultation'
+                category: 'Consultation',
+                price: 600
             },
             'Hydrating Facial Treatment': {
                 image: 'images/image 31.png',
                 description: 'A luxurious facial using marine-based ingredients and advanced hydration techniques to restore skin luminosity.\n\nThis treatment begins with a gentle cleanse and exfoliation, followed by a hydrating serum infusion using ultrasonic technology. A marine collagen mask deeply nourishes while you enjoy a relaxing scalp and hand massage. The session concludes with a protective moisturizer and SPF application, leaving your skin radiant and deeply hydrated.',
                 duration: '75 minutes',
-                category: 'Facial Treatment'
+                category: 'Facial Treatment',
+                price: 750
             },
             'Sound Healing Session': {
                 image: 'images/Rectangle 50.png',
                 description: 'An immersive sonic meditation using Tibetan singing bowls and tuning forks for deep relaxation and inner stillness.\n\nLie comfortably as our sound therapist creates a cocoon of resonant vibrations using crystal and Tibetan singing bowls, tuning forks, and chimes. The sound waves help shift your brainwaves from active beta to deeply relaxed theta state, promoting profound relaxation, stress reduction, and emotional balance.',
                 duration: '60 minutes',
-                category: 'Mind & Spirit'
+                category: 'Mind & Spirit',
+                price: 450
             },
             'Airport Transfer': {
                 image: 'images/image 18.png',
@@ -4475,6 +4521,16 @@
             if (typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
+        function toggleGuestTreatment(guestKey, treatmentName) {
+            if (!booking.treatmentsByGuest) booking.treatmentsByGuest = {};
+            const list = booking.treatmentsByGuest[guestKey] || [];
+            const idx = list.indexOf(treatmentName);
+            if (idx >= 0) list.splice(idx, 1); else list.push(treatmentName);
+            booking.treatmentsByGuest[guestKey] = list;
+            rerenderGuestFormsPreservingInputs();
+            if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
+        }
+
         function rerenderGuestFormsPreservingInputs() {
             const container = document.getElementById('guestFormsContainer');
             const snapshot = container
@@ -4609,6 +4665,19 @@
         }
 
         // ===== RENDER PRICE SUMMARY =====
+        function computeGuestTreatmentsTotal() {
+            let sum = 0, count = 0;
+            if (booking.treatmentsByGuest && typeof treatmentDetails !== 'undefined') {
+                for (const ids of Object.values(booking.treatmentsByGuest)) {
+                    for (const n of (ids || [])) {
+                        const d = treatmentDetails[n];
+                        if (d && typeof d.price === 'number') { sum += d.price; count += 1; }
+                    }
+                }
+            }
+            return { total: sum, count };
+        }
+
         function renderPriceSummary(containerId) {
             const el = document.getElementById(containerId);
             if (!el) return;
@@ -4616,7 +4685,8 @@
             const retreatTotal = booking.retreatPrice * booking.adults;
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
-            const total = retreatTotal + roomTotal + addonsTotal;
+            const guestTreatments = computeGuestTreatmentsTotal();
+            const total = retreatTotal + roomTotal + addonsTotal + guestTreatments.total;
 
             const isAr = currentLang === 'ar';
             const t = translations.ar;
@@ -4629,6 +4699,9 @@
             });
             if (booking.addons.length > 0) {
                 html += `<div class="price-line"><div><div class="price-line-label">${isAr ? t.additionalTreatments : 'Additional Treatments'}</div><div class="price-line-sublabel">${booking.addons.length} ${isAr ? t.selected : 'selected'}</div></div><div class="price-line-value">${formatCurrency(addonsTotal)}</div></div>`;
+            }
+            if (guestTreatments.count > 0) {
+                html += `<div class="price-line"><div><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-sublabel">${guestTreatments.count} ${isAr ? 'محدد' : 'selected'}</div></div><div class="price-line-value">${formatCurrency(guestTreatments.total)}</div></div>`;
             }
             html += `<div class="price-divider"></div>
                 <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatCurrency(total)}</span></div>
@@ -4645,13 +4718,15 @@
             const retreatTotal = booking.retreatPrice * booking.adults;
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
-            const total = retreatTotal + roomTotal + addonsTotal;
+            const guestTreatments = computeGuestTreatmentsTotal();
+            const total = retreatTotal + roomTotal + addonsTotal + guestTreatments.total;
 
             const isAr = currentLang === 'ar'; const t = translations.ar;
             let breakdownHtml = `<div style="margin-bottom:var(--space-lg);">
                 <div class="price-line"><div class="price-line-label">${isAr ? t.retreat : 'Retreat'}</div><div class="price-line-value">${formatCurrency(retreatTotal)}</div></div>
                 <div class="price-line"><div class="price-line-label">${isAr ? t.accommodation : 'Accommodation'} (${booking.selectedRooms.length} ${isAr ? 'غرفة/غرف' : 'room(s)'})</div><div class="price-line-value">${formatCurrency(roomTotal)}</div></div>`;
-            if (addonsTotal > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-value">${formatCurrency(addonsTotal)}</div></div>`;
+            if (addonsTotal > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.additionalTreatments : 'Add-ons'}</div><div class="price-line-value">${formatCurrency(addonsTotal)}</div></div>`;
+            if (guestTreatments.total > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-value">${formatCurrency(guestTreatments.total)}</div></div>`;
             breakdownHtml += `<div class="price-divider"></div>
                 <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatCurrency(total)}</span></div>
                 <p class="price-vat-note">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p></div>`;
@@ -4756,6 +4831,7 @@
                             <div class="form-group"><label class="form-label">${isAr ? 'الجنس' : 'Gender'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Prefer not to say</option><option>Male</option><option>Female</option></select></div>
                         </div>
                         ${renderGuestRetreatChips(r, g, isAr, t)}
+                        ${renderGuestTreatments(r, g, isAr, t)}
                     </div>`;
                 }
 
@@ -4842,7 +4918,55 @@
                     <div class="form-group"><label class="form-label">${isAr ? 'الجنس' : 'Gender'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Prefer not to say</option><option>Male</option><option>Female</option></select></div>
                 </div>
                 ${renderGuestRetreatChips(roomIndex, guestNum, isAr, t)}
+                ${renderGuestTreatments(roomIndex, guestNum, isAr, t)}
             </div>`;
+        }
+
+        function getTreatmentCatalogForPicker() {
+            const excluded = new Set(['Airport Transfer']);
+            if (typeof treatmentDetails === 'undefined') return [];
+            return Object.keys(treatmentDetails).filter(name => !excluded.has(name));
+        }
+
+        function renderGuestTreatments(r, g, isAr, t) {
+            const guestKey = `r${r}g${g}`;
+            if (!booking.treatmentsByGuest) booking.treatmentsByGuest = {};
+            const selected = booking.treatmentsByGuest[guestKey] || [];
+            const list = getTreatmentCatalogForPicker();
+            if (list.length === 0) return '';
+
+            const headerLabel = isAr ? 'العلاجات' : 'Treatments';
+            const countLabel = isAr
+                ? `${selected.length} محدد`
+                : `${selected.length} selected`;
+
+            const itemsHtml = list.map(function(name) {
+                const d = treatmentDetails[name];
+                const priceLabel = typeof formatCurrency === 'function' && d && typeof d.price !== 'undefined'
+                    ? formatCurrency(d.price)
+                    : (d && d.price ? 'SAR ' + d.price : '');
+                const duration = (d && d.duration) ? d.duration : '';
+                const on = selected.indexOf(name) >= 0;
+                const nameAttr = name.replace(/"/g, '&quot;');
+                const nameEsc = name.replace(/'/g, "\\'");
+                return '<div class="guest-treatment-item">' +
+                    '<div class="treatment-meta">' +
+                        '<span class="treatment-name">' + name + '</span>' +
+                        (duration || priceLabel ? '<span class="treatment-sub">' + [duration, priceLabel].filter(Boolean).join(' · ') + '</span>' : '') +
+                    '</div>' +
+                    '<button type="button" class="addon-toggle' + (on ? ' active' : '') +
+                        '" data-treatment="' + nameAttr + '"' +
+                        ' onclick="toggleGuestTreatment(\'' + guestKey + '\', \'' + nameEsc + '\')"></button>' +
+                '</div>';
+            }).join('');
+
+            return '<div class="guest-treatments-row">' +
+                '<div class="guest-treatments-head">' +
+                    '<span class="guest-treatments-title" data-i18n="treatmentsLabel">' + headerLabel + '</span>' +
+                    '<span class="guest-treatments-count">' + countLabel + '</span>' +
+                '</div>' +
+                '<div class="guest-treatments-list">' + itemsHtml + '</div>' +
+            '</div>';
         }
 
         function renderGuestRetreatChips(r, g, isAr, t) {
