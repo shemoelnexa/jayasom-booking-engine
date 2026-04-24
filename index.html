@@ -5025,6 +5025,7 @@
 
             container.innerHTML = html;
             if (typeof applyTranslations === 'function') applyTranslations(currentLang);
+            if (typeof refreshAddButtonCaps === 'function') refreshAddButtonCaps();
         }
 
         function renderAdditionalGuestForm(roomIndex, guestNum, isAr, t) {
@@ -5044,7 +5045,7 @@
                     <div class="form-group"><label class="form-label">${isAr ? t.lastName : 'Last Name'} *</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterLastName : 'Enter last name'}"></div>
                     <div class="form-group"><label class="form-label">${isAr ? t.emailAddress : 'Email Address'} *</label><input type="email" class="form-input-white" placeholder="email@example.com"></div>
                     <div class="form-group"><label class="form-label">${isAr ? t.phoneNumber : 'Phone Number'} *</label><input type="tel" class="form-input-white" placeholder="+966 5XX XXX XXXX"></div>
-                    <div class="form-group"><label class="form-label">${isAr ? 'العمر' : 'Age Range'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Select</option><option>18-25</option><option>26-35</option><option>36-45</option><option>46-55</option><option>56-65</option><option>65+</option></select></div>
+                    <div class="form-group"><label class="form-label">${isAr ? 'العمر' : 'Age'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><input type="number" min="0" max="120" class="form-input-white" placeholder="${isAr ? 'العمر' : 'e.g. 34'}"></div>
                     <div class="form-group"><label class="form-label">${isAr ? 'الجنس' : 'Gender'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Prefer not to say</option><option>Male</option><option>Female</option></select></div>
                 </div>
                 ${renderGuestTreatments(roomIndex, guestNum, isAr, t)}
@@ -5126,7 +5127,38 @@
             content.classList.toggle('open');
         }
 
+        // ===== Step 5 guest / child cap helpers =====
+        function totalAdultRowsInStep5() {
+            const container = document.getElementById('guestFormsContainer');
+            if (!container) return 0;
+            const base = container.querySelectorAll('.guest-form-section:not(.child-row)').length;
+            const extras = container.querySelectorAll('.additional-guest-form').length;
+            return base + extras;
+        }
+        function totalChildRowsInStep5() {
+            const container = document.getElementById('guestFormsContainer');
+            return container ? container.querySelectorAll('.guest-form-section.child-row').length : 0;
+        }
+        function refreshAddButtonCaps() {
+            const adultsCap = booking.adults || 0;
+            const childrenCap = booking.children || 0;
+            const adultsNow = totalAdultRowsInStep5();
+            const childrenNow = totalChildRowsInStep5();
+            document.querySelectorAll('#guestFormsContainer .add-guest-btn:not(.add-child-btn)').forEach(btn => {
+                const atCap = adultsNow >= adultsCap;
+                btn.disabled = atCap;
+                btn.title = atCap ? `Cap reached (${adultsCap})` : '';
+            });
+            document.querySelectorAll('#guestFormsContainer .add-child-btn').forEach(btn => {
+                const atCap = childrenNow >= childrenCap;
+                btn.disabled = atCap;
+                btn.style.display = childrenCap > 0 ? '' : 'none';
+                btn.title = atCap ? `Cap reached (${childrenCap})` : '';
+            });
+        }
+
         function addGuest(roomIndex) {
+            if (totalAdultRowsInStep5() >= (booking.adults || 0)) return;
             if (!booking.additionalGuests[roomIndex]) booking.additionalGuests[roomIndex] = 0;
             booking.additionalGuests[roomIndex]++;
             const adultsPerRoom = Math.ceil(booking.adults / booking.rooms);
@@ -5135,32 +5167,81 @@
             const container = document.getElementById('additionalGuests' + roomIndex);
             if (container) {
                 container.insertAdjacentHTML('beforeend', renderAdditionalGuestForm(roomIndex, guestNum));
+                if (typeof applyTranslations === 'function') applyTranslations(currentLang);
             }
+            refreshAddButtonCaps();
         }
 
         function removeGuest(roomIndex, guestNum) {
             const el = document.getElementById('room' + roomIndex + 'guest' + guestNum);
             if (el) el.remove();
             booking.additionalGuests[roomIndex] = Math.max(0, (booking.additionalGuests[roomIndex] || 1) - 1);
+            refreshAddButtonCaps();
         }
 
         function addChild(roomIndex) {
             if (!booking.childrenByRoom) booking.childrenByRoom = {};
-            booking.childrenByRoom[roomIndex] = (booking.childrenByRoom[roomIndex] || 0) + 1;
-            booking.children = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
-            const el = document.getElementById('childrenCount');
-            if (el) el.textContent = booking.children;
-            rerenderGuestFormsPreservingInputs();
+            if (totalChildRowsInStep5() >= (booking.children || 0)) return;
+            const accordionContent = document.getElementById('roomAccordion' + roomIndex);
+            if (!accordionContent) return;
+            const addSection = accordionContent.querySelector('.add-guest-section');
+            if (!addSection) return;
+            const nextC = (booking.childrenByRoom[roomIndex] || 0) + 1;
+            booking.childrenByRoom[roomIndex] = nextC;
+            const isAr = getLang() === 'ar';
+            const childAge = (booking.childAges && booking.childAges[(roomIndex * 10) + (nextC - 1)]) || '';
+            const html = `
+                <div class="guest-form-section child-row" style="margin-bottom:var(--space-md);padding-top:var(--space-md);" data-room="${roomIndex}" data-child="${nextC}">
+                    <h3 class="guest-form-section-title">
+                        ${isAr ? 'طفل' : 'Child'} ${nextC}
+                        <button type="button" class="remove-child-btn" onclick="removeChild(${roomIndex}, ${nextC})">${isAr ? 'إزالة' : 'Remove'}</button>
+                    </h3>
+                    <div class="guest-form-grid">
+                        <div class="form-group">
+                            <label class="form-label">${isAr ? 'الاسم' : 'First Name'}</label>
+                            <input type="text" class="form-input-white" id="r${roomIndex}_child${nextC}_name" placeholder="${isAr ? 'الاسم' : 'Enter first name'}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">${isAr ? 'العمر' : 'Age'}</label>
+                            <input type="number" min="0" max="17" class="form-input-white" id="r${roomIndex}_child${nextC}_age" value="${childAge}" onchange="if(!booking.childAges) booking.childAges=[]; booking.childAges[${(roomIndex * 10) + (nextC - 1)}] = this.value;">
+                        </div>
+                    </div>
+                </div>`;
+            addSection.insertAdjacentHTML('beforebegin', html);
+            refreshAddButtonCaps();
             if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
         function removeChild(roomIndex, c) {
+            const row = document.querySelector(`#guestFormsContainer .child-row[data-room="${roomIndex}"][data-child="${c}"]`);
+            if (!row) return;
+            row.remove();
             if (!booking.childrenByRoom) booking.childrenByRoom = {};
-            booking.childrenByRoom[roomIndex] = Math.max(0, (booking.childrenByRoom[roomIndex] || 0) - 1);
-            booking.children = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
-            const el = document.getElementById('childrenCount');
-            if (el) el.textContent = booking.children;
-            rerenderGuestFormsPreservingInputs();
+            // Renumber remaining child rows in this room so labels stay 1..N
+            const remaining = Array.from(document.querySelectorAll(`#guestFormsContainer .child-row[data-room="${roomIndex}"]`));
+            booking.childrenByRoom[roomIndex] = remaining.length;
+            const isAr = getLang() === 'ar';
+            remaining.forEach((el, i) => {
+                const newIdx = i + 1;
+                el.setAttribute('data-child', newIdx);
+                const title = el.querySelector('.guest-form-section-title');
+                const removeBtn = el.querySelector('.remove-child-btn');
+                if (title) {
+                    const oldText = title.firstChild;
+                    if (oldText && oldText.nodeType === 3) {
+                        oldText.nodeValue = `\n                        ${isAr ? 'طفل' : 'Child'} ${newIdx}\n                        `;
+                    }
+                }
+                if (removeBtn) removeBtn.setAttribute('onclick', `removeChild(${roomIndex}, ${newIdx})`);
+                const nameInput = el.querySelector('input[type="text"]');
+                const ageInput = el.querySelector('input[type="number"]');
+                if (nameInput) nameInput.id = `r${roomIndex}_child${newIdx}_name`;
+                if (ageInput) {
+                    ageInput.id = `r${roomIndex}_child${newIdx}_age`;
+                    ageInput.setAttribute('onchange', `if(!booking.childAges) booking.childAges=[]; booking.childAges[${(roomIndex * 10) + (newIdx - 1)}] = this.value;`);
+                }
+            });
+            refreshAddButtonCaps();
             if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
