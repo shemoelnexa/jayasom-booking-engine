@@ -1689,6 +1689,111 @@
         [dir="rtl"] .payment-choice-container { direction: rtl; }
         [dir="rtl"] .hero-title, [dir="rtl"] .hero-subtitle { direction: rtl; }
 
+        /* ===== CARD ZOOM BUTTON & IMAGE CAROUSEL MODAL ===== */
+        .card-zoom-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.92);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background 0.2s;
+            z-index: 2;
+        }
+        .card-zoom-btn:hover { transform: scale(1.1); background: #fff; }
+        .card-zoom-btn svg { width: 16px; height: 16px; color: var(--inner-black); }
+        .retreat-card-image, .room-card-image, .addon-image { position: relative; }
+
+        /* Full-image carousel modal */
+        .image-carousel-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+        .image-carousel-modal-overlay.show { display: flex; }
+        .image-carousel-modal {
+            position: relative;
+            width: min(90vw, 1100px);
+            height: min(80vh, 720px);
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .icm-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.35s ease;
+        }
+        .icm-slide {
+            flex: 0 0 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icm-slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .icm-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+        }
+        .icm-nav:hover { background: #fff; }
+        .icm-nav.prev { left: 16px; }
+        .icm-nav.next { right: 16px; }
+        .icm-nav[disabled] { opacity: 0.35; cursor: default; }
+        .icm-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            z-index: 2;
+        }
+        .icm-close:hover { background: #fff; }
+        .icm-dots {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+        }
+        .icm-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .icm-dot.active { background: #fff; }
+
         /* ===== DETAIL DRAWER (Bottom Sheet) ===== */
         .detail-drawer-overlay {
             display: none; position: fixed; inset: 0; z-index: 2000;
@@ -2167,6 +2272,13 @@
                             <div class="retreat-card" onclick="selectRetreat(this, 'The Renewal Retreat', 28500)" data-price="28500">
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
+                                    <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Renewal Retreat');" aria-label="View images">
+                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="7" cy="7" r="5"/>
+                                            <path d="M11 11l3 3" stroke-linecap="round"/>
+                                            <path d="M7 5v4M5 7h4" stroke-linecap="round"/>
+                                        </svg>
+                                    </button>
                                     <img src="images/Rectangle 13-3.png" alt="The Renewal Retreat">
                                 </div>
                                 <div class="retreat-card-body">
@@ -2188,6 +2300,13 @@
                             <div class="retreat-card" onclick="selectRetreat(this, 'The Reset Experience', 19200)" data-price="19200">
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
+                                    <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Reset Experience');" aria-label="View images">
+                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="7" cy="7" r="5"/>
+                                            <path d="M11 11l3 3" stroke-linecap="round"/>
+                                            <path d="M7 5v4M5 7h4" stroke-linecap="round"/>
+                                        </svg>
+                                    </button>
                                     <img src="images/Rectangle 13-4.png" alt="The Reset Experience">
                                 </div>
                                 <div class="retreat-card-body">
@@ -2209,6 +2328,13 @@
                             <div class="retreat-card" onclick="selectRetreat(this, 'The Reclaim Journey', 52000)" data-price="52000">
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
+                                    <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Reclaim Journey');" aria-label="View images">
+                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="7" cy="7" r="5"/>
+                                            <path d="M11 11l3 3" stroke-linecap="round"/>
+                                            <path d="M7 5v4M5 7h4" stroke-linecap="round"/>
+                                        </svg>
+                                    </button>
                                     <img src="images/Rectangle 13-5.png" alt="The Reclaim Journey">
                                 </div>
                                 <div class="retreat-card-body">
@@ -2230,6 +2356,13 @@
                             <div class="retreat-card" onclick="selectRetreat(this, 'The Weekend Pause', 9800)" data-price="9800">
                                 <div class="selected-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                                 <div class="retreat-card-image">
+                                    <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('retreat', 'The Weekend Pause');" aria-label="View images">
+                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="7" cy="7" r="5"/>
+                                            <path d="M11 11l3 3" stroke-linecap="round"/>
+                                            <path d="M7 5v4M5 7h4" stroke-linecap="round"/>
+                                        </svg>
+                                    </button>
                                     <img src="images/image 20.png" alt="The Weekend Pause">
                                 </div>
                                 <div class="retreat-card-body">
@@ -2273,7 +2406,7 @@
                                 <!-- Desert View Suite -->
                                 <div class="room-card" style="cursor:pointer;" data-room-name="Desert View Suite" data-room-price="3200" data-room-capacity="2" onclick="openRoomDrawer('Desert View Suite')">
                                     <div style="display:flex;" class="room-card-inner">
-                                        <div class="room-card-image" style="width:260px;min-width:260px;height:auto;min-height:200px;"><img src="images/Rectangle 13-2.png" alt="Desert View Suite"></div>
+                                        <div class="room-card-image" style="width:260px;min-width:260px;height:auto;min-height:200px;"><button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('room', 'Desert View Suite');" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button><img src="images/Rectangle 13-2.png" alt="Desert View Suite"></div>
                                         <div class="room-card-body" style="flex:1;">
                                             <h3 class="room-card-name">Desert View Suite</h3>
                                             <p class="room-card-size">72 m&sup2; &middot; King Bed &middot; Max 2 Guests</p>
@@ -2298,7 +2431,7 @@
                                 <!-- Sea View Villa -->
                                 <div class="room-card" style="cursor:pointer;" data-room-name="Sea View Villa" data-room-price="5800" data-room-capacity="3" onclick="openRoomDrawer('Sea View Villa')">
                                     <div style="display:flex;" class="room-card-inner">
-                                        <div class="room-card-image" style="width:260px;min-width:260px;height:auto;min-height:200px;"><img src="images/Rectangle 33.png" alt="Sea View Villa"></div>
+                                        <div class="room-card-image" style="width:260px;min-width:260px;height:auto;min-height:200px;"><button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('room', 'Sea View Villa');" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button><img src="images/Rectangle 33.png" alt="Sea View Villa"></div>
                                         <div class="room-card-body" style="flex:1;">
                                             <h3 class="room-card-name">Sea View Villa</h3>
                                             <p class="room-card-size">120 m&sup2; &middot; King Bed &middot; Max 3 Guests</p>
@@ -2323,7 +2456,7 @@
                                 <!-- Presidential Residence -->
                                 <div class="room-card" style="cursor:pointer;" data-room-name="Presidential Residence" data-room-price="12500" data-room-capacity="4" onclick="openRoomDrawer('Presidential Residence')">
                                     <div style="display:flex;" class="room-card-inner">
-                                        <div class="room-card-image" style="width:260px;min-width:260px;height:auto;min-height:200px;"><img src="images/image 9.png" alt="Presidential Residence"></div>
+                                        <div class="room-card-image" style="width:260px;min-width:260px;height:auto;min-height:200px;"><button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('room', 'Presidential Residence');" aria-label="View images"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3" stroke-linecap="round"/><path d="M7 5v4M5 7h4" stroke-linecap="round"/></svg></button><img src="images/image 9.png" alt="Presidential Residence"></div>
                                         <div class="room-card-body" style="flex:1;">
                                             <h3 class="room-card-name">Presidential Residence</h3>
                                             <p class="room-card-size">240 m&sup2; &middot; 2 Bedrooms &middot; Max 4 Guests</p>
@@ -2475,6 +2608,13 @@
                                     <div class="addons-list">
                                         <div class="addon-card" onclick="toggleAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
                                             <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
+                                                <button class="card-zoom-btn" onclick="event.stopPropagation(); openCardCarousel('treatment', 'Airport Transfer');" aria-label="View images">
+                                                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                        <circle cx="7" cy="7" r="5"/>
+                                                        <path d="M11 11l3 3" stroke-linecap="round"/>
+                                                        <path d="M7 5v4M5 7h4" stroke-linecap="round"/>
+                                                    </svg>
+                                                </button>
                                                 <div class="addon-image-placeholder" style="font-size:36px;">&#9992;</div>
                                             </div>
                                             <div class="addon-body">
@@ -4074,6 +4214,75 @@
             }
         });
 
+        // ===== IMAGE CAROUSEL MODAL =====
+        let _icmImages = [];
+        let _icmIndex = 0;
+
+        function openImageCarouselModal(images) {
+            _icmImages = Array.isArray(images) && images.length ? images : [];
+            _icmIndex = 0;
+            if (_icmImages.length === 0) return;
+            const track = document.getElementById('icmTrack');
+            const dots = document.getElementById('icmDots');
+            track.innerHTML = _icmImages.map(src =>
+                `<div class="icm-slide"><img src="${src}" alt=""></div>`
+            ).join('');
+            dots.innerHTML = _icmImages.length > 1
+                ? _icmImages.map((_, i) =>
+                    `<button class="icm-dot${i === 0 ? ' active' : ''}" onclick="icmGoTo(${i})" aria-label="Image ${i + 1}"></button>`
+                ).join('')
+                : '';
+            track.style.transform = 'translateX(0%)';
+            const prev = document.getElementById('icmPrevBtn');
+            const next = document.getElementById('icmNextBtn');
+            const multi = _icmImages.length > 1;
+            if (prev) prev.style.display = multi ? '' : 'none';
+            if (next) next.style.display = multi ? '' : 'none';
+            document.getElementById('imageCarouselModalOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageCarouselModal() {
+            document.getElementById('imageCarouselModalOverlay').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function icmGoTo(i) {
+            if (_icmImages.length === 0) return;
+            _icmIndex = ((i % _icmImages.length) + _icmImages.length) % _icmImages.length;
+            document.getElementById('icmTrack').style.transform = `translateX(-${_icmIndex * 100}%)`;
+            document.querySelectorAll('.icm-dot').forEach((d, di) => d.classList.toggle('active', di === _icmIndex));
+        }
+        function icmPrev() { icmGoTo(_icmIndex - 1); }
+        function icmNext() { icmGoTo(_icmIndex + 1); }
+
+        document.addEventListener('keydown', e => {
+            const overlay = document.getElementById('imageCarouselModalOverlay');
+            if (!overlay || !overlay.classList.contains('show')) return;
+            if (e.key === 'Escape') closeImageCarouselModal();
+            if (e.key === 'ArrowLeft') icmPrev();
+            if (e.key === 'ArrowRight') icmNext();
+        });
+
+        function openCardCarousel(type, key) {
+            let images = [];
+            if (type === 'retreat' && typeof retreatDetails !== 'undefined') {
+                const d = retreatDetails[key];
+                if (d) images = d.images || (d.image ? [d.image] : []);
+            } else if (type === 'room' && typeof roomDetails !== 'undefined') {
+                const d = roomDetails[key];
+                if (d) images = d.images || (d.image ? [d.image] : []);
+            } else if (type === 'treatment' && typeof treatmentDetails !== 'undefined') {
+                const d = treatmentDetails[key];
+                if (d) images = d.images || (d.image ? [d.image] : []);
+            }
+            if (!images.length) {
+                console.warn(`openCardCarousel: no images for ${type}/${key}`);
+                return;
+            }
+            openImageCarouselModal(images);
+        }
+
         function switchDrawerTab(tabBtn, tabName) {
             const parent = tabBtn.closest('.detail-drawer-content');
             parent.querySelectorAll('.drawer-tab').forEach(t => t.classList.remove('active'));
@@ -5466,5 +5675,16 @@
         });
 
     </script>
+
+    <!-- IMAGE CAROUSEL MODAL -->
+    <div class="image-carousel-modal-overlay" id="imageCarouselModalOverlay" onclick="closeImageCarouselModal()">
+        <div class="image-carousel-modal" onclick="event.stopPropagation()">
+            <button class="icm-close" onclick="closeImageCarouselModal()" aria-label="Close">&times;</button>
+            <button class="icm-nav prev" id="icmPrevBtn" onclick="icmPrev()" aria-label="Previous">&lsaquo;</button>
+            <button class="icm-nav next" id="icmNextBtn" onclick="icmNext()" aria-label="Next">&rsaquo;</button>
+            <div class="icm-track" id="icmTrack"></div>
+            <div class="icm-dots" id="icmDots"></div>
+        </div>
+    </div>
 </body>
 </html>
