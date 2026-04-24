@@ -506,20 +506,23 @@
         }
         .date-picker-field:hover .date-picker-icon { color: var(--gentle-beige); }
         .calendar-dropdown {
-            display: none; position: absolute; top: 100%; left: 0; right: auto;
+            display: none; position: absolute; top: 100%;
+            left: 50%; right: auto;
+            transform: translateX(-50%);
             width: min(820px, 95vw);
+            max-height: 86vh; overflow-y: auto;
             z-index: 100; margin-top: var(--space-xs);
             box-shadow: 0 12px 40px rgba(16, 24, 32, 0.12);
         }
         .calendar-dropdown.show { display: block; }
-        .calendar-two-months { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+        .calendar-two-months { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .calendar-month-label {
             font-family: 'Century Gothic', 'CenturyGothic', sans-serif;
-            letter-spacing: 2px; font-size: 13px; color: var(--inner-black);
-            text-align: center; margin-bottom: var(--space-sm);
+            letter-spacing: 2px; font-size: 12px; color: var(--inner-black);
+            text-align: center; margin-bottom: 6px;
             text-transform: uppercase;
         }
-        .calendar-footer-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--border-light); }
+        .calendar-footer-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-sm); padding-top: var(--space-sm); border-top: 1px solid var(--border-light); }
         .calendar-done-btn {
             background: var(--soft-coral); color: #fff;
             border: none; padding: 10px 24px; border-radius: var(--radius-md);
@@ -533,15 +536,15 @@
         }
 
         /* CUSTOM CALENDAR */
-        .calendar-container { background: var(--warm-white); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--space-lg); }
-        .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); }
+        .calendar-container { background: var(--warm-white); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--space-md); }
+        .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-sm); }
         .calendar-header h4 { font-family: 'Century Gothic', 'CenturyGothic', sans-serif; letter-spacing: 4px; font-size: 18px; font-weight: 400; color: var(--inner-black); }
         .calendar-nav-btn { width: 32px; height: 32px; border: 1px solid var(--border-light); border-radius: 50%; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.3s ease; }
         .calendar-nav-btn:hover { border-color: var(--gentle-beige); color: var(--gentle-beige); }
-        .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: var(--space-sm); }
-        .calendar-weekday { text-align: center; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 6px 0; }
-        .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-        .calendar-day { text-align: center; padding: 10px 2px 8px; font-size: 13px; color: var(--text-primary); cursor: pointer; border-radius: var(--radius-sm); transition: all 0.2s ease; position: relative; min-height: 54px; }
+        .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 4px; }
+        .calendar-weekday { text-align: center; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; padding: 4px 0; }
+        .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+        .calendar-day { text-align: center; padding: 4px 2px 3px; font-size: 12px; color: var(--text-primary); cursor: pointer; border-radius: var(--radius-sm); transition: all 0.2s ease; position: relative; min-height: 42px; }
         .calendar-day:hover:not(.empty):not(.disabled) { background: var(--purifying-beige); }
         .calendar-day.empty { cursor: default; }
         .calendar-day.disabled { color: var(--border-light); cursor: not-allowed; }
