@@ -2089,7 +2089,7 @@
                                 </div>
                             </div>
                             <div class="form-group full-width">
-                                <button class="btn-primary" onclick="goToStep(2)" data-i18n="beginJourney">Begin Your Journey</button>
+                                <button class="btn-primary" onclick="startFlow()" data-i18n="beginJourney">Begin Your Journey</button>
                             </div>
                         </div>
                     </div>
@@ -2206,8 +2206,8 @@
                         <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep2"></div></div>
                         </div>
                         <div class="step-navigation">
-                            <button class="step-nav-back" onclick="goToStep(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back</button>
-                            <button class="step-nav-next" onclick="goToStep(3)">Continue to Room Selection <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                            <button class="step-nav-back" onclick="goToStep(prevStepFrom(currentStep))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back</button>
+                            <button class="step-nav-next" data-continue-btn="true" onclick="goToStep(nextStepFrom(currentStep))">Continue to Room Selection <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                         </div>
                     </div>
                 </div>
@@ -2338,8 +2338,8 @@
                             <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep3"></div></div>
                         </div>
                         <div class="step-navigation">
-                            <button class="step-nav-back" onclick="goToStep(2)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Retreats</button>
-                            <button class="step-nav-next" onclick="goToStep(5)">Continue to Guest Details <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                            <button class="step-nav-back" onclick="goToStep(prevStepFrom(currentStep))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back to Retreats</button>
+                            <button class="step-nav-next" data-continue-btn="true" onclick="goToStep(nextStepFrom(currentStep))">Continue to Guest Details <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
                         </div>
                     </div>
                 </div>
@@ -2938,6 +2938,44 @@
         }
 
         // ===== NAVIGATION =====
+        const STEP_LABELS = {
+            1: 'Dates & Guests',
+            2: 'Select Retreat',
+            3: 'Select Room',
+            5: 'Guest Details',
+            6: 'Confirmation'
+        };
+
+        function getFlowOrder() {
+            return booking.destination === 'jayala'
+                ? [1, 3, 2, 5, 6]
+                : [1, 2, 3, 5, 6];
+        }
+
+        function nextStepFrom(current) {
+            const order = getFlowOrder();
+            const idx = order.indexOf(current);
+            return idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        }
+
+        function prevStepFrom(current) {
+            const order = getFlowOrder();
+            const idx = order.indexOf(current);
+            return idx > 0 ? order[idx - 1] : null;
+        }
+
+        function currentStepNames() {
+            return getFlowOrder().map(s => STEP_LABELS[s]);
+        }
+
+        function refreshContinueButtonLabels() {
+            const next = nextStepFrom(currentStep);
+            const label = next && STEP_LABELS[next] ? `Continue to ${STEP_LABELS[next]}` : 'Continue';
+            document.querySelectorAll('[data-continue-btn]').forEach(btn => {
+                btn.textContent = label;
+            });
+        }
+
         function goToStep(step) {
             // Sync dates and guest counts
             const ci = document.getElementById('checkinDate');
@@ -2982,23 +3020,35 @@
             if (step === 5) { renderGuestForms(); renderMergedSummaryPayment(); }
             if (step === 6) renderConfirmation();
 
+            refreshContinueButtonLabels();
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // ===== STEPPER =====
         // Visible steps: 2 (retreat), 3 (room), 5 (guest), 6 (confirmation). Step 4 archived.
+        // For Jayala, 2 and 3 swap order in the flow.
+        function visibleStepperOrder() {
+            // Flow order excluding step 1 (landing) since the stepper is hidden on step 1.
+            return getFlowOrder().filter(s => s !== 1);
+        }
         function stepperIndexFromStep(step) {
-            return step - 2 - (step >= 5 ? 1 : 0);
+            return visibleStepperOrder().indexOf(step);
         }
         function stepFromStepperIndex(idx) {
-            return idx < 2 ? idx + 2 : idx + 3; // 0→2, 1→3, 2→5, 3→6
+            const order = visibleStepperOrder();
+            return (idx >= 0 && idx < order.length) ? order[idx] : null;
         }
         function updateStepper(step) {
             const activeIdx = stepperIndexFromStep(step);
             const container = document.getElementById('stepperContent');
             if (!container) return;
+            const order = visibleStepperOrder();
+            const names = currentStepNames();
+            // names includes step 1 at index 0; drop it to align with visible order
+            const visibleNames = names.slice(1);
             let html = '';
-            for (let i = 0; i < stepNames.length; i++) {
+            for (let i = 0; i < order.length; i++) {
                 let cls = '';
                 if (i < activeIdx) cls = 'completed';
                 else if (i === activeIdx) cls = 'active';
@@ -3007,14 +3057,13 @@
                     ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
                     : (i + 1);
 
-                html += `<div class="v-step ${cls}" onclick="goToStep(${stepFromStepperIndex(i)})">
+                html += `<div class="v-step ${cls}" onclick="goToStep(${order[i]})">
                     <div class="v-step-circle">${circleContent}</div>
                     <div class="v-step-text">
-                        <div class="v-step-label">${stepNames[i].label}</div>
-                        <div class="v-step-sublabel">${stepNames[i].sub}</div>
+                        <div class="v-step-label">${visibleNames[i] || ''}</div>
                     </div>
                 </div>`;
-                if (i < stepNames.length - 1) {
+                if (i < order.length - 1) {
                     const connCls = (i < activeIdx) ? 'completed-connector' : '';
                     html += `<div class="v-step-connector ${connCls}"><div class="v-line"></div></div>`;
                 }
@@ -3032,15 +3081,17 @@
             if (!ms) return;
             if (step <= 1 || step > 6 || step === 4) { hideMobileStepper(); return; }
             ms.classList.add('show');
-            const idx = stepperIndexFromStep(step);
-            const total = stepNames.length;
+            const order = visibleStepperOrder();
+            const visibleNames = currentStepNames().slice(1);
+            const idx = order.indexOf(step);
+            const total = order.length;
             const pct = ((idx + 1) / total) * 100;
             const label = document.getElementById('mobileStepLabel');
             const fill = document.getElementById('mobileStepFill');
             const name = document.getElementById('mobileStepName');
             if (label) label.textContent = `Step ${idx + 1} of ${total}`;
             if (fill) fill.style.width = pct + '%';
-            if (name) name.textContent = stepNames[idx] ? stepNames[idx].label : '';
+            if (name) name.textContent = visibleNames[idx] || '';
         }
 
         // ===== GUEST COUNTER =====
@@ -4936,6 +4987,11 @@
                 el.classList.toggle('selected', el.dataset.value === value);
             });
             applyDestinationVisibility();
+        }
+
+        function startFlow() {
+            const order = getFlowOrder();
+            goToStep(order[1]); // first step after landing
         }
 
         function toggleCurrencyMenu(e) {
