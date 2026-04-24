@@ -797,6 +797,35 @@
         .treatment-name { font-size: 13px; color: var(--text-primary); }
         .treatment-sub { font-size: 11px; color: var(--text-muted); }
 
+        /* RETREAT GUEST TABS (Step 2) */
+        .retreat-guest-tabs {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .retreat-guest-tab {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: 999px;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+        .retreat-guest-tab:hover { border-color: var(--soft-coral); color: var(--soft-coral); }
+        .retreat-guest-tab.active {
+            background: var(--soft-coral);
+            border-color: var(--soft-coral);
+            color: #fff;
+            font-weight: 600;
+        }
+        .retreat-guest-tab-meta {
+            font-size: 10px; opacity: 0.8; margin-left: 6px;
+        }
+
         /* CARD DETAILS BUTTON (top-right) */
         .view-details-btn {
             position: absolute;
@@ -2436,6 +2465,7 @@
                             <h2 class="step-title" data-i18n="chooseRetreat">Choose Your Retreat</h2>
                             <p class="step-description" data-i18n="chooseRetreatDesc">Each retreat is a curated journey designed to guide you back to your inner self. Select the experience that speaks to your needs.</p>
                         </div>
+                        <div class="retreat-guest-tabs" id="retreatGuestTabs"></div>
                         <div class="addons-layout"><div class="retreat-grid" id="retreatGrid">
                             <div class="retreat-card" data-price="28500">
                                 <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">View Details</button>
@@ -3355,7 +3385,7 @@
             updateMobileStepper(step);
 
             // Build dynamic content
-            if (step === 2) renderPriceSummary('priceSummaryStep2');
+            if (step === 2) { renderRetreatGuestTabs(); renderPriceSummary('priceSummaryStep2'); }
             if (step === 3) renderPriceSummary('priceSummaryStep3');
             if (step === 4) renderPriceSummary('priceSummaryStep4');
             if (step === 5) { renderGuestForms(); renderMergedSummaryPayment(); }
@@ -4485,19 +4515,69 @@
         }
 
         // ===== RETREAT SELECTION =====
-        function selectRetreatDirect(card, name, price) {
-            document.querySelectorAll('#retreatGrid .retreat-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            booking.retreatName = name;
-            booking.retreatPrice = price;
-            // Default any guest without an explicit per-guest retreat to the new global pick
-            if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
-            for (let r = 0; r < booking.rooms; r++) {
-                for (let g = 1; g <= 10; g++) {
-                    const key = `r${r}g${g}`;
-                    if (!booking.retreatsByGuest[key]) booking.retreatsByGuest[key] = name;
+        let activeRetreatGuestKey = 'r0g1';
+
+        function listRetreatGuests() {
+            const adults = booking.adults || 0;
+            const rooms = Math.max(1, booking.rooms || 1);
+            const perRoom = Math.ceil(adults / rooms);
+            const guests = [];
+            let a = 1;
+            for (let r = 0; r < rooms && a <= adults; r++) {
+                for (let g = 1; g <= perRoom && a <= adults; g++, a++) {
+                    guests.push({ key: `r${r}g${g}`, label: `Guest ${a}` });
                 }
             }
+            // Include children as guests too (pick retreat per child)
+            const children = booking.children || 0;
+            for (let c = 1; c <= children; c++) {
+                guests.push({ key: `child${c}`, label: `Child ${c}` });
+            }
+            return guests;
+        }
+
+        function renderRetreatGuestTabs() {
+            const host = document.getElementById('retreatGuestTabs');
+            if (!host) return;
+            const guests = listRetreatGuests();
+            if (guests.length <= 1) { host.innerHTML = ''; return; }
+            if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
+            if (!guests.some(g => g.key === activeRetreatGuestKey)) {
+                activeRetreatGuestKey = guests[0].key;
+            }
+            host.innerHTML = guests.map(g => {
+                const picked = booking.retreatsByGuest[g.key] || '';
+                const active = g.key === activeRetreatGuestKey ? ' active' : '';
+                const meta = picked ? ` <span class="retreat-guest-tab-meta">· ${picked}</span>` : '';
+                return `<button type="button" class="retreat-guest-tab${active}" onclick="setActiveRetreatGuest('${g.key}')">${g.label}${meta}</button>`;
+            }).join('');
+            highlightSelectedRetreatForActiveGuest();
+        }
+
+        function setActiveRetreatGuest(key) {
+            activeRetreatGuestKey = key;
+            renderRetreatGuestTabs();
+        }
+
+        function highlightSelectedRetreatForActiveGuest() {
+            const picked = (booking.retreatsByGuest || {})[activeRetreatGuestKey] || '';
+            document.querySelectorAll('#retreatGrid .retreat-card').forEach(c => {
+                const nameEl = c.querySelector('.retreat-card-name');
+                const isMatch = nameEl && nameEl.textContent.trim() === picked;
+                c.classList.toggle('selected', !!isMatch);
+            });
+        }
+
+        function selectRetreatDirect(card, name, price) {
+            if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
+            booking.retreatsByGuest[activeRetreatGuestKey] = name;
+            // Keep lead guest's retreat as the primary for pricing & summary
+            if (activeRetreatGuestKey === 'r0g1' || !booking.retreatName) {
+                booking.retreatName = name;
+                booking.retreatPrice = price;
+            }
+            highlightSelectedRetreatForActiveGuest();
+            renderRetreatGuestTabs();
             renderPriceSummary('priceSummaryStep2');
         }
 
@@ -4510,13 +4590,22 @@
             if (typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
-        function toggleGuestTreatment(guestKey, treatmentName) {
+        function toggleGuestTreatment(guestKey, treatmentName, btn) {
             if (!booking.treatmentsByGuest) booking.treatmentsByGuest = {};
             const list = booking.treatmentsByGuest[guestKey] || [];
             const idx = list.indexOf(treatmentName);
             if (idx >= 0) list.splice(idx, 1); else list.push(treatmentName);
             booking.treatmentsByGuest[guestKey] = list;
-            rerenderGuestFormsPreservingInputs();
+            // Surgical DOM update — flip the toggle and update the count in the head
+            if (btn) btn.classList.toggle('active', list.indexOf(treatmentName) >= 0);
+            const section = document.querySelector(`.guest-treatments-section[data-guest-key="${guestKey}"]`);
+            if (section) {
+                const countEl = section.querySelector('.guest-treatments-count');
+                if (countEl) {
+                    const isAr = getLang() === 'ar';
+                    countEl.textContent = isAr ? `${list.length} محدد` : `${list.length} selected`;
+                }
+            }
             if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
@@ -4839,10 +4928,9 @@
                             <div class="form-group"><label class="form-label">${isAr ? t.lastName : 'Last Name'} *</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterLastName : 'Enter last name'}"${required}></div>
                             <div class="form-group"><label class="form-label">${isAr ? t.emailAddress : 'Email Address'} *</label><input type="email" class="form-input-white" placeholder="email@example.com"${required}></div>
                             <div class="form-group"><label class="form-label">${isAr ? t.phoneNumber : 'Phone Number'} *</label><input type="tel" class="form-input-white" placeholder="+966 5XX XXX XXXX"${required}></div>
-                            <div class="form-group"><label class="form-label">${isAr ? 'العمر' : 'Age Range'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Select</option><option>18-25</option><option>26-35</option><option>36-45</option><option>46-55</option><option>56-65</option><option>65+</option></select></div>
+                            <div class="form-group"><label class="form-label">${isAr ? 'العمر' : 'Age'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><input type="number" min="0" max="120" class="form-input-white" placeholder="${isAr ? 'العمر' : 'e.g. 34'}"></div>
                             <div class="form-group"><label class="form-label">${isAr ? 'الجنس' : 'Gender'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Prefer not to say</option><option>Male</option><option>Female</option></select></div>
                         </div>
-                        ${renderGuestRetreatChips(r, g, isAr, t)}
                         ${renderGuestTreatments(r, g, isAr, t)}
                     </div>`;
                 }
@@ -4929,7 +5017,6 @@
                     <div class="form-group"><label class="form-label">${isAr ? 'العمر' : 'Age Range'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Select</option><option>18-25</option><option>26-35</option><option>36-45</option><option>46-55</option><option>56-65</option><option>65+</option></select></div>
                     <div class="form-group"><label class="form-label">${isAr ? 'الجنس' : 'Gender'} <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Prefer not to say</option><option>Male</option><option>Female</option></select></div>
                 </div>
-                ${renderGuestRetreatChips(roomIndex, guestNum, isAr, t)}
                 ${renderGuestTreatments(roomIndex, guestNum, isAr, t)}
             </div>`;
         }
@@ -4968,11 +5055,11 @@
                     '</div>' +
                     '<button type="button" class="addon-toggle' + (on ? ' active' : '') +
                         '" data-treatment="' + nameAttr + '"' +
-                        ' onclick="toggleGuestTreatment(\'' + guestKey + '\', \'' + nameEsc + '\')"></button>' +
+                        ' onclick="toggleGuestTreatment(\'' + guestKey + '\', \'' + nameEsc + '\', this)"></button>' +
                 '</div>';
             }).join('');
 
-            return '<div class="guest-treatments-row">' +
+            return '<div class="guest-treatments-section guest-treatments-row" data-guest-key="' + guestKey + '">' +
                 '<div class="guest-treatments-head">' +
                     '<span class="guest-treatments-title" data-i18n="treatmentsLabel">' + headerLabel + '</span>' +
                     '<span class="guest-treatments-count">' + countLabel + '</span>' +
