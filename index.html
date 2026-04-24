@@ -724,6 +724,28 @@
         .addon-toggle.active { background: var(--soft-coral); }
         .addon-toggle.active::after { transform: translateX(24px); }
 
+        /* CARD DETAILS BUTTON (Task 8) */
+        .card-details-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 999px;
+            font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 8px;
+        }
+        .card-details-btn:hover {
+            border-color: var(--soft-coral);
+            color: var(--soft-coral);
+            background: rgba(232, 163, 146, 0.05);
+        }
+        .card-details-btn svg { width: 12px; height: 12px; }
+
         /* PRICE SUMMARY */
         .price-summary {
             background: var(--warm-white);
@@ -2153,7 +2175,13 @@
                                     <div class="retreat-card-includes"><span class="include-tag">Wellness Assessment</span><span class="include-tag">Daily Treatments</span><span class="include-tag">Nutrition Plan</span><span class="include-tag">Yoga Sessions</span></div>
                                     <div class="retreat-card-footer">
                                         <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="28500">SAR 28,500 <span>/ person</span></span></div>
-                                        <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">Select</button>
+                                        <div style="display:flex;align-items:center;">
+                                            <button class="card-details-btn" onclick="event.stopPropagation(); openRetreatDrawer(this.closest('.retreat-card'), 'The Renewal Retreat', 28500);">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                <span data-i18n="detailsLabel">Details</span>
+                                            </button>
+                                            <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">Select</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2168,7 +2196,13 @@
                                     <div class="retreat-card-includes"><span class="include-tag">Spa Treatments</span><span class="include-tag">Meditation</span><span class="include-tag">Desert Excursion</span></div>
                                     <div class="retreat-card-footer">
                                         <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="19200">SAR 19,200 <span>/ person</span></span></div>
-                                        <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Reset Experience', 19200)">Select</button>
+                                        <div style="display:flex;align-items:center;">
+                                            <button class="card-details-btn" onclick="event.stopPropagation(); openRetreatDrawer(this.closest('.retreat-card'), 'The Reset Experience', 19200);">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                <span data-i18n="detailsLabel">Details</span>
+                                            </button>
+                                            <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Reset Experience', 19200)">Select</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2183,7 +2217,13 @@
                                     <div class="retreat-card-includes"><span class="include-tag">Full Assessment</span><span class="include-tag">Daily Therapies</span><span class="include-tag">Fitness Program</span><span class="include-tag">Nutrition</span><span class="include-tag">Mindfulness</span></div>
                                     <div class="retreat-card-footer">
                                         <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="52000">SAR 52,000 <span>/ person</span></span></div>
-                                        <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">Select</button>
+                                        <div style="display:flex;align-items:center;">
+                                            <button class="card-details-btn" onclick="event.stopPropagation(); openRetreatDrawer(this.closest('.retreat-card'), 'The Reclaim Journey', 52000);">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                <span data-i18n="detailsLabel">Details</span>
+                                            </button>
+                                            <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">Select</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2198,7 +2238,13 @@
                                     <div class="retreat-card-includes"><span class="include-tag">Spa Ritual</span><span class="include-tag">Sunset Yoga</span><span class="include-tag">Wellness Dining</span></div>
                                     <div class="retreat-card-footer">
                                         <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="9800">SAR 9,800 <span>/ person</span></span></div>
-                                        <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">Select</button>
+                                        <div style="display:flex;align-items:center;">
+                                            <button class="card-details-btn" onclick="event.stopPropagation(); openRetreatDrawer(this.closest('.retreat-card'), 'The Weekend Pause', 9800);">
+                                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                <span data-i18n="detailsLabel">Details</span>
+                                            </button>
+                                            <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">Select</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2234,10 +2280,16 @@
                                             <p class="room-card-desc">A serene sanctuary with panoramic desert views, designed with natural tones and soft lighting to create a calming retreat after a day of wellness.</p>
                                             <div class="room-card-footer">
                                                 <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="3200">SAR 3,200 <span>/night</span></span></div>
-                                                <div class="guest-counter">
-                                                    <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Desert View Suite', -1)">-</button>
-                                                    <span class="counter-value room-qty" id="roomQty-desert">0</span>
-                                                    <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Desert View Suite', 1)">+</button>
+                                                <div style="display:flex;align-items:center;">
+                                                    <button class="card-details-btn" onclick="event.stopPropagation(); openRoomDrawer('Desert View Suite');">
+                                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                        <span data-i18n="detailsLabel">Details</span>
+                                                    </button>
+                                                    <div class="guest-counter">
+                                                        <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Desert View Suite', -1)">-</button>
+                                                        <span class="counter-value room-qty" id="roomQty-desert">0</span>
+                                                        <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Desert View Suite', 1)">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2253,10 +2305,16 @@
                                             <p class="room-card-desc">An expansive private villa overlooking the Red Sea, featuring a private pool and living area for an elevated coastal wellness experience.</p>
                                             <div class="room-card-footer">
                                                 <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="5800">SAR 5,800 <span>/night</span></span></div>
-                                                <div class="guest-counter">
-                                                    <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Sea View Villa', -1)">-</button>
-                                                    <span class="counter-value room-qty" id="roomQty-sea">0</span>
-                                                    <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Sea View Villa', 1)">+</button>
+                                                <div style="display:flex;align-items:center;">
+                                                    <button class="card-details-btn" onclick="event.stopPropagation(); openRoomDrawer('Sea View Villa');">
+                                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                        <span data-i18n="detailsLabel">Details</span>
+                                                    </button>
+                                                    <div class="guest-counter">
+                                                        <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Sea View Villa', -1)">-</button>
+                                                        <span class="counter-value room-qty" id="roomQty-sea">0</span>
+                                                        <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Sea View Villa', 1)">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2272,10 +2330,16 @@
                                             <p class="room-card-desc">The ultimate expression of luxury and privacy, set within lush gardens with a plunge pool, dedicated butler, and bespoke wellness programming.</p>
                                             <div class="room-card-footer">
                                                 <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="12500">SAR 12,500 <span>/night</span></span></div>
-                                                <div class="guest-counter">
-                                                    <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Presidential Residence', -1)">-</button>
-                                                    <span class="counter-value room-qty" id="roomQty-presidential">0</span>
-                                                    <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Presidential Residence', 1)">+</button>
+                                                <div style="display:flex;align-items:center;">
+                                                    <button class="card-details-btn" onclick="event.stopPropagation(); openRoomDrawer('Presidential Residence');">
+                                                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                        <span data-i18n="detailsLabel">Details</span>
+                                                    </button>
+                                                    <div class="guest-counter">
+                                                        <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Presidential Residence', -1)">-</button>
+                                                        <span class="counter-value room-qty" id="roomQty-presidential">0</span>
+                                                        <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Presidential Residence', 1)">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2420,7 +2484,13 @@
                                                 </div>
                                                 <div class="addon-footer">
                                                     <span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span>
-                                                    <button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button>
+                                                    <div style="display:flex;align-items:center;">
+                                                        <button class="card-details-btn" onclick="event.stopPropagation(); openTreatmentDrawer(this.closest('.addon-card'), 'Airport Transfer', 0);">
+                                                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 4.5v.01" stroke-linecap="round"/></svg>
+                                                            <span data-i18n="detailsLabel">Details</span>
+                                                        </button>
+                                                        <button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div id="airportTransferFields" style="display:none;width:100%;padding:var(--space-md) var(--space-lg) var(--space-lg);border-top:1px solid var(--border-light);" onclick="event.stopPropagation();">
@@ -4594,6 +4664,7 @@
                 guestInformation: 'معلومات الضيوف',
                 guestInfoDesc: 'يرجى تقديم البيانات لكل ضيف. سيتم استخدام معلومات الضيف الرئيسي للمراسلات.',
                 arrivalTransferTitle: 'الوصول والنقل',
+                detailsLabel: 'التفاصيل',
                 adult: 'بالغ',
                 child: 'طفل',
                 leadGuest: 'الضيف الرئيسي',
