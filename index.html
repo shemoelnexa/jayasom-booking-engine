@@ -3475,11 +3475,13 @@
         }
 
         // ===== CHILD AGE SYNC =====
+        const CHILD_AGE_BRACKETS = '0-3, 4-6, 7-12, 13-17';
+
         function syncChildAges() {
             booking.childAges = [];
-            const selectors = document.querySelectorAll('.child-age-select');
-            selectors.forEach(sel => {
-                booking.childAges.push(sel.value);
+            const inputs = document.querySelectorAll('.child-age-input');
+            inputs.forEach(inp => {
+                booking.childAges.push(inp.value);
             });
         }
 
@@ -3493,16 +3495,14 @@
                 return;
             }
             container.style.display = 'block';
-            let html = '<label class="form-label" style="margin-bottom:8px;">Child Age Ranges</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">';
+            let html = '<label class="form-label" style="margin-bottom:8px;">Child Ages</label>'
+                + '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Brackets: ' + CHILD_AGE_BRACKETS + '</div>'
+                + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">';
             for (let i = 0; i < count; i++) {
-                const currentAge = (booking.childAges && booking.childAges[i]) || '0-6';
+                const currentAge = (booking.childAges && booking.childAges[i] != null) ? booking.childAges[i] : '';
                 html += `<div class="form-group" style="margin:0;">
                     <label class="form-label" style="margin-bottom:4px;">Child ${i + 1} Age</label>
-                    <select class="form-select child-age-select" onchange="syncChildAges()">
-                        <option value="0-6" ${currentAge === '0-6' ? 'selected' : ''}>Infant (0-6 years) - Free</option>
-                        <option value="7-12" ${currentAge === '7-12' ? 'selected' : ''}>Child (7-12 years)</option>
-                        <option value="13-15" ${currentAge === '13-15' ? 'selected' : ''}>Teen (13-15 years)</option>
-                    </select>
+                    <input type="number" min="0" max="17" class="form-input-white child-age-input" value="${currentAge}" onchange="syncChildAges()" placeholder="e.g. 8">
                 </div>`;
             }
             html += '</div>';
@@ -3791,23 +3791,22 @@
             if (!container) return;
             const count = parseInt(document.getElementById('modifyChildren').textContent) || 0;
             if (count === 0) { container.innerHTML = ''; return; }
-            let html = '<label class="form-label" style="margin-bottom:8px;">Child Age Ranges</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">';
+            let html = '<label class="form-label" style="margin-bottom:8px;">Child Ages</label>'
+                + '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Brackets: ' + CHILD_AGE_BRACKETS + '</div>'
+                + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">';
             for (let i = 0; i < count; i++) {
-                const currentAge = modifyChildAges[i] || '0-6';
+                const currentAge = modifyChildAges[i] != null ? modifyChildAges[i] : '';
                 html += '<div class="form-group" style="margin:0;">';
                 html += '<label class="form-label" style="margin-bottom:4px;">Child ' + (i + 1) + ' Age</label>';
-                html += '<select class="form-select modify-child-age-select" onchange="syncModifyChildAges()">';
-                html += '<option value="0-6"' + (currentAge === '0-6' ? ' selected' : '') + '>Infant (0-6 years) - Free</option>';
-                html += '<option value="7-12"' + (currentAge === '7-12' ? ' selected' : '') + '>Child (7-12 years)</option>';
-                html += '<option value="13-15"' + (currentAge === '13-15' ? ' selected' : '') + '>Teen (13-15 years)</option>';
-                html += '</select></div>';
+                html += '<input type="number" min="0" max="17" class="form-input-white modify-child-age-input" value="' + currentAge + '" onchange="syncModifyChildAges()" placeholder="e.g. 8">';
+                html += '</div>';
             }
             html += '</div>';
             container.innerHTML = html;
         }
         function syncModifyChildAges() {
             modifyChildAges = [];
-            document.querySelectorAll('.modify-child-age-select').forEach(function(sel) { modifyChildAges.push(sel.value); });
+            document.querySelectorAll('.modify-child-age-input').forEach(function(inp) { modifyChildAges.push(inp.value); });
         }
 
         function backToManageResult() {
@@ -5633,14 +5632,24 @@
         function applyDestinationVisibility() {
             const childrenGroup = document.getElementById('childrenCounterGroup');
             const childAgesContainer = document.getElementById('childAgesContainer');
+            const infantsGroup = document.getElementById('infantsCounterGroup');
+            const caretakersLabel = document.querySelector('#caretakersCounterGroup .form-label');
             if (!childrenGroup) return;
+            const isAr = (typeof currentLang !== 'undefined' && currentLang === 'ar');
             if (booking.destination === 'jayasom') {
                 if (booking.children > 0) updateCount('children', -booking.children);
                 booking.childrenByRoom = {};
                 childrenGroup.style.display = 'none';
                 if (childAgesContainer) childAgesContainer.style.display = 'none';
+                if (infantsGroup) {
+                    infantsGroup.style.display = 'none';
+                    if (booking.infants > 0) updateCount('infants', -booking.infants);
+                }
+                if (caretakersLabel) caretakersLabel.textContent = isAr ? 'طاقم الدعم' : 'Support Staff';
             } else {
                 childrenGroup.style.display = '';
+                if (infantsGroup) infantsGroup.style.display = '';
+                if (caretakersLabel) caretakersLabel.textContent = isAr ? 'مرافقون' : 'Caretakers';
             }
         }
 
