@@ -4536,6 +4536,7 @@
         let activeRetreatGuestKey = 'r0g1';
 
         function listRetreatGuests() {
+            // Children attend with their parent — retreat selection is adults-only.
             const adults = booking.adults || 0;
             const rooms = Math.max(1, booking.rooms || 1);
             const perRoom = Math.ceil(adults / rooms);
@@ -4545,11 +4546,6 @@
                 for (let g = 1; g <= perRoom && a <= adults; g++, a++) {
                     guests.push({ key: `r${r}g${g}`, label: `Guest ${a}` });
                 }
-            }
-            // Include children as guests too (pick retreat per child)
-            const children = booking.children || 0;
-            for (let c = 1; c <= children; c++) {
-                guests.push({ key: `child${c}`, label: `Child ${c}` });
             }
             return guests;
         }
