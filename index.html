@@ -4844,13 +4844,9 @@
             const childAgesContainer = document.getElementById('childAgesContainer');
             if (!childrenGroup) return;
             if (booking.destination === 'jayasom') {
+                if (booking.children > 0) updateCount('children', -booking.children);
                 childrenGroup.style.display = 'none';
                 if (childAgesContainer) childAgesContainer.style.display = 'none';
-                if (booking.children > 0) {
-                    booking.children = 0;
-                    const el = document.getElementById('childrenCount');
-                    if (el) el.textContent = '0';
-                }
             } else {
                 childrenGroup.style.display = '';
             }
