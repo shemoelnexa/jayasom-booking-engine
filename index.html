@@ -321,14 +321,14 @@
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          gap: 10px;
-          padding: 14px 16px;
+          gap: 8px;
+          padding: 8px 12px;
           border: 1.5px solid var(--border-light);
           border-radius: 0;
           cursor: pointer;
           background: #fff;
           transition: all 0.2s ease;
-          font-size: 14px;
+          font-size: 13px;
           color: var(--text-primary);
           text-align: start;
         }
@@ -339,8 +339,8 @@
           box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .destination-radio-circle {
-          width: 18px;
-          height: 18px;
+          width: 16px;
+          height: 16px;
           border: 2px solid var(--border-light);
           border-radius: 50%;
           flex-shrink: 0;
@@ -359,14 +359,16 @@
         }
         .destination-radio-label {
           display: flex;
-          flex-direction: column;
-          gap: 2px;
+          flex-direction: row;
+          align-items: baseline;
+          gap: 6px;
           text-align: start;
-          align-items: flex-start;
           min-width: 0;
         }
         .destination-radio-title { font-weight: 600; }
         .destination-radio-sub { font-size: 11px; color: var(--text-muted); }
+        .destination-radio-sub::before { content: '('; }
+        .destination-radio-sub::after { content: ')'; }
         .form-label {
             font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
             color: var(--text-muted); font-weight: 700;
