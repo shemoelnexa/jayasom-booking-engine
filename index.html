@@ -4991,7 +4991,7 @@
                         <div class="guest-form-section child-row" style="margin-bottom:var(--space-md);padding-top:var(--space-md);" data-room="${r}" data-child="${c}">
                             <h3 class="guest-form-section-title">
                                 ${isAr ? 'طفل' : 'Child'} ${c}
-                                <button type="button" class="remove-child-btn" onclick="removeChild(${r}, ${c})" data-i18n="removeChildLabel">${isAr ? 'إزالة' : 'Remove'}</button>
+                                <button type="button" class="remove-child-btn" onclick="removeChild(this)">${isAr ? 'إزالة' : 'Remove'}</button>
                             </h3>
                             <div class="guest-form-grid">
                                 <div class="form-group">
@@ -5194,7 +5194,7 @@
                 <div class="guest-form-section child-row" style="margin-bottom:var(--space-md);padding-top:var(--space-md);" data-room="${roomIndex}" data-child="${nextC}">
                     <h3 class="guest-form-section-title">
                         ${isAr ? 'طفل' : 'Child'} ${nextC}
-                        <button type="button" class="remove-child-btn" onclick="removeChild(${roomIndex}, ${nextC})">${isAr ? 'إزالة' : 'Remove'}</button>
+                        <button type="button" class="remove-child-btn" onclick="removeChild(this)">${isAr ? 'إزالة' : 'Remove'}</button>
                     </h3>
                     <div class="guest-form-grid">
                         <div class="form-group">
@@ -5212,12 +5212,14 @@
             if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
-        function removeChild(roomIndex, c) {
-            const row = document.querySelector(`#guestFormsContainer .child-row[data-room="${roomIndex}"][data-child="${c}"]`);
+        function removeChild(btn) {
+            // btn is the clicked button — find its row via DOM traversal, robust to renumbering.
+            const row = btn && btn.closest ? btn.closest('.child-row') : null;
             if (!row) return;
+            const roomIndex = parseInt(row.getAttribute('data-room'));
+            if (isNaN(roomIndex)) return;
             row.remove();
             if (!booking.childrenByRoom) booking.childrenByRoom = {};
-            // Renumber remaining child rows in this room so labels stay 1..N
             const remaining = Array.from(document.querySelectorAll(`#guestFormsContainer .child-row[data-room="${roomIndex}"]`));
             booking.childrenByRoom[roomIndex] = remaining.length;
             const isAr = getLang() === 'ar';
@@ -5225,14 +5227,12 @@
                 const newIdx = i + 1;
                 el.setAttribute('data-child', newIdx);
                 const title = el.querySelector('.guest-form-section-title');
-                const removeBtn = el.querySelector('.remove-child-btn');
                 if (title) {
                     const oldText = title.firstChild;
                     if (oldText && oldText.nodeType === 3) {
                         oldText.nodeValue = `\n                        ${isAr ? 'طفل' : 'Child'} ${newIdx}\n                        `;
                     }
                 }
-                if (removeBtn) removeBtn.setAttribute('onclick', `removeChild(${roomIndex}, ${newIdx})`);
                 const nameInput = el.querySelector('input[type="text"]');
                 const ageInput = el.querySelector('input[type="number"]');
                 if (nameInput) nameInput.id = `r${roomIndex}_child${newIdx}_name`;
