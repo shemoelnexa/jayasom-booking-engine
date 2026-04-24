@@ -2141,17 +2141,30 @@
             margin-bottom: var(--space-md);
         }
         .drawer-includes-list {
-            display: flex; flex-direction: column; gap: var(--space-sm);
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--space-sm);
             margin-bottom: var(--space-lg);
         }
         .drawer-includes-item {
             font-size: 13px; color: var(--text-secondary);
-            display: flex; align-items: flex-start; gap: var(--space-sm);
-            line-height: 1.5;
+            display: flex; align-items: center; gap: var(--space-sm);
+            line-height: 1.4;
+            padding: var(--space-sm) var(--space-md);
+            background: var(--warm-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+        .drawer-includes-item:hover {
+            border-color: var(--soft-coral);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(16, 24, 32, 0.05);
         }
         .drawer-includes-item svg {
-            width: 16px; height: 16px; stroke: var(--soft-coral);
-            flex-shrink: 0; margin-top: 2px;
+            width: 18px; height: 18px; stroke: var(--soft-coral);
+            flex-shrink: 0; padding: 4px; background: rgba(232, 163, 146, 0.12);
+            border-radius: 50%; box-sizing: content-box;
         }
 
         /* Drawer treatments accordion */
