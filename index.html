@@ -765,15 +765,6 @@
             color: var(--inner-black); margin-bottom: var(--space-lg);
             display: flex; align-items: center; gap: var(--space-md);
         }
-        .guest-details-section { margin-bottom: 28px; }
-        .section-subtitle {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0 0 12px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
         .guest-badge {
             font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 4px 12px; background: var(--soft-coral); color: white;
@@ -2415,8 +2406,8 @@
                             <!-- Left: Guest Forms + Policies -->
                             <div style="min-width:0;">
                                 <!-- Airport Transfer & Travel (moved from room selection step) -->
-                                <div class="guest-details-section" id="airportTransferSection">
-                                    <h3 class="section-subtitle" data-i18n="arrivalTransferTitle">Arrival &amp; Transfer</h3>
+                                <div class="summary-card" id="airportTransferSection">
+                                    <h3 class="summary-card-title" data-i18n="arrivalTransferTitle">Arrival &amp; Transfer</h3>
                                     <div class="addons-list">
                                         <div class="addon-card" onclick="toggleAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
                                             <div class="addon-image" style="background:linear-gradient(135deg, var(--delicate-green-light), var(--purifying-beige));">
