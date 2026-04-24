@@ -1955,18 +1955,24 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             border: none;
             cursor: pointer;
-            font-size: 22px;
-            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            z-index: 3;
+            color: #1a1a1a;
+            transition: background 0.2s, transform 0.2s;
         }
-        .icm-nav:hover { background: #fff; }
-        .icm-nav.prev { left: 16px; }
-        .icm-nav.next { right: 16px; }
+        .icm-nav:hover { background: #fff; transform: translateY(-50%) scale(1.06); }
+        .icm-nav svg { width: 20px; height: 20px; }
+        .icm-nav.prev { left: 20px; }
+        .icm-nav.next { right: 20px; }
         .icm-nav[disabled] { opacity: 0.35; cursor: default; }
         .icm-close {
             position: absolute;
@@ -6196,8 +6202,8 @@
     <div class="image-carousel-modal-overlay" id="imageCarouselModalOverlay" onclick="closeImageCarouselModal()">
         <div class="image-carousel-modal" onclick="event.stopPropagation()">
             <button class="icm-close" onclick="closeImageCarouselModal()" aria-label="Close">&times;</button>
-            <button class="icm-nav prev" id="icmPrevBtn" onclick="icmPrev()" aria-label="Previous">&lsaquo;</button>
-            <button class="icm-nav next" id="icmNextBtn" onclick="icmNext()" aria-label="Next">&rsaquo;</button>
+            <button class="icm-nav prev" id="icmPrevBtn" onclick="icmPrev()" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+            <button class="icm-nav next" id="icmNextBtn" onclick="icmNext()" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
             <div class="icm-track" id="icmTrack"></div>
             <div class="icm-dots" id="icmDots"></div>
         </div>
