@@ -4444,8 +4444,25 @@
 
         function setLeadGuest(roomIndex, guestNum) {
             if (!booking.leadGuests) booking.leadGuests = {};
+            const container = document.getElementById('guestFormsContainer');
+            const snapshot = container
+                ? Array.from(container.querySelectorAll('input, select, textarea')).map(el => ({
+                    tag: el.tagName,
+                    type: el.type || '',
+                    value: el.value
+                }))
+                : [];
             booking.leadGuests[roomIndex] = guestNum;
             renderGuestForms();
+            if (container && snapshot.length) {
+                const refreshed = Array.from(container.querySelectorAll('input, select, textarea'));
+                snapshot.forEach((s, i) => {
+                    const el = refreshed[i];
+                    if (el && el.tagName === s.tag && (el.type || '') === s.type) {
+                        el.value = s.value;
+                    }
+                });
+            }
         }
 
         function selectRetreat(card, name, price) {
