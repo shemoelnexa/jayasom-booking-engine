@@ -1171,8 +1171,16 @@
         /* NAV BUTTONS */
         .step-navigation {
             display: flex; justify-content: space-between; align-items: center;
-            margin-top: var(--space-2xl); padding-top: var(--space-xl);
+            margin-top: var(--space-xl);
+            padding: var(--space-md) var(--space-xl);
+            position: sticky; bottom: 0; z-index: 20;
+            background: rgba(250, 247, 244, 0.97);
             border-top: 1px solid var(--border-light);
+            box-shadow: 0 -6px 20px rgba(16, 24, 32, 0.06);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            margin-left: calc(-1 * var(--space-xl));
+            margin-right: calc(-1 * var(--space-xl));
         }
         .step-nav-back {
             display: flex; align-items: center; gap: var(--space-sm);
