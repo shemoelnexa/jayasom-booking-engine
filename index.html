@@ -110,6 +110,48 @@
             border-radius: var(--radius-btn); background: transparent; cursor: pointer;
         }
         .lang-switch:hover { border-color: var(--gentle-beige); color: var(--gentle-beige); }
+        .currency-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            background: #fff;
+            font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .currency-switch:hover { border-color: var(--soft-coral); color: var(--text-primary); }
+        .currency-menu {
+            position: absolute;
+            top: calc(100% + 4px);
+            right: 0;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            padding: 4px;
+            display: none;
+            z-index: 100;
+            min-width: 120px;
+        }
+        .currency-menu.open { display: block; }
+        .currency-menu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 12px;
+            font-size: 12px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        .currency-menu button:hover { background: #f5f2ec; }
+        .currency-menu button.active { color: var(--soft-coral); font-weight: 600; }
 
         /* MAIN LAYOUT WITH VERTICAL STEPPER */
         .main-content { margin-top: 72px; min-height: calc(100vh - 72px); }
@@ -1929,6 +1971,16 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                     <span>+966 800 123 4567</span>
                 </div>
+                <div class="currency-switch" onclick="toggleCurrencyMenu(event)">
+                    <span id="currencyLabel">SAR</span>
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 3l4 4 4-4"/></svg>
+                    <div class="currency-menu" id="currencyMenu">
+                        <button data-currency="SAR" class="active" onclick="selectCurrency('SAR', event)">SAR — ر.س</button>
+                        <button data-currency="USD" onclick="selectCurrency('USD', event)">USD — $</button>
+                        <button data-currency="EUR" onclick="selectCurrency('EUR', event)">EUR — €</button>
+                        <button data-currency="GBP" onclick="selectCurrency('GBP', event)">GBP — £</button>
+                    </div>
+                </div>
                 <button class="lang-switch" onclick="toggleLanguage()">EN / AR</button>
             </div>
         </div>
@@ -2100,7 +2152,7 @@
                                     <p class="retreat-card-desc" data-i18n="renewalRetreatDesc">A transformative seven-night journey combining ancient healing traditions with modern wellness science. Rediscover balance through personalized therapies, mindful movement, and restorative nutrition.</p>
                                     <div class="retreat-card-includes"><span class="include-tag">Wellness Assessment</span><span class="include-tag">Daily Treatments</span><span class="include-tag">Nutrition Plan</span><span class="include-tag">Yoga Sessions</span></div>
                                     <div class="retreat-card-footer">
-                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 28,500 <span>/ person</span></span></div>
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="28500">SAR 28,500 <span>/ person</span></span></div>
                                         <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">Select</button>
                                     </div>
                                 </div>
@@ -2115,7 +2167,7 @@
                                     <p class="retreat-card-desc">A focused five-night program designed to restore your natural rhythm. Immerse yourself in desert tranquility with targeted spa therapies and guided meditation practices.</p>
                                     <div class="retreat-card-includes"><span class="include-tag">Spa Treatments</span><span class="include-tag">Meditation</span><span class="include-tag">Desert Excursion</span></div>
                                     <div class="retreat-card-footer">
-                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 19,200 <span>/ person</span></span></div>
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="19200">SAR 19,200 <span>/ person</span></span></div>
                                         <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Reset Experience', 19200)">Select</button>
                                     </div>
                                 </div>
@@ -2130,7 +2182,7 @@
                                     <p class="retreat-card-desc">Our most comprehensive two-week transformation. A deep, holistic approach that addresses body, mind and spirit through an integrated wellness protocol tailored uniquely for you.</p>
                                     <div class="retreat-card-includes"><span class="include-tag">Full Assessment</span><span class="include-tag">Daily Therapies</span><span class="include-tag">Fitness Program</span><span class="include-tag">Nutrition</span><span class="include-tag">Mindfulness</span></div>
                                     <div class="retreat-card-footer">
-                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 52,000 <span>/ person</span></span></div>
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="52000">SAR 52,000 <span>/ person</span></span></div>
                                         <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">Select</button>
                                     </div>
                                 </div>
@@ -2145,7 +2197,7 @@
                                     <p class="retreat-card-desc">A brief yet meaningful three-night retreat perfect for those seeking a restorative pause. Experience curated spa rituals and the calming embrace of the Red Sea landscape.</p>
                                     <div class="retreat-card-includes"><span class="include-tag">Spa Ritual</span><span class="include-tag">Sunset Yoga</span><span class="include-tag">Wellness Dining</span></div>
                                     <div class="retreat-card-footer">
-                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 9,800 <span>/ person</span></span></div>
+                                        <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="9800">SAR 9,800 <span>/ person</span></span></div>
                                         <button class="retreat-select-btn" onclick="event.stopPropagation(); selectRetreatDirect(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">Select</button>
                                     </div>
                                 </div>
@@ -2181,7 +2233,7 @@
                                             <p class="room-card-size">72 m&sup2; &middot; King Bed &middot; Max 2 Guests</p>
                                             <p class="room-card-desc">A serene sanctuary with panoramic desert views, designed with natural tones and soft lighting to create a calming retreat after a day of wellness.</p>
                                             <div class="room-card-footer">
-                                                <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 3,200 <span>/night</span></span></div>
+                                                <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="3200">SAR 3,200 <span>/night</span></span></div>
                                                 <div class="guest-counter">
                                                     <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Desert View Suite', -1)">-</button>
                                                     <span class="counter-value room-qty" id="roomQty-desert">0</span>
@@ -2200,7 +2252,7 @@
                                             <p class="room-card-size">120 m&sup2; &middot; King Bed &middot; Max 3 Guests</p>
                                             <p class="room-card-desc">An expansive private villa overlooking the Red Sea, featuring a private pool and living area for an elevated coastal wellness experience.</p>
                                             <div class="room-card-footer">
-                                                <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 5,800 <span>/night</span></span></div>
+                                                <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="5800">SAR 5,800 <span>/night</span></span></div>
                                                 <div class="guest-counter">
                                                     <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Sea View Villa', -1)">-</button>
                                                     <span class="counter-value room-qty" id="roomQty-sea">0</span>
@@ -2219,7 +2271,7 @@
                                             <p class="room-card-size">240 m&sup2; &middot; 2 Bedrooms &middot; Max 4 Guests</p>
                                             <p class="room-card-desc">The ultimate expression of luxury and privacy, set within lush gardens with a plunge pool, dedicated butler, and bespoke wellness programming.</p>
                                             <div class="room-card-footer">
-                                                <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 12,500 <span>/night</span></span></div>
+                                                <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="12500">SAR 12,500 <span>/night</span></span></div>
                                                 <div class="guest-counter">
                                                     <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Presidential Residence', -1)">-</button>
                                                     <span class="counter-value room-qty" id="roomQty-presidential">0</span>
@@ -2307,28 +2359,28 @@
                                     <div class="addon-image"><img src="images/image 18.png" alt="Deep Tissue Massage"></div>
                                     <div class="addon-body">
                                         <div><h3 class="addon-name">Deep Tissue Massage</h3><p class="addon-desc">A therapeutic massage targeting deep muscle layers to release chronic tension. 90 minutes of focused recovery.</p></div>
-                                        <div class="addon-footer"><span class="addon-price">SAR 850 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                        <div class="addon-footer"><span class="addon-price" data-price-sar="850">SAR 850 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
                                     </div>
                                 </div>
                                 <div class="addon-card" onclick="openTreatmentDrawer(this, 'Ayurvedic Consultation', 600)" data-price="600" data-name="Ayurvedic Consultation">
                                     <div class="addon-image"><img src="images/image 19.png" alt="Ayurvedic Consultation"></div>
                                     <div class="addon-body">
                                         <div><h3 class="addon-name">Ayurvedic Consultation</h3><p class="addon-desc">A comprehensive dosha assessment with personalized lifestyle and nutrition recommendations rooted in ancient Ayurvedic wisdom.</p></div>
-                                        <div class="addon-footer"><span class="addon-price">SAR 600 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                        <div class="addon-footer"><span class="addon-price" data-price-sar="600">SAR 600 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
                                     </div>
                                 </div>
                                 <div class="addon-card" onclick="openTreatmentDrawer(this, 'Hydrating Facial Treatment', 750)" data-price="750" data-name="Hydrating Facial Treatment">
                                     <div class="addon-image"><img src="images/image 31.png" alt="Hydrating Facial Treatment"></div>
                                     <div class="addon-body">
                                         <div><h3 class="addon-name">Hydrating Facial Treatment</h3><p class="addon-desc">A luxurious facial using marine-based ingredients and advanced hydration techniques to restore skin luminosity.</p></div>
-                                        <div class="addon-footer"><span class="addon-price">SAR 750 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                        <div class="addon-footer"><span class="addon-price" data-price-sar="750">SAR 750 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
                                     </div>
                                 </div>
                                 <div class="addon-card" onclick="openTreatmentDrawer(this, 'Sound Healing Session', 450)" data-price="450" data-name="Sound Healing Session">
                                     <div class="addon-image"><img src="images/Rectangle 50.png" alt="Sound Healing Session"></div>
                                     <div class="addon-body">
                                         <div><h3 class="addon-name">Sound Healing Session</h3><p class="addon-desc">An immersive sonic meditation using Tibetan singing bowls and tuning forks for deep relaxation and inner stillness.</p></div>
-                                        <div class="addon-footer"><span class="addon-price">SAR 450 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
+                                        <div class="addon-footer"><span class="addon-price" data-price-sar="450">SAR 450 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleAddon(this.closest('.addon-card'))"></button></div>
                                     </div>
                                 </div>
                                 <!-- Airport Transfer & Transport (as addon card) -->
@@ -2578,7 +2630,7 @@
                                                 <h3 class="retreat-card-name">The Renewal Retreat</h3>
                                                 <p class="retreat-card-desc">A transformative seven-night journey combining ancient healing traditions with modern wellness science.</p>
                                                 <div class="retreat-card-footer">
-                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 28,500 <span>/ person</span></span></div>
+                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="28500">SAR 28,500 <span>/ person</span></span></div>
                                                     <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">Select</button>
                                                 </div>
                                             </div>
@@ -2590,7 +2642,7 @@
                                                 <h3 class="retreat-card-name">The Reset Experience</h3>
                                                 <p class="retreat-card-desc">A focused five-night program designed to restore your natural rhythm with targeted spa therapies.</p>
                                                 <div class="retreat-card-footer">
-                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 19,200 <span>/ person</span></span></div>
+                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="19200">SAR 19,200 <span>/ person</span></span></div>
                                                     <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Reset Experience', 19200)">Select</button>
                                                 </div>
                                             </div>
@@ -2602,7 +2654,7 @@
                                                 <h3 class="retreat-card-name">The Reclaim Journey</h3>
                                                 <p class="retreat-card-desc">Our most comprehensive two-week transformation addressing body, mind and spirit.</p>
                                                 <div class="retreat-card-footer">
-                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 52,000 <span>/ person</span></span></div>
+                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="52000">SAR 52,000 <span>/ person</span></span></div>
                                                     <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Reclaim Journey', 52000)">Select</button>
                                                 </div>
                                             </div>
@@ -2614,7 +2666,7 @@
                                                 <h3 class="retreat-card-name">The Weekend Pause</h3>
                                                 <p class="retreat-card-desc">A brief yet meaningful three-night retreat for a restorative pause by the Red Sea.</p>
                                                 <div class="retreat-card-footer">
-                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value">SAR 9,800 <span>/ person</span></span></div>
+                                                    <div class="retreat-price"><span class="retreat-price-label">Starting from</span><span class="retreat-price-value" data-price-sar="9800">SAR 9,800 <span>/ person</span></span></div>
                                                     <button class="retreat-select-btn" onclick="event.stopPropagation(); selectModifyRetreat(this.closest('.retreat-card'), 'The Weekend Pause', 9800)">Select</button>
                                                 </div>
                                             </div>
@@ -2634,7 +2686,7 @@
                                                     <h3 class="room-card-name">Desert View Suite</h3>
                                                     <p class="room-card-size">72 m&sup2; &middot; King Bed &middot; Max 2 Guests</p>
                                                     <div class="room-card-footer">
-                                                        <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 3,200 <span>/night</span></span></div>
+                                                        <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="3200">SAR 3,200 <span>/night</span></span></div>
                                                         <div class="guest-counter">
                                                             <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifyDesert', -1)">-</button>
                                                             <span class="counter-value" id="modifyDesert">0</span>
@@ -2651,7 +2703,7 @@
                                                     <h3 class="room-card-name">Sea View Villa</h3>
                                                     <p class="room-card-size">120 m&sup2; &middot; King Bed &middot; Max 3 Guests</p>
                                                     <div class="room-card-footer">
-                                                        <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 5,800 <span>/night</span></span></div>
+                                                        <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="5800">SAR 5,800 <span>/night</span></span></div>
                                                         <div class="guest-counter">
                                                             <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifySea', -1)">-</button>
                                                             <span class="counter-value" id="modifySea">0</span>
@@ -2668,7 +2720,7 @@
                                                     <h3 class="room-card-name">Presidential Residence</h3>
                                                     <p class="room-card-size">240 m&sup2; &middot; 2 Bedrooms &middot; Max 4 Guests</p>
                                                     <div class="room-card-footer">
-                                                        <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value">SAR 12,500 <span>/night</span></span></div>
+                                                        <div class="room-price"><span class="room-price-label">Per night</span><span class="room-price-value" data-price-sar="12500">SAR 12,500 <span>/night</span></span></div>
                                                         <div class="guest-counter">
                                                             <button class="counter-btn" onclick="event.stopPropagation(); updateModifyRoomQty('modifyPresidential', -1)">-</button>
                                                             <span class="counter-value" id="modifyPresidential">0</span>
@@ -2706,28 +2758,28 @@
                                             <div class="addon-image"><img src="images/image 18.png" alt="Deep Tissue Massage"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Deep Tissue Massage</h3><p class="addon-desc">A therapeutic massage targeting deep muscle layers to release chronic tension. 90 minutes of focused recovery.</p></div>
-                                                <div class="addon-footer"><span class="addon-price">SAR 850 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                                <div class="addon-footer"><span class="addon-price" data-price-sar="850">SAR 850 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
                                         <div class="addon-card" onclick="openTreatmentDrawer(this, 'Ayurvedic Consultation', 600, 'modify')" data-price="600" data-name="Ayurvedic Consultation">
                                             <div class="addon-image"><img src="images/image 19.png" alt="Ayurvedic Consultation"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Ayurvedic Consultation</h3><p class="addon-desc">A comprehensive dosha assessment with personalized lifestyle and nutrition recommendations rooted in ancient Ayurvedic wisdom.</p></div>
-                                                <div class="addon-footer"><span class="addon-price">SAR 600 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                                <div class="addon-footer"><span class="addon-price" data-price-sar="600">SAR 600 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
                                         <div class="addon-card" onclick="openTreatmentDrawer(this, 'Hydrating Facial Treatment', 750, 'modify')" data-price="750" data-name="Hydrating Facial Treatment">
                                             <div class="addon-image"><img src="images/image 31.png" alt="Hydrating Facial Treatment"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Hydrating Facial Treatment</h3><p class="addon-desc">A luxurious facial using marine-based ingredients and advanced hydration techniques to restore skin luminosity.</p></div>
-                                                <div class="addon-footer"><span class="addon-price">SAR 750 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                                <div class="addon-footer"><span class="addon-price" data-price-sar="750">SAR 750 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
                                         <div class="addon-card" onclick="openTreatmentDrawer(this, 'Sound Healing Session', 450, 'modify')" data-price="450" data-name="Sound Healing Session">
                                             <div class="addon-image"><img src="images/Rectangle 50.png" alt="Sound Healing Session"></div>
                                             <div class="addon-body">
                                                 <div><h3 class="addon-name">Sound Healing Session</h3><p class="addon-desc">An immersive sonic meditation using Tibetan singing bowls and tuning forks for deep relaxation and inner stillness.</p></div>
-                                                <div class="addon-footer"><span class="addon-price">SAR 450 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                                <div class="addon-footer"><span class="addon-price" data-price-sar="450">SAR 450 <span>/ session</span></span><button class="addon-toggle" onclick="event.stopPropagation(); toggleModifyAddon(this.closest('.addon-card'))"></button></div>
                                             </div>
                                         </div>
                                         <div class="addon-card" onclick="toggleModifyAddon(this)" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
@@ -2883,10 +2935,6 @@
           const sym = CURRENCY_SYMBOLS[code];
           const val = convertFromSAR(amountSAR).toLocaleString();
           return code === 'SAR' ? `SAR ${val}` : `${sym}${val}`;
-        }
-
-        function formatSAR(num) {
-            return 'SAR ' + num.toLocaleString('en-US');
         }
 
         // ===== NAVIGATION =====
@@ -3094,7 +3142,7 @@
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-out</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Rooms</span><span class="confirmation-detail-value">${booking.selectedRooms.length || booking.rooms}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">${booking.adults} Adult(s)${booking.children > 0 ? ', ' + booking.children + ' Child(ren)' : ''}</span></div>`;
-            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Total</span><span class="confirmation-detail-value">${formatSAR(total || 28500)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Total</span><span class="confirmation-detail-value">${formatCurrency(total || 28500)}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">Status</span><span class="confirmation-detail-value" style="color:var(--success-green);">Confirmed</span></div>`;
 
             document.getElementById('manageBookingDetails').innerHTML = html;
@@ -3407,18 +3455,18 @@
             var html = '<h3 class="price-summary-title">Your Journey Summary</h3>';
             if (booking.retreatName) {
                 var retreatChanged = orig && (booking.retreatName !== orig.retreatName || booking.retreatPrice !== orig.retreatPrice || booking.adults !== orig.adults);
-                html += '<div class="price-line"><div><div class="price-line-label">' + booking.retreatName + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + booking.adults + ' guest(s)</div></div><div class="price-line-value">' + formatSAR(retreatTotal) + '</div></div>';
+                html += '<div class="price-line"><div><div class="price-line-label">' + booking.retreatName + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + booking.adults + ' guest(s)</div></div><div class="price-line-value">' + formatCurrency(retreatTotal) + '</div></div>';
             }
             booking.selectedRooms.forEach(function(r) {
                 var isNew = orig && !orig.rooms.some(function(or) { return or.name === r.name; });
-                html += '<div class="price-line"><div><div class="price-line-label">' + r.name + (isNew ? newBadge : '') + '</div><div class="price-line-sublabel">1 room x ' + nights + ' night(s)</div></div><div class="price-line-value">' + formatSAR(r.pricePerNight * nights) + '</div></div>';
+                html += '<div class="price-line"><div><div class="price-line-label">' + r.name + (isNew ? newBadge : '') + '</div><div class="price-line-sublabel">1 room x ' + nights + ' night(s)</div></div><div class="price-line-value">' + formatCurrency(r.pricePerNight * nights) + '</div></div>';
             });
             if (booking.addons.length > 0) {
                 var addonsChanged = orig && (booking.addons.length !== orig.addons.length || booking.addons.some(function(a) { return !orig.addons.some(function(oa) { return oa.name === a.name; }); }));
-                html += '<div class="price-line"><div><div class="price-line-label">Additional Treatments' + (addonsChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + booking.addons.length + ' selected</div></div><div class="price-line-value">' + formatSAR(addonsTotal) + '</div></div>';
+                html += '<div class="price-line"><div><div class="price-line-label">Additional Treatments' + (addonsChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + booking.addons.length + ' selected</div></div><div class="price-line-value">' + formatCurrency(addonsTotal) + '</div></div>';
             }
             html += '<div class="price-divider"></div>';
-            html += '<div class="price-total-line"><span class="price-total-label">Total</span><span class="price-total-value">' + formatSAR(total) + '</span></div>';
+            html += '<div class="price-total-line"><span class="price-total-label">Total</span><span class="price-total-value">' + formatCurrency(total) + '</span></div>';
             html += '<p class="price-vat-note">Inclusive of VAT</p>';
             el.innerHTML = html;
 
@@ -3427,33 +3475,33 @@
             var diff = newTotal - originalBookingTotal;
 
             var origCard = document.getElementById('modifySidebarOriginal');
-            origCard.innerHTML = '<h4 class="summary-card-title">Original Booking</h4><div class="summary-row"><span class="summary-row-label">Original Total</span><span class="summary-row-value">' + formatSAR(originalBookingTotal) + '</span></div>';
+            origCard.innerHTML = '<h4 class="summary-card-title">Original Booking</h4><div class="summary-row"><span class="summary-row-label">Original Total</span><span class="summary-row-value">' + formatCurrency(originalBookingTotal) + '</span></div>';
 
             var newHtml = '<h4 class="summary-card-title">Updated Breakdown</h4>';
             if (booking.retreatName) {
-                newHtml += '<div class="summary-row"><span class="summary-row-label">Retreat: ' + booking.retreatName + '</span><span class="summary-row-value">' + formatSAR(retreatTotal) + '</span></div>';
+                newHtml += '<div class="summary-row"><span class="summary-row-label">Retreat: ' + booking.retreatName + '</span><span class="summary-row-value">' + formatCurrency(retreatTotal) + '</span></div>';
             }
             booking.selectedRooms.forEach(function(r) {
-                newHtml += '<div class="summary-row"><span class="summary-row-label">Room: ' + r.name + '</span><span class="summary-row-value">' + formatSAR(r.pricePerNight * nights) + '</span></div>';
+                newHtml += '<div class="summary-row"><span class="summary-row-label">Room: ' + r.name + '</span><span class="summary-row-value">' + formatCurrency(r.pricePerNight * nights) + '</span></div>';
             });
             booking.addons.forEach(function(a) {
-                newHtml += '<div class="summary-row"><span class="summary-row-label">' + a.name + '</span><span class="summary-row-value">' + formatSAR(a.price) + '</span></div>';
+                newHtml += '<div class="summary-row"><span class="summary-row-label">' + a.name + '</span><span class="summary-row-value">' + formatCurrency(a.price) + '</span></div>';
             });
             newHtml += '<div style="height:1px;background:var(--border-light);margin:var(--space-md) 0;"></div>';
-            newHtml += '<div class="summary-row"><span class="summary-row-label" style="font-weight:700;">New Total</span><span class="summary-row-value" style="font-weight:700;font-size:16px;">' + formatSAR(newTotal) + '</span></div>';
+            newHtml += '<div class="summary-row"><span class="summary-row-label" style="font-weight:700;">New Total</span><span class="summary-row-value" style="font-weight:700;font-size:16px;">' + formatCurrency(newTotal) + '</span></div>';
             var newCard = document.getElementById('modifySidebarNew');
             newCard.innerHTML = newHtml;
 
             var adjHtml = '<h4 class="summary-card-title">Payment Adjustment</h4>';
-            adjHtml += '<div class="summary-row"><span class="summary-row-label">Original Total</span><span class="summary-row-value">' + formatSAR(originalBookingTotal) + '</span></div>';
-            adjHtml += '<div class="summary-row"><span class="summary-row-label">New Total</span><span class="summary-row-value">' + formatSAR(newTotal) + '</span></div>';
+            adjHtml += '<div class="summary-row"><span class="summary-row-label">Original Total</span><span class="summary-row-value">' + formatCurrency(originalBookingTotal) + '</span></div>';
+            adjHtml += '<div class="summary-row"><span class="summary-row-label">New Total</span><span class="summary-row-value">' + formatCurrency(newTotal) + '</span></div>';
             adjHtml += '<div style="height:1px;background:var(--soft-coral);margin:var(--space-md) 0;"></div>';
             if (diff > 0) {
-                adjHtml += '<div class="summary-row"><span class="summary-row-label" style="color:var(--soft-coral);font-weight:700;">Additional Charge</span><span class="summary-row-value" style="color:var(--soft-coral);font-weight:700;">+ ' + formatSAR(diff) + '</span></div>';
+                adjHtml += '<div class="summary-row"><span class="summary-row-label" style="color:var(--soft-coral);font-weight:700;">Additional Charge</span><span class="summary-row-value" style="color:var(--soft-coral);font-weight:700;">+ ' + formatCurrency(diff) + '</span></div>';
             } else if (diff < 0) {
-                adjHtml += '<div class="summary-row"><span class="summary-row-label" style="color:var(--success-green);font-weight:700;">Refund Amount</span><span class="summary-row-value" style="color:var(--success-green);font-weight:700;">- ' + formatSAR(Math.abs(diff)) + '</span></div>';
+                adjHtml += '<div class="summary-row"><span class="summary-row-label" style="color:var(--success-green);font-weight:700;">Refund Amount</span><span class="summary-row-value" style="color:var(--success-green);font-weight:700;">- ' + formatCurrency(Math.abs(diff)) + '</span></div>';
             } else {
-                adjHtml += '<div class="summary-row"><span class="summary-row-label">No Price Change</span><span class="summary-row-value">' + formatSAR(0) + '</span></div>';
+                adjHtml += '<div class="summary-row"><span class="summary-row-label">No Price Change</span><span class="summary-row-value">' + formatCurrency(0) + '</span></div>';
             }
             var adjCard = document.getElementById('modifySidebarAdjustment');
             adjCard.innerHTML = adjHtml;
@@ -3499,9 +3547,9 @@
             var refNum = (document.getElementById('manageRefNumber') && document.getElementById('manageRefNumber').value.trim()) || 'JWR-2026-04158';
             var detailText = '';
             if (diff > 0) {
-                detailText = 'An additional charge of ' + formatSAR(diff) + ' has been applied to your payment method.';
+                detailText = 'An additional charge of ' + formatCurrency(diff) + ' has been applied to your payment method.';
             } else if (diff < 0) {
-                detailText = 'A refund of ' + formatSAR(Math.abs(diff)) + ' will be processed to your original payment method.';
+                detailText = 'A refund of ' + formatCurrency(Math.abs(diff)) + ' will be processed to your original payment method.';
             } else {
                 detailText = 'No price change. Your booking details have been updated.';
             }
@@ -3517,14 +3565,14 @@
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Nights</span><span class="confirmation-detail-value">' + nights + '</span></div>';
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Guests</span><span class="confirmation-detail-value">' + booking.adults + ' Adult(s)' + (booking.children > 0 ? ', ' + booking.children + ' Child(ren)' : '') + '</span></div>';
             booking.selectedRooms.forEach(function(r) {
-                detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">' + r.name + '</span><span class="confirmation-detail-value">' + formatSAR(r.pricePerNight * nights) + '</span></div>';
+                detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">' + r.name + '</span><span class="confirmation-detail-value">' + formatCurrency(r.pricePerNight * nights) + '</span></div>';
             });
             if (booking.addons.length > 0) {
                 booking.addons.forEach(function(a) {
-                    detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">' + a.name + '</span><span class="confirmation-detail-value">' + formatSAR(a.price) + '</span></div>';
+                    detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">' + a.name + '</span><span class="confirmation-detail-value">' + formatCurrency(a.price) + '</span></div>';
                 });
             }
-            detailsHtml += '<div class="confirmation-detail-row" style="font-weight:700;border-top:2px solid var(--soft-coral);padding-top:var(--space-md);"><span class="confirmation-detail-label" style="font-weight:700;">Total</span><span class="confirmation-detail-value" style="font-size:16px;">' + formatSAR(newTotal) + '</span></div>';
+            detailsHtml += '<div class="confirmation-detail-row" style="font-weight:700;border-top:2px solid var(--soft-coral);padding-top:var(--space-md);"><span class="confirmation-detail-label" style="font-weight:700;">Total</span><span class="confirmation-detail-value" style="font-size:16px;">' + formatCurrency(newTotal) + '</span></div>';
             document.getElementById('modifySuccessDetails').innerHTML = detailsHtml;
 
             // Navigate to success page
@@ -4090,16 +4138,16 @@
             const t = translations.ar;
             let html = `<h3 class="price-summary-title">${isAr ? t.journeySummary : 'Your Journey Summary'}</h3>`;
             if (booking.retreatName) {
-                html += `<div class="price-line"><div><div class="price-line-label">${booking.retreatName}</div><div class="price-line-sublabel">${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</div></div><div class="price-line-value">${formatSAR(retreatTotal)}</div></div>`;
+                html += `<div class="price-line"><div><div class="price-line-label">${booking.retreatName}</div><div class="price-line-sublabel">${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</div></div><div class="price-line-value">${formatCurrency(retreatTotal)}</div></div>`;
             }
             booking.selectedRooms.forEach(r => {
-                html += `<div class="price-line"><div><div class="price-line-label">${r.name}</div><div class="price-line-sublabel">1 ${isAr ? 'غرفة' : 'room'} &times; ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatSAR(r.pricePerNight * nights)}</div></div>`;
+                html += `<div class="price-line"><div><div class="price-line-label">${r.name}</div><div class="price-line-sublabel">1 ${isAr ? 'غرفة' : 'room'} &times; ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatCurrency(r.pricePerNight * nights)}</div></div>`;
             });
             if (booking.addons.length > 0) {
-                html += `<div class="price-line"><div><div class="price-line-label">${isAr ? t.additionalTreatments : 'Additional Treatments'}</div><div class="price-line-sublabel">${booking.addons.length} ${isAr ? t.selected : 'selected'}</div></div><div class="price-line-value">${formatSAR(addonsTotal)}</div></div>`;
+                html += `<div class="price-line"><div><div class="price-line-label">${isAr ? t.additionalTreatments : 'Additional Treatments'}</div><div class="price-line-sublabel">${booking.addons.length} ${isAr ? t.selected : 'selected'}</div></div><div class="price-line-value">${formatCurrency(addonsTotal)}</div></div>`;
             }
             html += `<div class="price-divider"></div>
-                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatSAR(total)}</span></div>
+                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatCurrency(total)}</span></div>
                 <p class="price-vat-note">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p>`;
             el.innerHTML = html;
         }
@@ -4117,11 +4165,11 @@
 
             const isAr = currentLang === 'ar'; const t = translations.ar;
             let breakdownHtml = `<div style="margin-bottom:var(--space-lg);">
-                <div class="price-line"><div class="price-line-label">${isAr ? t.retreat : 'Retreat'}</div><div class="price-line-value">${formatSAR(retreatTotal)}</div></div>
-                <div class="price-line"><div class="price-line-label">${isAr ? t.accommodation : 'Accommodation'} (${booking.selectedRooms.length} ${isAr ? 'غرفة/غرف' : 'room(s)'})</div><div class="price-line-value">${formatSAR(roomTotal)}</div></div>`;
-            if (addonsTotal > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-value">${formatSAR(addonsTotal)}</div></div>`;
+                <div class="price-line"><div class="price-line-label">${isAr ? t.retreat : 'Retreat'}</div><div class="price-line-value">${formatCurrency(retreatTotal)}</div></div>
+                <div class="price-line"><div class="price-line-label">${isAr ? t.accommodation : 'Accommodation'} (${booking.selectedRooms.length} ${isAr ? 'غرفة/غرف' : 'room(s)'})</div><div class="price-line-value">${formatCurrency(roomTotal)}</div></div>`;
+            if (addonsTotal > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-value">${formatCurrency(addonsTotal)}</div></div>`;
             breakdownHtml += `<div class="price-divider"></div>
-                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatSAR(total)}</span></div>
+                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatCurrency(total)}</span></div>
                 <p class="price-vat-note">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p></div>`;
             document.getElementById('paymentBreakdown').innerHTML = breakdownHtml;
         }
@@ -4138,20 +4186,20 @@
             const isAr = currentLang === 'ar'; const t = translations.ar;
             const indentDir = isAr ? 'padding-right' : 'padding-left';
             let html = `<h4 class="summary-card-title">${isAr ? t.completePriceBreakdown : 'Complete Price Breakdown'}</h4>`;
-            html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.retreat : 'Retreat'}: ${booking.retreatName || (isAr ? t.notSelected : 'Not selected')}</span><span class="summary-row-value">${formatSAR(retreatTotal)}</span></div>`;
-            html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatSAR(booking.retreatPrice)} x ${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</span><span class="summary-row-value"></span></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.retreat : 'Retreat'}: ${booking.retreatName || (isAr ? t.notSelected : 'Not selected')}</span><span class="summary-row-value">${formatCurrency(retreatTotal)}</span></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatCurrency(booking.retreatPrice)} x ${booking.adults} ${isAr ? t.guestUnit : 'guest(s)'}</span><span class="summary-row-value"></span></div>`;
 
             booking.selectedRooms.forEach(r => {
-                html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.room : 'Room'}: ${r.name}</span><span class="summary-row-value">${formatSAR(r.pricePerNight * nights)}</span></div>`;
-                html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatSAR(r.pricePerNight)} x ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</span><span class="summary-row-value"></span></div>`;
+                html += `<div class="summary-row"><span class="summary-row-label">${isAr ? t.room : 'Room'}: ${r.name}</span><span class="summary-row-value">${formatCurrency(r.pricePerNight * nights)}</span></div>`;
+                html += `<div class="summary-row"><span class="summary-row-label" style="font-size:11px;color:var(--text-muted);${indentDir}:16px;">${formatCurrency(r.pricePerNight)} x ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</span><span class="summary-row-value"></span></div>`;
             });
 
             booking.addons.forEach(a => {
-                html += `<div class="summary-row"><span class="summary-row-label">${a.name}</span><span class="summary-row-value">${formatSAR(a.price)}</span></div>`;
+                html += `<div class="summary-row"><span class="summary-row-label">${a.name}</span><span class="summary-row-value">${formatCurrency(a.price)}</span></div>`;
             });
 
             html += `<div style="height:1px;background:var(--soft-coral);margin:var(--space-lg) 0;"></div>`;
-            html += `<div class="summary-row"><span class="summary-row-label" style="font-weight:700;font-size:14px;">${isAr ? t.total : 'Total'}</span><span class="summary-row-value" style="font-size:22px;font-family:'Cormorant Garamond',serif;">${formatSAR(total)}</span></div>`;
+            html += `<div class="summary-row"><span class="summary-row-label" style="font-weight:700;font-size:14px;">${isAr ? t.total : 'Total'}</span><span class="summary-row-value" style="font-size:22px;font-family:'Cormorant Garamond',serif;">${formatCurrency(total)}</span></div>`;
             html += `<p style="font-size:11px;color:var(--text-muted);text-align:${isAr ? 'left' : 'right'};">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p>`;
             el.innerHTML = html;
         }
@@ -4302,11 +4350,11 @@
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             let breakdownHtml = `<div style="margin-bottom:var(--space-lg);">
-                <div class="price-line"><div class="price-line-label">${isAr ? t.retreat : 'Retreat'}</div><div class="price-line-value">${formatSAR(retreatTotal)}</div></div>
-                <div class="price-line"><div class="price-line-label">${isAr ? t.accommodation : 'Accommodation'} (${booking.selectedRooms.length} ${isAr ? 'غرفة/غرف' : 'room(s)'})</div><div class="price-line-value">${formatSAR(roomTotal)}</div></div>`;
-            if (addonsTotal > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-value">${formatSAR(addonsTotal)}</div></div>`;
+                <div class="price-line"><div class="price-line-label">${isAr ? t.retreat : 'Retreat'}</div><div class="price-line-value">${formatCurrency(retreatTotal)}</div></div>
+                <div class="price-line"><div class="price-line-label">${isAr ? t.accommodation : 'Accommodation'} (${booking.selectedRooms.length} ${isAr ? 'غرفة/غرف' : 'room(s)'})</div><div class="price-line-value">${formatCurrency(roomTotal)}</div></div>`;
+            if (addonsTotal > 0) breakdownHtml += `<div class="price-line"><div class="price-line-label">${isAr ? t.treatmentsLabel : 'Treatments'}</div><div class="price-line-value">${formatCurrency(addonsTotal)}</div></div>`;
             breakdownHtml += `<div class="price-divider"></div>
-                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatSAR(total)}</span></div>
+                <div class="price-total-line"><span class="price-total-label">${isAr ? t.total : 'Total'}</span><span class="price-total-value">${formatCurrency(total)}</span></div>
                 <p class="price-vat-note">${isAr ? t.inclusiveVAT : 'Inclusive of VAT'}</p></div>`;
             document.getElementById('paymentBreakdown').innerHTML = breakdownHtml;
         }
@@ -4327,7 +4375,7 @@
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkin : 'Check-in'}</span><span class="confirmation-detail-value">${ci.toLocaleDateString(locale, opts)}, 3:00 PM</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkout : 'Check-out'}</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}, 12:00 PM</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.guests : 'Guests'}</span><span class="confirmation-detail-value">${booking.adults} ${isAr ? t.adultsLabel : 'Adult(s)'}${booking.children > 0 ? ', ' + booking.children + ' ' + (isAr ? t.childrenLabel : 'Child(ren)') : ''}</span></div>`;
-            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.totalPaid : 'Total Paid'}</span><span class="confirmation-detail-value">${formatSAR(total)}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.totalPaid : 'Total Paid'}</span><span class="confirmation-detail-value">${formatCurrency(total)}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.paymentStatus : 'Payment Status'}</span><span class="confirmation-detail-value" style="color:var(--success-green);">${isAr ? t.confirmed : 'Confirmed'}</span></div>`;
 
             document.getElementById('confirmationDetails').innerHTML = html;
@@ -4889,6 +4937,40 @@
             });
             applyDestinationVisibility();
         }
+
+        function toggleCurrencyMenu(e) {
+            e.stopPropagation();
+            const m = document.getElementById('currencyMenu');
+            if (m) m.classList.toggle('open');
+        }
+
+        function selectCurrency(code, e) {
+            if (e) e.stopPropagation();
+            booking.currency = code;
+            const label = document.getElementById('currencyLabel');
+            if (label) label.textContent = code;
+            document.querySelectorAll('#currencyMenu button').forEach(b => {
+                b.classList.toggle('active', b.dataset.currency === code);
+            });
+            const m = document.getElementById('currencyMenu');
+            if (m) m.classList.remove('open');
+            rerenderAllPrices();
+        }
+
+        function rerenderAllPrices() {
+            if (typeof renderPriceSummary === 'function') renderPriceSummary();
+            if (typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
+            if (typeof renderConfirmation === 'function' && typeof currentStep !== 'undefined' && currentStep === 6) renderConfirmation();
+            document.querySelectorAll('[data-price-sar]').forEach(el => {
+                const sar = parseFloat(el.dataset.priceSar);
+                if (!isNaN(sar)) el.textContent = formatCurrency(sar);
+            });
+        }
+
+        document.addEventListener('click', () => {
+            const m = document.getElementById('currencyMenu');
+            if (m) m.classList.remove('open');
+        });
 
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
