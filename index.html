@@ -1172,15 +1172,13 @@
         .step-navigation {
             display: flex; justify-content: space-between; align-items: center;
             margin-top: var(--space-xl);
-            padding: var(--space-md) var(--space-xl);
+            padding: var(--space-md) 0;
             position: sticky; bottom: 0; z-index: 20;
             background: rgba(250, 247, 244, 0.97);
             border-top: 1px solid var(--border-light);
             box-shadow: 0 -6px 20px rgba(16, 24, 32, 0.06);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
-            margin-left: calc(-1 * var(--space-xl));
-            margin-right: calc(-1 * var(--space-xl));
         }
         .step-nav-back {
             display: flex; align-items: center; gap: var(--space-sm);
@@ -2618,7 +2616,6 @@
                                                         <span class="counter-value room-qty" id="roomQty-desert">0</span>
                                                         <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Desert View Suite', 1)">+</button>
                                                     </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -2639,7 +2636,6 @@
                                                         <span class="counter-value room-qty" id="roomQty-sea">0</span>
                                                         <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Sea View Villa', 1)">+</button>
                                                     </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -2660,7 +2656,6 @@
                                                         <span class="counter-value room-qty" id="roomQty-presidential">0</span>
                                                         <button class="counter-btn" onclick="event.stopPropagation(); updateRoomQty('Presidential Residence', 1)">+</button>
                                                     </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
