@@ -391,11 +391,12 @@
             padding-right: 40px; cursor: pointer;
         }
         .guest-counters-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: 16px;
+          display: flex;
+          flex-wrap: nowrap;
+          gap: 12px;
           margin-top: 8px;
         }
+        .guest-counters-grid > .form-group { flex: 1 1 0; min-width: 0; }
         .guest-counter { display: flex; align-items: center; gap: var(--space-md); justify-content: center; }
         .form-group.guest-group { align-items: center; text-align: center; }
         .counter-btn {
@@ -1298,7 +1299,7 @@
             .date-picker-value { font-size: 12px; }
             .date-picker-segment.date-picker-nights { min-width: 40px; }
             .calendar-dropdown { position: fixed; top: auto; bottom: 0; left: 0; right: 0; z-index: 2001; margin: 0; max-height: 70vh; overflow-y: auto; }
-            .guest-counters-grid { grid-template-columns: 1fr 1fr 1fr; }
+            .guest-counters-grid { flex-wrap: nowrap; }
             .guest-counter { gap: var(--space-sm); }
             .counter-btn { width: 44px; height: 44px; font-size: 20px; }
             .counter-value { font-size: 18px; min-width: 28px; }
@@ -1465,7 +1466,8 @@
             .step-title { font-size: 22px; }
             .retreat-card-image { height: 160px; }
             .room-card-image { height: 160px; }
-            .guest-counters-grid { grid-template-columns: 1fr 1fr; }
+            .guest-counters-grid { flex-wrap: wrap; }
+            .guest-counters-grid > .form-group { flex: 1 1 calc(50% - 6px); }
             .summary-row-label { min-width: 70px; }
             .confirmation-title { font-size: 22px; }
             .mobile-stepper { padding: var(--space-xs) var(--space-sm); }
