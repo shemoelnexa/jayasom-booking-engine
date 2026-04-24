@@ -858,6 +858,39 @@
             display: flex; align-items: center; gap: var(--space-sm);
         }
         .add-guest-btn:hover { background: rgba(70, 69, 71, 0.04); border-style: solid; }
+        .guest-actions-row {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .add-guest-btn[disabled],
+        .add-guest-btn.add-child-btn[disabled] {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .add-guest-btn[disabled]:hover,
+        .add-guest-btn.add-child-btn[disabled]:hover {
+            background: transparent;
+            border-style: dashed;
+        }
+        .child-row {
+            border-left: 3px solid var(--delicate-green-light, #C2E3DE) !important;
+            padding-left: var(--space-md) !important;
+        }
+        .remove-child-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: var(--space-sm);
+            font-family: 'Century Gothic', sans-serif;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .remove-child-btn:hover { color: #c33; }
         .additional-guest-form {
             margin-top: var(--space-lg); padding-top: var(--space-lg);
             border-top: 1px solid var(--border-light); position: relative;
@@ -4659,6 +4692,22 @@
 
             // Auto-populate forms for all adult guests across rooms
             if (!booking.leadGuests) booking.leadGuests = {};
+
+            // Initialize per-room children allocation (persisted across re-renders)
+            if (!booking.childrenByRoom || typeof booking.childrenByRoom !== 'object') {
+                booking.childrenByRoom = {};
+            }
+            // Initial distribution: distribute booking.children evenly across rooms
+            // ONLY if nothing has been allocated yet (subsequent add/remove persists)
+            const currentAllocated = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+            if (currentAllocated === 0 && booking.children > 0) {
+                const base = Math.floor(booking.children / booking.rooms);
+                const extra = booking.children % booking.rooms;
+                for (let r = 0; r < booking.rooms; r++) {
+                    booking.childrenByRoom[r] = base + (r < extra ? 1 : 0);
+                }
+            }
+
             for (let r = 0; r < booking.rooms; r++) {
                 if (booking.leadGuests[r] === undefined) booking.leadGuests[r] = 1;
                 const isFirst = r === 0;
@@ -4711,14 +4760,50 @@
                 }
                 html += `</div>`;
 
-                // Add guest button
+                // Child rows (per room, from booking.childrenByRoom)
+                const childCount = booking.childrenByRoom[r] || 0;
+                for (let c = 1; c <= childCount; c++) {
+                    const childAge = (booking.childAges && booking.childAges[(r * 10) + (c - 1)]) || '';
+                    html += `
+                        <div class="guest-form-section child-row" style="margin-bottom:var(--space-md);padding-top:var(--space-md);" data-room="${r}" data-child="${c}">
+                            <h3 class="guest-form-section-title">
+                                ${isAr ? 'طفل' : 'Child'} ${c}
+                                <button type="button" class="remove-child-btn" onclick="removeChild(${r}, ${c})" data-i18n="removeChildLabel">${isAr ? 'إزالة' : 'Remove'}</button>
+                            </h3>
+                            <div class="guest-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">${isAr ? t.firstName : 'First Name'}</label>
+                                    <input type="text" class="form-input-white" id="r${r}_child${c}_name" placeholder="${isAr ? t.enterFirstName : 'Enter first name'}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">${isAr ? 'العمر' : 'Age'}</label>
+                                    <input type="number" min="0" max="17" class="form-input-white" id="r${r}_child${c}_age" value="${childAge}">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Add guest / Add child action row
+                let canAddMoreChildren = false;
+                if (booking.children > 0) {
+                    const used = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+                    canAddMoreChildren = used < booking.children;
+                }
+
                 html += `<div class="add-guest-section">
-                    <div class="add-guest-field">
-                        <button class="add-guest-btn" onclick="addGuest(${r})">
+                    <div class="guest-actions-row">
+                        <button class="add-guest-btn" onclick="addGuest(${r})" data-i18n="addGuestBtn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            ${isAr ? 'إضافة ضيف' : 'Add Guest'}
-                        </button>
-                    </div>
+                            ${isAr ? 'إضافة ضيف' : '+ Add Guest'}
+                        </button>`;
+                if (booking.children > 0) {
+                    html += `<button class="add-guest-btn add-child-btn" onclick="addChild(${r})" ${canAddMoreChildren ? '' : 'disabled'} data-i18n="addChildBtn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            ${isAr ? (canAddMoreChildren ? 'إضافة طفل' : 'تم الوصول للحد الأقصى') : (canAddMoreChildren ? '+ Add Child' : '+ Add Child (limit reached)')}
+                        </button>`;
+                }
+                html += `</div>
                 </div>`;
 
                 html += `</div></div>`;
@@ -4796,6 +4881,20 @@
             const el = document.getElementById('room' + roomIndex + 'guest' + guestNum);
             if (el) el.remove();
             booking.additionalGuests[roomIndex] = Math.max(0, (booking.additionalGuests[roomIndex] || 1) - 1);
+        }
+
+        function addChild(roomIndex) {
+            if (!booking.childrenByRoom) booking.childrenByRoom = {};
+            const used = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+            if (used >= booking.children) return;
+            booking.childrenByRoom[roomIndex] = (booking.childrenByRoom[roomIndex] || 0) + 1;
+            renderGuestForms();
+        }
+
+        function removeChild(roomIndex, c) {
+            if (!booking.childrenByRoom) booking.childrenByRoom = {};
+            booking.childrenByRoom[roomIndex] = Math.max(0, (booking.childrenByRoom[roomIndex] || 0) - 1);
+            renderGuestForms();
         }
 
         // ===== RENDER SUMMARY (Step 7) =====
@@ -5014,6 +5113,9 @@
                 child: 'طفل',
                 leadGuest: 'الضيف الرئيسي',
                 makeLead: 'تعيين كرئيسي',
+                addGuestBtn: 'إضافة ضيف',
+                addChildBtn: 'إضافة طفل',
+                removeChildLabel: 'إزالة',
                 retreatForGuest: 'الباقة لهذا الضيف',
                 title: 'اللقب',
                 firstName: 'الاسم الأول',
@@ -5373,6 +5475,7 @@
             if (!childrenGroup) return;
             if (booking.destination === 'jayasom') {
                 if (booking.children > 0) updateCount('children', -booking.children);
+                booking.childrenByRoom = {};
                 childrenGroup.style.display = 'none';
                 if (childAgesContainer) childAgesContainer.style.display = 'none';
             } else {
