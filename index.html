@@ -2877,12 +2877,6 @@
     <script>
         // ===== STATE =====
         let currentStep = 1;
-        const stepNames = [
-            { label: 'Select Retreat', sub: 'Choose your journey' },
-            { label: 'Select Room', sub: 'Pick accommodation' },
-            { label: 'Guest Details', sub: 'Details & payment' },
-            { label: 'Confirmation', sub: 'Booking confirmed' }
-        ];
 
         let booking = {
           destination: 'jayasom',
@@ -2973,15 +2967,18 @@
             return idx > 0 ? order[idx - 1] : null;
         }
 
+        function getLang() {
+            return (typeof currentLang !== 'undefined' && currentLang === 'ar') ? 'ar' : 'en';
+        }
+
         function currentStepNames() {
-            const lang = (typeof currentLang !== 'undefined' && currentLang === 'ar') ? 'ar' : 'en';
-            const labels = STEP_LABELS[lang] || STEP_LABELS.en;
+            const labels = STEP_LABELS[getLang()] || STEP_LABELS.en;
             return getFlowOrder().map(s => labels[s]);
         }
 
         function refreshContinueButtonLabels() {
             const next = nextStepFrom(currentStep);
-            const lang = (typeof currentLang !== 'undefined' && currentLang === 'ar') ? 'ar' : 'en';
+            const lang = getLang();
             const labels = STEP_LABELS[lang] || STEP_LABELS.en;
             const prefix = lang === 'ar' ? 'متابعة إلى' : 'Continue to';
             const label = next && labels[next] ? `${prefix} ${labels[next]}` : (lang === 'ar' ? 'متابعة' : 'Continue');
@@ -4493,22 +4490,7 @@
                 promoPlaceholder: 'أدخل رمز الخصم أو العرض',
                 // Stepper
                 stepperTitle: 'تقدم الحجز الخاص بك',
-                // Step names
-                sn_selectRetreat: 'اختيار المنتجع',
-                sn_chooseJourney: 'اختر رحلتك',
-                sn_selectRoom: 'اختيار الغرفة',
-                sn_pickAccommodation: 'اختر الإقامة',
-                sn_treatments: 'العلاجات',
-                sn_addonServices: 'خدمات إضافية',
-                sn_priceBreakdown: 'تفاصيل الأسعار',
-                sn_reviewCosts: 'مراجعة التكاليف',
-                sn_guestDetails: 'بيانات الضيوف',
-                sn_personalInfo: 'المعلومات الشخصية',
-                sn_summaryPayment: 'الملخص والدفع',
-                sn_reviewPay: 'المراجعة والدفع',
-                sn_confirmation: 'التأكيد',
-                sn_bookingConfirmed: 'تم تأكيد الحجز',
-                // Step 2: Retreat
+// Step 2: Retreat
                 step1of7: 'الخطوة ١ من ٧',
                 chooseRetreat: 'اختر منتجعك',
                 chooseRetreatDesc: 'كل منتجع هو رحلة مُنسّقة مصممة لإعادتك إلى ذاتك الداخلية. اختر التجربة التي تناسب احتياجاتك.',
@@ -4585,7 +4567,6 @@
                 soundHealing: 'جلسة العلاج بالصوت',
                 soundHealingDesc: 'تأمل صوتي غامر باستخدام أوعية الغناء التبتية والشوكات الرنانة للاسترخاء العميق والسكينة الداخلية.',
                 perSession: '/ جلسة',
-                backToRooms: 'العودة للغرف',
                 continueToPriceBreakdown: 'المتابعة لتفاصيل الأسعار',
                 // Price Summary
                 journeySummary: 'ملخص رحلتك',
@@ -4872,7 +4853,7 @@
 
             // Nav buttons - use bulkEnglish for matching
             const navTexts = {
-                'Back': t.back, 'Back to Retreats': t.backToRetreats, 'Back to Rooms': t.backToRooms,
+                'Back': t.back, 'Back to Retreats': t.backToRetreats,
                 'Back to Treatments': t.backToTreatments, 'Back to Price Breakdown': t.backToPriceBreakdown,
                 'Back to Guest Details': t.backToGuestDetails
             };
