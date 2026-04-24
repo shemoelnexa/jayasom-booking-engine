@@ -792,6 +792,27 @@
             padding: 4px 12px; background: var(--soft-coral); color: white;
             border-radius: var(--radius-2xl); font-weight: 700;
         }
+        .guest-badge.is-lead {
+            background: var(--soft-coral);
+            color: white;
+        }
+        .guest-badge.make-lead {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px dashed var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            font: inherit;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 4px 12px;
+        }
+        .guest-badge.make-lead:hover {
+            color: var(--soft-coral);
+            border-color: var(--soft-coral);
+        }
         .child-badge {
             font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 4px 12px; background: var(--delicate-green); color: white;
@@ -4421,6 +4442,12 @@
             if (typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
         }
 
+        function setLeadGuest(roomIndex, guestNum) {
+            if (!booking.leadGuests) booking.leadGuests = {};
+            booking.leadGuests[roomIndex] = guestNum;
+            renderGuestForms();
+        }
+
         function selectRetreat(card, name, price) {
             openRetreatDrawer(card, name, price);
         }
@@ -4614,7 +4641,9 @@
             let html = '';
 
             // Auto-populate forms for all adult guests across rooms
+            if (!booking.leadGuests) booking.leadGuests = {};
             for (let r = 0; r < booking.rooms; r++) {
+                if (booking.leadGuests[r] === undefined) booking.leadGuests[r] = 1;
                 const isFirst = r === 0;
                 const roomLabel = isAr ? `غرفة ${r + 1}` : `Room ${r + 1}`;
                 const roomSubLabel = (booking.selectedRooms[r] && booking.selectedRooms[r].name) || (isAr ? 'لم يتم الاختيار' : 'Not selected');
@@ -4634,9 +4663,11 @@
                 const guestsInThisRoom = (r < booking.rooms - 1) ? adultsPerRoom : (booking.adults - adultsPerRoom * r);
 
                 for (let g = 1; g <= Math.max(1, guestsInThisRoom); g++) {
-                    const isLead = (r === 0 && g === 1);
+                    const isLead = booking.leadGuests[r] === g;
                     const label = isAr ? `${t.adult} ${g}` : `Guest ${g}`;
-                    const badge = isLead ? `<span class="guest-badge">${isAr ? t.leadGuest : 'Lead Guest'}</span>` : '';
+                    const badge = isLead
+                        ? `<span class="guest-badge is-lead" data-i18n="leadGuest">${isAr ? t.leadGuest : 'Lead Guest'}</span>`
+                        : `<button type="button" class="guest-badge make-lead" onclick="setLeadGuest(${r}, ${g})" data-i18n="makeLead">${isAr ? t.makeLead : 'Make lead'}</button>`;
                     const required = isLead ? ' required' : '';
 
                     html += `<div class="guest-form-section" style="margin-bottom:var(--space-md);border:none;padding:0;">
@@ -4683,9 +4714,14 @@
         function renderAdditionalGuestForm(roomIndex, guestNum, isAr, t) {
             if (!isAr) isAr = currentLang === 'ar';
             if (!t) t = translations.ar;
+            if (!booking.leadGuests) booking.leadGuests = {};
+            const isLead = booking.leadGuests[roomIndex] === guestNum;
+            const badge = isLead
+                ? `<span class="guest-badge is-lead" data-i18n="leadGuest">${isAr ? t.leadGuest : 'Lead Guest'}</span>`
+                : `<button type="button" class="guest-badge make-lead" onclick="setLeadGuest(${roomIndex}, ${guestNum})" data-i18n="makeLead">${isAr ? t.makeLead : 'Make lead'}</button>`;
             return `<div class="additional-guest-form" id="room${roomIndex}guest${guestNum}">
                 <button class="remove-guest-btn" onclick="removeGuest(${roomIndex}, ${guestNum})">${isAr ? 'إزالة' : 'Remove'}</button>
-                <h3 class="guest-form-section-title" style="font-size:18px;">${isAr ? 'ضيف' : 'Guest'} ${guestNum}</h3>
+                <h3 class="guest-form-section-title" style="font-size:18px;">${isAr ? 'ضيف' : 'Guest'} ${guestNum} ${badge}</h3>
                 <div class="guest-form-grid">
                     <div class="form-group"><label class="form-label">${isAr ? t.title : 'Title'}</label><select class="form-select" style="background:var(--open-white);"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
                     <div class="form-group"><label class="form-label">${isAr ? t.firstName : 'First Name'} *</label><input type="text" class="form-input-white" placeholder="${isAr ? t.enterFirstName : 'Enter first name'}"></div>
@@ -4960,6 +4996,7 @@
                 adult: 'بالغ',
                 child: 'طفل',
                 leadGuest: 'الضيف الرئيسي',
+                makeLead: 'تعيين كرئيسي',
                 retreatForGuest: 'الباقة لهذا الضيف',
                 title: 'اللقب',
                 firstName: 'الاسم الأول',
