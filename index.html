@@ -3458,6 +3458,8 @@
             document.getElementById('checkoutDate').value = booking.checkout;
             document.getElementById('adultsCount').textContent = booking.adults;
             document.getElementById('childrenCount').textContent = booking.children;
+            const infSyncEl = document.getElementById('infantsCount');
+            if (infSyncEl) infSyncEl.textContent = booking.infants || 0;
 
             // Sync main flow cards to match
             document.querySelectorAll('#retreatGrid .retreat-card').forEach(function(c) {
@@ -4319,9 +4321,11 @@
 
         // ===== NEW BOOKING =====
         function startNewBooking() {
-            booking = { destination: 'jayasom', retreatName: '', retreatPrice: 0, selectedRooms: [], addons: [], adults: 2, children: 0, rooms: 1, childAges: [], additionalGuests: {}, checkin: '', checkout: '', flightNumber: '', arrivalTime: '', needsPickup: '' };
+            booking = { destination: 'jayasom', currency: 'SAR', retreatName: '', retreatPrice: 0, retreatsByGuest: {}, leadGuests: {}, treatmentsByGuest: {}, selectedRooms: [], addons: [], adults: 2, children: 0, infants: 0, caretakers: 0, rooms: 1, childAges: [], additionalGuests: {}, checkin: '', checkout: '', flightNumber: '', arrivalTime: '', needsPickup: '' };
             document.getElementById('adultsCount').textContent = '2';
             document.getElementById('childrenCount').textContent = '0';
+            const infCount = document.getElementById('infantsCount');
+            if (infCount) infCount.textContent = '0';
             // Reset calendar
             calendarCheckin = null;
             calendarCheckout = null;
