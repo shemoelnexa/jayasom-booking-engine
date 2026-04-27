@@ -2983,7 +2983,7 @@
                                         <input type="hidden" id="modifyCheckin">
                                         <input type="hidden" id="modifyCheckout">
                                     </div>
-                                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-top:var(--space-md);">
+                                    <div id="modifyGuestCountersGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-top:var(--space-md);">
                                         <div class="form-group guest-group">
                                             <label class="form-label">Adults</label>
                                             <div class="guest-counter">
@@ -2992,7 +2992,7 @@
                                                 <button class="counter-btn" onclick="updateModifyCount('modifyAdults', 1)">+</button>
                                             </div>
                                         </div>
-                                        <div class="form-group guest-group">
+                                        <div class="form-group guest-group" id="modifyChildrenGroup">
                                             <label class="form-label">Children</label>
                                             <div class="guest-counter">
                                                 <button class="counter-btn" onclick="updateModifyCount('modifyChildren', -1)">-</button>
@@ -3005,8 +3005,9 @@
                                 </div>
 
                                 <!-- Retreat Selection (card-based) -->
-                                <div style="margin-bottom:var(--space-2xl);">
+                                <div style="margin-bottom:var(--space-2xl);" id="modifyRetreatSection">
                                     <h4 class="summary-card-title">Choose Retreat</h4>
+                                    <div class="retreat-guest-tabs" id="modifyRetreatGuestTabs"></div>
                                     <div class="retreat-grid" id="modifyRetreatGrid">
                                         <div class="retreat-card" data-price="28500">
                                             <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Renewal Retreat', 28500, 'modify')">View Details</button>
@@ -3072,9 +3073,10 @@
                                 </div>
 
                                 <!-- Room Selection -->
-                                <div style="margin-bottom:var(--space-2xl);">
+                                <div style="margin-bottom:var(--space-2xl);" id="modifyRoomSection">
                                     <h4 class="summary-card-title">Select Accommodation</h4>
-                                    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-lg);">Select room types and quantities.</p>
+                                    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-md);">Select room types and quantities.</p>
+                                    <div id="modifyRoomCapacityWarning" style="display:none;padding:var(--space-md);background:rgba(236,198,129,0.15);border:1px solid var(--kind-yellow);border-radius:var(--radius-md);margin-bottom:var(--space-lg);font-size:13px;color:var(--text-secondary);"></div>
                                     <div class="room-grid" id="modifyRoomGrid" style="grid-template-columns:1fr;">
                                         <div class="room-card">
                                             <button class="view-details-btn" onclick="openRoomDrawer('Desert View Suite', 'modify')">View Details</button>
@@ -3134,13 +3136,53 @@
                                 </div>
 
                                 <!-- Airport Transfer & Travel (moved from treatments block) -->
-                                <div style="margin-bottom:var(--space-2xl);">
+                                <div class="summary-card" id="modifyAirportTransferSection" style="margin-bottom:var(--space-2xl);">
+                                    <h3 class="summary-card-title">Arrival &amp; Transfer</h3>
                                     <div class="addons-list" id="modifyAddonsList">
                                         <div class="addon-card" data-price="0" data-name="Airport Transfer" style="flex-wrap:wrap;">
                                             <button class="view-details-btn" onclick="openTreatmentDrawer(this.closest('.addon-card'), 'Airport Transfer', 0, 'modify')">View Details</button>
                                             <div class="addon-body" style="width:100%;">
-                                                <div><h3 class="addon-name">Airport Transfer &amp; Travel</h3><p class="addon-desc">Complimentary airport pickup coordination for your arrival at Amaala.</p></div>
-                                                <div class="addon-footer"><span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span><button class="addon-toggle" onclick="toggleModifyAddon(this.closest('.addon-card'))"></button></div>
+                                                <div>
+                                                    <h3 class="addon-name">Airport Transfer &amp; Travel</h3>
+                                                    <p class="addon-desc">Amaala is a dedicated destination — airport pickup is recommended. Let us know your travel plans to coordinate a seamless arrival.</p>
+                                                </div>
+                                                <div class="addon-footer">
+                                                    <span class="addon-price" style="font-size:13px;font-weight:400;color:var(--text-secondary);">Complimentary</span>
+                                                    <button class="addon-toggle" onclick="toggleModifyAddon(this.closest('.addon-card'))"></button>
+                                                </div>
+                                            </div>
+                                            <div id="modifyAirportTransferFields" style="display:none;width:100%;padding:var(--space-md) var(--space-lg) var(--space-lg);border-top:1px solid var(--border-light);" onclick="event.stopPropagation();">
+                                                <div class="guest-form-grid">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Do you need airport pickup?</label>
+                                                        <select class="form-select" style="background:var(--open-white);" id="modifyNeedsPickup" onchange="booking.needsPickup=this.value">
+                                                            <option value="">Select</option>
+                                                            <option value="yes">Yes, please arrange pickup</option>
+                                                            <option value="no">No, I have my own transport</option>
+                                                            <option value="later">I'll confirm later</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Do you know your flight details?</label>
+                                                        <select class="form-select" style="background:var(--open-white);" id="modifyKnowFlightDetails" onchange="document.getElementById('modifyFlightNumberFields').style.display=this.value==='yes'?'block':'none';">
+                                                            <option value="">Select</option>
+                                                            <option value="yes">Yes</option>
+                                                            <option value="no">Not yet</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div id="modifyFlightNumberFields" style="display:none;margin-top:var(--space-md);">
+                                                    <div class="guest-form-grid">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Flight Number</label>
+                                                            <input type="text" class="form-input-white" id="modifyFlightNumber" placeholder="e.g. SV 1234" onchange="booking.flightNumber=this.value">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label">Arrival Date &amp; Time</label>
+                                                            <input type="datetime-local" class="form-input-white" id="modifyArrivalTime" onchange="booking.arrivalTime=this.value">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -3210,6 +3252,16 @@
                                 <div class="summary-card" id="modifySidebarAdjustment" style="margin-top:var(--space-lg);"></div>
 
                                 <div id="modifySidebarActions" style="margin-top:var(--space-lg);">
+                                    <div class="policies-section" style="border-top:none;padding-top:0;margin-bottom:var(--space-md);">
+                                        <div class="policy-check" onclick="toggleCheck(this)">
+                                            <div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                            <p class="policy-text">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a> of Jayasom Wellness Resort.</p>
+                                        </div>
+                                        <div class="policy-check" onclick="toggleCheck(this)">
+                                            <div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                            <p class="policy-text">I have read and accept the <a href="#">Cancellation Policy</a> and <a href="#">Booking Terms</a>.</p>
+                                        </div>
+                                    </div>
                                     <button class="btn-primary" style="width:100%;" onclick="confirmPaymentAdjustment()">Confirm Changes</button>
                                     <button class="btn-secondary" style="width:100%;margin-top:var(--space-sm);text-align:center;" onclick="backToManageResult()">Cancel Changes</button>
                                 </div>
@@ -3654,8 +3706,40 @@
             document.getElementById('verticalStepper').classList.add('hidden');
             hideMobileStepper();
 
-            // Restore action buttons
-            document.getElementById('modifySidebarActions').innerHTML = '<button class="btn-primary" style="width:100%;" onclick="confirmPaymentAdjustment()">Confirm Changes</button><button class="btn-secondary" style="width:100%;margin-top:var(--space-sm);text-align:center;" onclick="backToManageResult()">Cancel Changes</button>';
+            // Match flow order from main booking: Jayasom (adults-only) shows retreat first, then room.
+            // Jayala (family) shows room first, then retreat.
+            const wrapper = document.getElementById('modifyRetreatSection') && document.getElementById('modifyRetreatSection').parentNode;
+            const retreatSection = document.getElementById('modifyRetreatSection');
+            const roomSection = document.getElementById('modifyRoomSection');
+            if (wrapper && retreatSection && roomSection) {
+                if (booking.destination === 'jayala') {
+                    wrapper.insertBefore(roomSection, retreatSection);
+                } else {
+                    wrapper.insertBefore(retreatSection, roomSection);
+                }
+            }
+
+            // Apply destination visibility — hide children counter for adults-only (jayasom).
+            const isAdultsOnly = booking.destination === 'jayasom';
+            const childrenGroup = document.getElementById('modifyChildrenGroup');
+            if (childrenGroup) childrenGroup.style.display = isAdultsOnly ? 'none' : '';
+            const ageContainer = document.getElementById('modifyChildAgesContainer');
+            if (ageContainer) ageContainer.style.display = 'none'; // per-room rows replace this
+            const guestCountersGrid = document.getElementById('modifyGuestCountersGrid');
+            if (guestCountersGrid) guestCountersGrid.style.gridTemplateColumns = isAdultsOnly ? '1fr' : '1fr 1fr';
+            if (isAdultsOnly && booking.children > 0) {
+                booking.children = 0;
+                booking.childrenByRoom = {};
+            }
+
+            // Restore action buttons including policy checkboxes (cancel flow may have replaced them).
+            document.getElementById('modifySidebarActions').innerHTML = ''
+                + '<div class="policies-section" style="border-top:none;padding-top:0;margin-bottom:var(--space-md);">'
+                +   '<div class="policy-check" onclick="toggleCheck(this)"><div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><p class="policy-text">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a> of Jayasom Wellness Resort.</p></div>'
+                +   '<div class="policy-check" onclick="toggleCheck(this)"><div class="policy-checkbox"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><p class="policy-text">I have read and accept the <a href="#">Cancellation Policy</a> and <a href="#">Booking Terms</a>.</p></div>'
+                + '</div>'
+                + '<button class="btn-primary" style="width:100%;" onclick="confirmPaymentAdjustment()">Confirm Changes</button>'
+                + '<button class="btn-secondary" style="width:100%;margin-top:var(--space-sm);text-align:center;" onclick="backToManageResult()">Cancel Changes</button>';
 
             // Populate stay details via calendar
             document.getElementById('modifyCheckin').value = booking.checkin;
@@ -3671,16 +3755,9 @@
             modifyCalendarSelectMode = 'checkin';
             renderModifyCalendar();
 
-            // Render child ages if any
+            // Render legacy child ages if any (kept for state continuity, but container is hidden)
             modifyChildAges = booking.childAges ? booking.childAges.slice() : [];
             renderModifyChildAgeSelectors();
-
-            // Pre-select current retreat card
-            document.querySelectorAll('#modifyRetreatGrid .retreat-card').forEach(c => {
-                c.classList.remove('selected');
-                const name = c.querySelector('.retreat-card-name').textContent;
-                if (name === (booking.retreatName || 'The Renewal Retreat')) c.classList.add('selected');
-            });
 
             // Pre-populate room quantities
             const roomQtyMap = { 'Desert View Suite': 'modifyDesert', 'Sea View Villa': 'modifySea', 'Presidential Residence': 'modifyPresidential' };
@@ -3689,8 +3766,23 @@
                 const id = roomQtyMap[r.name];
                 if (id) { const el = document.getElementById(id); if (el) el.textContent = parseInt(el.textContent) + 1; }
             });
+            // Highlight selected room cards
+            document.querySelectorAll('#modifyRoomGrid .room-card').forEach(card => {
+                const qtyEl = card.querySelector('.counter-value');
+                const qty = qtyEl ? parseInt(qtyEl.textContent) || 0 : 0;
+                card.classList.toggle('selected', qty > 0);
+            });
 
-            // Pre-select current addon cards
+            // Render per-guest retreat tabs and pre-select current retreat for active guest
+            modifyActiveRetreatGuestKey = 'r0g1';
+            if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
+            // If a single retreat was previously chosen, seed all guests with it so the tabs show context.
+            if (booking.retreatName && Object.keys(booking.retreatsByGuest).length === 0) {
+                listModifyRetreatGuests().forEach(g => { booking.retreatsByGuest[g.key] = booking.retreatName; });
+            }
+            renderModifyRetreatGuestTabs();
+
+            // Pre-select current addon cards & expand airport transfer fields if previously selected
             const selectedAddonNames = booking.addons.map(a => a.name);
             document.querySelectorAll('#modifyAddonsList .addon-card').forEach(c => {
                 c.classList.remove('selected');
@@ -3701,8 +3793,27 @@
                     if (toggle) toggle.classList.add('active');
                 }
             });
+            const apFields = document.getElementById('modifyAirportTransferFields');
+            const apCard = document.querySelector('#modifyAddonsList .addon-card[data-name="Airport Transfer"]');
+            if (apFields) apFields.style.display = (apCard && apCard.classList.contains('selected')) ? 'block' : 'none';
 
-            // Render per-room guest accordion
+            // Pre-populate airport transfer fields from booking state
+            const np = document.getElementById('modifyNeedsPickup');
+            if (np) np.value = booking.needsPickup || '';
+            const fn = document.getElementById('modifyFlightNumber');
+            if (fn) fn.value = booking.flightNumber || '';
+            const at = document.getElementById('modifyArrivalTime');
+            if (at) at.value = booking.arrivalTime || '';
+            const kfd = document.getElementById('modifyKnowFlightDetails');
+            if (kfd) {
+                kfd.value = booking.flightNumber ? 'yes' : '';
+                document.getElementById('modifyFlightNumberFields').style.display = kfd.value === 'yes' ? 'block' : 'none';
+            }
+
+            // Capacity warning
+            validateModifyRoomCapacity();
+
+            // Render per-room guest accordion (now includes per-room child rows)
             renderModifyGuestForms();
 
             // Pre-populate lead guest (Room 1) from manage booking search
@@ -3725,25 +3836,105 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function selectModifyRetreat(card, name, price) {
-            const isAr = getLang() === 'ar';
-            const wasSelected = card.classList.contains('selected');
-            document.querySelectorAll('#modifyRetreatGrid .retreat-card').forEach(c => {
-                c.classList.remove('selected');
-                const btn = c.querySelector('.retreat-select-btn');
-                if (btn) {
-                    btn.textContent = isAr ? 'اختيار' : 'Select';
-                    btn.classList.remove('is-selected');
-                }
+        // ===== MODIFY: Per-guest retreat tabs (mirror main flow's renderRetreatGuestTabs) =====
+        let modifyActiveRetreatGuestKey = 'r0g1';
+
+        function getModifyRoomsCount() {
+            const ids = ['modifyDesert', 'modifySea', 'modifyPresidential'];
+            let total = 0;
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                total += el ? (parseInt(el.textContent) || 0) : 0;
             });
-            if (!wasSelected) {
-                card.classList.add('selected');
-                const btn = card.querySelector('.retreat-select-btn');
-                if (btn) {
-                    btn.textContent = isAr ? 'إلغاء التحديد' : 'Clear Selection';
-                    btn.classList.add('is-selected');
+            return total || (booking.rooms || 1);
+        }
+
+        function listModifyRetreatGuests() {
+            const adultsEl = document.getElementById('modifyAdults');
+            const adults = adultsEl ? (parseInt(adultsEl.textContent) || 0) : (booking.adults || 0);
+            const rooms = Math.max(1, getModifyRoomsCount());
+            const perRoom = Math.ceil(adults / rooms);
+            const guests = [];
+            let a = 1;
+            for (let r = 0; r < rooms && a <= adults; r++) {
+                for (let g = 1; g <= perRoom && a <= adults; g++, a++) {
+                    guests.push({ key: `r${r}g${g}`, label: `Guest ${a}` });
                 }
             }
+            return guests;
+        }
+
+        function renderModifyRetreatGuestTabs() {
+            const host = document.getElementById('modifyRetreatGuestTabs');
+            if (!host) return;
+            const guests = listModifyRetreatGuests();
+            if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
+            if (guests.length <= 1) {
+                host.innerHTML = '';
+                highlightModifySelectedRetreat();
+                refreshModifyRetreatSelectButtons();
+                return;
+            }
+            if (!guests.some(g => g.key === modifyActiveRetreatGuestKey)) {
+                modifyActiveRetreatGuestKey = guests[0].key;
+            }
+            host.innerHTML = guests.map(g => {
+                const picked = booking.retreatsByGuest[g.key] || '';
+                const active = g.key === modifyActiveRetreatGuestKey ? ' active' : '';
+                const meta = picked ? ` <span class="retreat-guest-tab-meta">· ${picked}</span>` : '';
+                return `<button type="button" class="retreat-guest-tab${active}" onclick="setModifyActiveRetreatGuest('${g.key}')">${g.label}${meta}</button>`;
+            }).join('');
+            highlightModifySelectedRetreat();
+            refreshModifyRetreatSelectButtons();
+        }
+
+        function setModifyActiveRetreatGuest(key) {
+            modifyActiveRetreatGuestKey = key;
+            renderModifyRetreatGuestTabs();
+        }
+
+        function highlightModifySelectedRetreat() {
+            const picked = (booking.retreatsByGuest || {})[modifyActiveRetreatGuestKey] || '';
+            document.querySelectorAll('#modifyRetreatGrid .retreat-card').forEach(c => {
+                const nameEl = c.querySelector('.retreat-card-name');
+                const isMatch = nameEl && nameEl.textContent.trim() === picked;
+                c.classList.toggle('selected', !!isMatch);
+            });
+        }
+
+        function refreshModifyRetreatSelectButtons() {
+            const picked = (booking.retreatsByGuest || {})[modifyActiveRetreatGuestKey] || '';
+            const isAr = getLang() === 'ar';
+            document.querySelectorAll('#modifyRetreatGrid .retreat-card').forEach(card => {
+                const nameEl = card.querySelector('.retreat-card-name');
+                const btn = card.querySelector('.retreat-select-btn');
+                if (!nameEl || !btn) return;
+                const isSelected = nameEl.textContent.trim() === picked;
+                btn.textContent = isSelected
+                    ? (isAr ? 'إلغاء التحديد' : 'Clear Selection')
+                    : (isAr ? 'اختيار' : 'Select');
+                btn.classList.toggle('is-selected', isSelected);
+            });
+        }
+
+        function selectModifyRetreat(card, name, price) {
+            if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
+            if (booking.retreatsByGuest[modifyActiveRetreatGuestKey] === name) {
+                delete booking.retreatsByGuest[modifyActiveRetreatGuestKey];
+                if (modifyActiveRetreatGuestKey === 'r0g1') {
+                    booking.retreatName = '';
+                    booking.retreatPrice = 0;
+                }
+            } else {
+                booking.retreatsByGuest[modifyActiveRetreatGuestKey] = name;
+                if (modifyActiveRetreatGuestKey === 'r0g1' || !booking.retreatName) {
+                    booking.retreatName = name;
+                    booking.retreatPrice = price;
+                }
+            }
+            highlightModifySelectedRetreat();
+            renderModifyRetreatGuestTabs();
+            refreshModifyRetreatSelectButtons();
             renderModifyPriceSummary();
         }
 
@@ -3755,19 +3946,54 @@
             card.classList.toggle('selected');
             const toggle = card.querySelector('.addon-toggle');
             if (toggle) toggle.classList.toggle('active');
+            // Show/hide airport transfer fields
+            if (card.dataset && card.dataset.name === 'Airport Transfer') {
+                const fields = document.getElementById('modifyAirportTransferFields');
+                if (fields) fields.style.display = card.classList.contains('selected') ? 'block' : 'none';
+            }
             renderModifyPriceSummary();
         }
 
         function renderModifyGuestForms() {
             const container = document.getElementById('modifyGuestFormsContainer');
             if (!container) return;
-            const rooms = booking.selectedRooms.length || booking.rooms || 1;
-            let html = '';
 
+            // Snapshot current input values so re-renders (e.g. on adults+/-) don't nuke them.
+            const preserved = {};
+            container.querySelectorAll('input, select').forEach(el => { if (el.id) preserved[el.id] = el.value; });
+
+            const adultsEl = document.getElementById('modifyAdults');
+            const childrenEl = document.getElementById('modifyChildren');
+            const adults = adultsEl ? (parseInt(adultsEl.textContent) || 0) : (booking.adults || 0);
+            const children = childrenEl ? (parseInt(childrenEl.textContent) || 0) : (booking.children || 0);
+            const rooms = Math.max(1, getModifyRoomsCount());
+
+            // Initialise per-room child allocation (mirrors main flow's renderGuestForms).
+            if (!booking.childrenByRoom || typeof booking.childrenByRoom !== 'object') {
+                booking.childrenByRoom = {};
+            }
+            let allocated = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+            if (allocated > children) {
+                booking.childrenByRoom = {};
+                allocated = 0;
+            }
+            if (allocated === 0 && children > 0) {
+                const base = Math.floor(children / rooms);
+                const extra = children % rooms;
+                for (let r = 0; r < rooms; r++) {
+                    booking.childrenByRoom[r] = base + (r < extra ? 1 : 0);
+                }
+            }
+
+            let html = '';
             for (let r = 0; r < rooms; r++) {
                 const isFirst = r === 0;
                 const roomName = (booking.selectedRooms[r] && booking.selectedRooms[r].name) || 'Room ' + (r + 1);
                 if (!booking.additionalGuests[r]) booking.additionalGuests[r] = 0;
+
+                // Determine adults assigned to this room (distribute evenly across rooms).
+                const adultsPerRoom = Math.ceil(adults / rooms);
+                const guestsInThisRoom = Math.max(1, (r < rooms - 1) ? adultsPerRoom : (adults - adultsPerRoom * r));
 
                 html += `<div class="room-accordion">
                     <div class="room-accordion-header ${isFirst ? 'active' : ''}" onclick="toggleModifyRoomAccordion(${r})">
@@ -3779,40 +4005,81 @@
                     </div>
                     <div class="room-accordion-content ${isFirst ? 'open' : ''}" id="modifyRoomAccordion${r}">`;
 
-                // Lead guest for this room
-                html += `<div class="guest-form-section" style="margin-bottom:0;border:none;padding:0;">
-                    <h3 class="guest-form-section-title">Guest 1 <span class="guest-badge">Lead Guest</span></h3>
-                    <div class="guest-form-grid">
-                        <div class="form-group"><label class="form-label">Title</label><select class="form-select" style="background:var(--open-white);" id="modifyRoom${r}Guest1Title"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
-                        <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input-white" id="modifyRoom${r}Guest1First" placeholder="Enter first name"></div>
-                        <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input-white" id="modifyRoom${r}Guest1Last" placeholder="Enter last name"></div>
-                        <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input-white" id="modifyRoom${r}Guest1Email" placeholder="email@example.com"></div>
-                        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input-white" id="modifyRoom${r}Guest1Phone" placeholder="+966 5XX XXX XXXX"></div>
-                        <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input-white" id="modifyRoom${r}Guest1Age" placeholder="Enter age" min="0" max="120"></div>
+                // Adult guests for this room (lead = guest 1)
+                for (let g = 1; g <= guestsInThisRoom; g++) {
+                    const isLead = g === 1;
+                    const required = isLead ? ' required' : '';
+                    const badge = isLead ? '<span class="guest-badge">Lead Guest</span>' : '';
+                    html += `<div class="guest-form-section" style="margin-bottom:var(--space-md);border:none;padding:0;">
+                        <h3 class="guest-form-section-title">Guest ${g} ${badge}</h3>
+                        <div class="guest-form-grid">
+                            <div class="form-group"><label class="form-label">Title</label><select class="form-select" style="background:var(--open-white);" id="modifyRoom${r}Guest${g}Title"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select></div>
+                            <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input-white" id="modifyRoom${r}Guest${g}First" placeholder="Enter first name"${required}></div>
+                            <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input-white" id="modifyRoom${r}Guest${g}Last" placeholder="Enter last name"${required}></div>
+                            <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input-white" id="modifyRoom${r}Guest${g}Email" placeholder="email@example.com"${required}></div>
+                            <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input-white" id="modifyRoom${r}Guest${g}Phone" placeholder="+966 5XX XXX XXXX"${required}></div>
+                            <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input-white" id="modifyRoom${r}Guest${g}Age" placeholder="Enter age" min="0" max="120"></div>
+                        </div>
                     </div>`;
+                }
 
-                // Additional guests
+                // Additional guests (extras beyond the auto-distributed adults)
                 const extraCount = booking.additionalGuests[r] || 0;
                 html += `<div id="modifyAdditionalGuests${r}">`;
                 for (let g = 0; g < extraCount; g++) {
-                    html += renderModifyAdditionalGuest(r, g + 2);
+                    html += renderModifyAdditionalGuest(r, guestsInThisRoom + g + 1);
                 }
                 html += `</div>`;
 
-                // Add guest button
+                // Per-room child rows
+                const childCount = booking.childrenByRoom[r] || 0;
+                for (let c = 1; c <= childCount; c++) {
+                    const childAge = (booking.childAges && booking.childAges[(r * 10) + (c - 1)]) || '';
+                    html += `<div class="guest-form-section child-row" style="margin-bottom:var(--space-md);padding-top:var(--space-md);" data-room="${r}" data-child="${c}">
+                        <h3 class="guest-form-section-title">
+                            Child ${c}
+                            <button type="button" class="remove-child-btn" onclick="removeModifyChildRow(this)">Remove</button>
+                        </h3>
+                        <div class="guest-form-grid">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-input-white" id="modifyR${r}Child${c}Name" placeholder="Enter first name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Age</label>
+                                <input type="number" min="0" max="17" class="form-input-white" id="modifyR${r}Child${c}Age" value="${childAge}" onchange="if(!booking.childAges) booking.childAges=[]; booking.childAges[${(r * 10) + (c - 1)}] = this.value;">
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                // Add Guest / Add Child buttons
+                const showAddChild = booking.destination !== 'jayasom';
                 html += `<div class="add-guest-section">
-                    <div class="add-guest-field">
+                    <div class="guest-actions-row">
                         <button class="add-guest-btn" onclick="addModifyGuest(${r})">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Add Guest
+                            + Add Guest
+                        </button>
+                        <button class="add-guest-btn add-child-btn" onclick="addModifyChildRow(${r})" style="${showAddChild ? '' : 'display:none;'}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            + Add Child
                         </button>
                     </div>
                 </div>`;
 
-                html += `</div></div></div>`;
+                html += `</div></div>`;
             }
 
             container.innerHTML = html;
+
+            // Restore preserved input values (e.g., on adults+1 / room qty change)
+            Object.keys(preserved).forEach(id => {
+                const el = document.getElementById(id);
+                if (el && preserved[id] !== '') el.value = preserved[id];
+            });
+
+            refreshModifyAddButtonCaps();
         }
 
         function renderModifyAdditionalGuest(roomIndex, guestNum) {
@@ -3838,18 +4105,121 @@
             content.classList.toggle('open');
         }
 
+        function totalModifyAdultRows() {
+            const c = document.getElementById('modifyGuestFormsContainer');
+            if (!c) return 0;
+            return c.querySelectorAll('.guest-form-section:not(.child-row)').length
+                 + c.querySelectorAll('.additional-guest-form').length;
+        }
+        function totalModifyChildRows() {
+            const c = document.getElementById('modifyGuestFormsContainer');
+            return c ? c.querySelectorAll('.guest-form-section.child-row').length : 0;
+        }
+        function refreshModifyAddButtonCaps() {
+            const adultsEl = document.getElementById('modifyAdults');
+            const childrenEl = document.getElementById('modifyChildren');
+            const adultsCap = adultsEl ? (parseInt(adultsEl.textContent) || 0) : (booking.adults || 0);
+            const childrenCap = childrenEl ? (parseInt(childrenEl.textContent) || 0) : (booking.children || 0);
+            const adultsNow = totalModifyAdultRows();
+            const childrenNow = totalModifyChildRows();
+            document.querySelectorAll('#modifyGuestFormsContainer .add-guest-btn:not(.add-child-btn)').forEach(btn => {
+                const atCap = adultsNow >= adultsCap;
+                btn.disabled = atCap;
+                btn.title = atCap ? `Cap reached (${adultsCap})` : '';
+            });
+            document.querySelectorAll('#modifyGuestFormsContainer .add-child-btn').forEach(btn => {
+                const atCap = childrenNow >= childrenCap;
+                btn.disabled = atCap;
+                btn.style.display = (childrenCap > 0 && booking.destination !== 'jayasom') ? '' : 'none';
+                btn.title = atCap ? `Cap reached (${childrenCap})` : '';
+            });
+        }
+
         function addModifyGuest(roomIndex) {
+            if (totalModifyAdultRows() >= ((parseInt(document.getElementById('modifyAdults').textContent)) || 0)) return;
             if (!booking.additionalGuests[roomIndex]) booking.additionalGuests[roomIndex] = 0;
             booking.additionalGuests[roomIndex]++;
-            const guestNum = booking.additionalGuests[roomIndex] + 1;
+            const adultsEl = document.getElementById('modifyAdults');
+            const adults = adultsEl ? (parseInt(adultsEl.textContent) || 0) : (booking.adults || 0);
+            const rooms = Math.max(1, getModifyRoomsCount());
+            const adultsPerRoom = Math.ceil(adults / rooms);
+            const baseGuests = Math.max(1, (roomIndex < rooms - 1) ? adultsPerRoom : (adults - adultsPerRoom * roomIndex));
+            const guestNum = baseGuests + booking.additionalGuests[roomIndex];
             const container = document.getElementById('modifyAdditionalGuests' + roomIndex);
             if (container) container.insertAdjacentHTML('beforeend', renderModifyAdditionalGuest(roomIndex, guestNum));
+            refreshModifyAddButtonCaps();
         }
 
         function removeModifyGuest(roomIndex, guestNum) {
             const el = document.getElementById('modifyRoom' + roomIndex + 'guest' + guestNum);
             if (el) el.remove();
             booking.additionalGuests[roomIndex] = Math.max(0, (booking.additionalGuests[roomIndex] || 0) - 1);
+            refreshModifyAddButtonCaps();
+        }
+
+        function addModifyChildRow(roomIndex) {
+            if (!booking.childrenByRoom) booking.childrenByRoom = {};
+            const childrenEl = document.getElementById('modifyChildren');
+            const cap = childrenEl ? (parseInt(childrenEl.textContent) || 0) : (booking.children || 0);
+            if (totalModifyChildRows() >= cap) return;
+            const accordionContent = document.getElementById('modifyRoomAccordion' + roomIndex);
+            if (!accordionContent) return;
+            const addSection = accordionContent.querySelector('.add-guest-section');
+            if (!addSection) return;
+            const nextC = (booking.childrenByRoom[roomIndex] || 0) + 1;
+            booking.childrenByRoom[roomIndex] = nextC;
+            const childAge = (booking.childAges && booking.childAges[(roomIndex * 10) + (nextC - 1)]) || '';
+            const html = `<div class="guest-form-section child-row" style="margin-bottom:var(--space-md);padding-top:var(--space-md);" data-room="${roomIndex}" data-child="${nextC}">
+                <h3 class="guest-form-section-title">
+                    Child ${nextC}
+                    <button type="button" class="remove-child-btn" onclick="removeModifyChildRow(this)">Remove</button>
+                </h3>
+                <div class="guest-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input-white" id="modifyR${roomIndex}Child${nextC}Name" placeholder="Enter first name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" min="0" max="17" class="form-input-white" id="modifyR${roomIndex}Child${nextC}Age" value="${childAge}" onchange="if(!booking.childAges) booking.childAges=[]; booking.childAges[${(roomIndex * 10) + (nextC - 1)}] = this.value;">
+                    </div>
+                </div>
+            </div>`;
+            addSection.insertAdjacentHTML('beforebegin', html);
+            refreshModifyAddButtonCaps();
+            renderModifyPriceSummary();
+        }
+
+        function removeModifyChildRow(btn) {
+            const row = btn && btn.closest ? btn.closest('.child-row') : null;
+            if (!row) return;
+            const roomIndex = parseInt(row.getAttribute('data-room'));
+            if (isNaN(roomIndex)) return;
+            row.remove();
+            if (!booking.childrenByRoom) booking.childrenByRoom = {};
+            const remaining = Array.from(document.querySelectorAll(`#modifyGuestFormsContainer .child-row[data-room="${roomIndex}"]`));
+            booking.childrenByRoom[roomIndex] = remaining.length;
+            // Renumber remaining child rows in this room.
+            remaining.forEach((el, i) => {
+                const newIdx = i + 1;
+                el.setAttribute('data-child', newIdx);
+                const title = el.querySelector('.guest-form-section-title');
+                if (title) {
+                    const oldText = title.firstChild;
+                    if (oldText && oldText.nodeType === 3) {
+                        oldText.nodeValue = `\n                    Child ${newIdx}\n                    `;
+                    }
+                }
+                const nameInput = el.querySelector('input[type="text"]');
+                const ageInput = el.querySelector('input[type="number"]');
+                if (nameInput) nameInput.id = `modifyR${roomIndex}Child${newIdx}Name`;
+                if (ageInput) {
+                    ageInput.id = `modifyR${roomIndex}Child${newIdx}Age`;
+                    ageInput.setAttribute('onchange', `if(!booking.childAges) booking.childAges=[]; booking.childAges[${(roomIndex * 10) + (newIdx - 1)}] = this.value;`);
+                }
+            });
+            refreshModifyAddButtonCaps();
+            renderModifyPriceSummary();
         }
 
         function updateModifyCount(id, delta) {
@@ -3861,7 +4231,23 @@
             el.textContent = val;
             el.style.transform = 'scale(1.3)';
             setTimeout(() => el.style.transform = 'scale(1)', 200);
-            if (id === 'modifyChildren') renderModifyChildAgeSelectors();
+            if (id === 'modifyAdults') {
+                booking.adults = val;
+                renderModifyRetreatGuestTabs();
+                renderModifyGuestForms();
+            }
+            if (id === 'modifyChildren') {
+                booking.children = val;
+                // Rebalance childrenByRoom if total exceeds new cap
+                if (booking.childrenByRoom) {
+                    let allocated = Object.values(booking.childrenByRoom).reduce((a, b) => a + (parseInt(b) || 0), 0);
+                    if (allocated > val) booking.childrenByRoom = {};
+                }
+                renderModifyChildAgeSelectors();
+                renderModifyGuestForms();
+            }
+            validateModifyRoomCapacity();
+            renderModifyPriceSummary();
         }
 
         let modifyChildAges = [];
@@ -3901,10 +4287,17 @@
             booking.adults = parseInt(document.getElementById('modifyAdults').textContent);
             booking.children = parseInt(document.getElementById('modifyChildren').textContent);
 
-            const selectedRetreatCard = document.querySelector('#modifyRetreatGrid .retreat-card.selected');
-            if (selectedRetreatCard) {
-                booking.retreatName = selectedRetreatCard.querySelector('.retreat-card-name').textContent;
-                booking.retreatPrice = parseInt(selectedRetreatCard.dataset.price, 10);
+            // booking.retreatName / retreatPrice are maintained by selectModifyRetreat
+            // (keyed to the r0g1 guest). Don't read .selected from the DOM here — it
+            // reflects whichever per-guest tab is currently active.
+            if (booking.retreatsByGuest && booking.retreatsByGuest['r0g1']) {
+                const r0g1Name = booking.retreatsByGuest['r0g1'];
+                const matchCard = Array.from(document.querySelectorAll('#modifyRetreatGrid .retreat-card'))
+                    .find(c => c.querySelector('.retreat-card-name').textContent.trim() === r0g1Name);
+                if (matchCard) {
+                    booking.retreatName = r0g1Name;
+                    booking.retreatPrice = parseInt(matchCard.dataset.price, 10);
+                }
             }
 
             booking.selectedRooms = [];
@@ -5990,8 +6383,39 @@
             el.textContent = val;
             el.style.transform = 'scale(1.3)';
             setTimeout(() => el.style.transform = 'scale(1)', 200);
+            // Highlight card if qty > 0
+            const card = el.closest('.room-card');
+            if (card) card.classList.toggle('selected', val > 0);
             renderModifyPriceSummary();
+            validateModifyRoomCapacity();
+            renderModifyRetreatGuestTabs();
+            renderModifyGuestForms();
             if (document.getElementById('modifyBookingCalendar')) renderModifyCalendar();
+        }
+
+        function validateModifyRoomCapacity() {
+            const warning = document.getElementById('modifyRoomCapacityWarning');
+            if (!warning) return;
+            const adultsEl = document.getElementById('modifyAdults');
+            const childrenEl = document.getElementById('modifyChildren');
+            const adults = adultsEl ? (parseInt(adultsEl.textContent) || 0) : (booking.adults || 0);
+            const children = childrenEl ? (parseInt(childrenEl.textContent) || 0) : (booking.children || 0);
+            const totalGuests = adults + children;
+            const capacityMap = { modifyDesert: 2, modifySea: 3, modifyPresidential: 4 };
+            let totalCapacity = 0;
+            let totalRooms = 0;
+            for (const id in capacityMap) {
+                const el = document.getElementById(id);
+                const qty = el ? (parseInt(el.textContent) || 0) : 0;
+                totalRooms += qty;
+                totalCapacity += qty * capacityMap[id];
+            }
+            if (totalRooms > 0 && totalCapacity < totalGuests) {
+                warning.style.display = 'block';
+                warning.innerHTML = `<strong>Capacity Notice:</strong> Your selected rooms accommodate up to ${totalCapacity} guests, but you have ${totalGuests} guests. Please add more rooms or choose a larger room type.`;
+            } else {
+                warning.style.display = 'none';
+            }
         }
 
         // ===== CUSTOM CALENDAR =====
