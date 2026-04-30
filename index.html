@@ -79,6 +79,31 @@
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-light);
         }
+        /* Transparent header over the landing hero */
+        body.is-landing .header {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            border-bottom: none !important;
+        }
+        body.is-landing .logo-text,
+        body.is-landing .header-manage-link,
+        body.is-landing .header-phone,
+        body.is-landing .header-phone span,
+        body.is-landing .lang-switch {
+            color: #fff;
+        }
+        body.is-landing .lang-switch {
+            border-color: rgba(255,255,255,0.4);
+        }
+        body.is-landing .currency-switch {
+            background: transparent;
+            border-color: rgba(255,255,255,0.4);
+            color: #fff;
+        }
+        body.is-landing .header-phone svg { stroke: #fff; }
+        /* On the landing page, let the hero extend behind the transparent header */
+        body.is-landing .main-content { margin-top: 0; min-height: 100vh; }
+        body.is-landing .hero-section { min-height: 100vh; }
         .header-inner {
             max-width: 1400px; margin: 0 auto;
             padding: 0 var(--space-2xl);
@@ -2311,7 +2336,7 @@
         }
     </style>
 </head>
-<body>
+<body class="is-landing">
 
     <!-- HEADER -->
     <header class="header">
@@ -3474,12 +3499,14 @@
                 document.getElementById('step1').classList.add('active');
                 document.getElementById('stepLayout').style.display = 'none';
                 document.getElementById('mainFooter').style.display = 'none';
+                document.body.classList.add('is-landing');
             } else {
                 document.getElementById('stepLayout').style.display = 'flex';
                 document.getElementById('mainFooter').style.display = 'block';
                 document.getElementById('verticalStepper').classList.remove('hidden');
                 const stepId = 'step' + step;
                 document.getElementById(stepId).classList.add('active');
+                document.body.classList.remove('is-landing');
             }
 
             // Update steppers
@@ -3642,6 +3669,7 @@
 
         // ===== MANAGE BOOKING =====
         function showManageBooking() {
+            document.body.classList.remove('is-landing');
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
             document.getElementById('stepLayout').style.display = 'flex';
             document.getElementById('mainFooter').style.display = 'block';
@@ -3703,6 +3731,7 @@
         let originalBookingTotal = 0;
 
         function showModifyBooking() {
+            document.body.classList.remove('is-landing');
             // Capture the original total before any modifications
             originalBookingTotal = getTotal();
 
@@ -6781,6 +6810,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderCalendar();
             applyDestinationVisibility();
+            if (document.getElementById('step1') && document.getElementById('step1').classList.contains('active')) {
+                document.body.classList.add('is-landing');
+            }
         });
 
     </script>
