@@ -3743,7 +3743,8 @@
                 adults: booking.adults,
                 children: booking.children,
                 checkin: booking.checkin,
-                checkout: booking.checkout
+                checkout: booking.checkout,
+                guestTreatmentsTotal: (typeof computeGuestTreatmentsTotal === 'function') ? computeGuestTreatmentsTotal().total : 0
             };
 
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
@@ -4397,7 +4398,8 @@
             var retreatTotal = booking.retreatPrice * booking.adults;
             var roomTotal = getRoomTotal();
             var addonsTotal = booking.addons.reduce(function(s, a) { return s + a.price; }, 0);
-            var total = retreatTotal + roomTotal + addonsTotal;
+            var guestTreatments = (typeof computeGuestTreatmentsTotal === 'function') ? computeGuestTreatmentsTotal() : { total: 0, count: 0 };
+            var total = retreatTotal + roomTotal + addonsTotal + guestTreatments.total;
             var orig = window._originalModifyState;
             var updBadge = '<span style="font-size:9px;background:var(--soft-coral);color:white;padding:2px 6px;border-radius:8px;margin-left:6px;">Updated</span>';
             var newBadge = '<span style="font-size:9px;background:var(--delicate-green);color:white;padding:2px 6px;border-radius:8px;margin-left:6px;">New</span>';
@@ -4414,6 +4416,11 @@
             if (booking.addons.length > 0) {
                 var addonsChanged = orig && (booking.addons.length !== orig.addons.length || booking.addons.some(function(a) { return !orig.addons.some(function(oa) { return oa.name === a.name; }); }));
                 html += '<div class="price-line"><div><div class="price-line-label">Additional Treatments' + (addonsChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + booking.addons.length + ' selected</div></div><div class="price-line-value">' + formatCurrency(addonsTotal) + '</div></div>';
+            }
+            if (guestTreatments.count > 0) {
+                var origTreatmentsTotal = (orig && typeof orig.guestTreatmentsTotal === 'number') ? orig.guestTreatmentsTotal : null;
+                var treatmentsChanged = origTreatmentsTotal !== null && guestTreatments.total !== origTreatmentsTotal;
+                html += '<div class="price-line"><div><div class="price-line-label">Treatments' + (treatmentsChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + guestTreatments.count + ' selected</div></div><div class="price-line-value">' + formatCurrency(guestTreatments.total) + '</div></div>';
             }
             html += '<div class="price-divider"></div>';
             html += '<div class="price-total-line"><span class="price-total-label">Total</span><span class="price-total-value">' + formatCurrency(total) + '</span></div>';
@@ -4437,6 +4444,9 @@
             booking.addons.forEach(function(a) {
                 newHtml += '<div class="summary-row"><span class="summary-row-label">' + a.name + '</span><span class="summary-row-value">' + formatCurrency(a.price) + '</span></div>';
             });
+            if (guestTreatments.total > 0) {
+                newHtml += '<div class="summary-row"><span class="summary-row-label">Treatments (' + guestTreatments.count + ')</span><span class="summary-row-value">' + formatCurrency(guestTreatments.total) + '</span></div>';
+            }
             newHtml += '<div style="height:1px;background:var(--border-light);margin:var(--space-md) 0;"></div>';
             newHtml += '<div class="summary-row"><span class="summary-row-label" style="font-weight:700;">New Total</span><span class="summary-row-value" style="font-weight:700;font-size:16px;">' + formatCurrency(newTotal) + '</span></div>';
             var newCard = document.getElementById('modifySidebarNew');
@@ -5157,6 +5167,10 @@
                 }
             }
             if (currentStep === 5 && typeof renderMergedSummaryPayment === 'function') renderMergedSummaryPayment();
+            var modifyActive = document.getElementById('stepModify');
+            if (modifyActive && modifyActive.classList.contains('active') && typeof renderModifyPriceSummary === 'function') {
+                renderModifyPriceSummary();
+            }
         }
 
         function rerenderGuestFormsPreservingInputs() {
