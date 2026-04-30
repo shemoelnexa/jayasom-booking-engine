@@ -3000,8 +3000,24 @@
                                                 <button class="counter-btn" onclick="updateModifyCount('modifyChildren', 1)">+</button>
                                             </div>
                                         </div>
+                                        <div class="form-group guest-group" id="modifyInfantsGroup">
+                                            <label class="form-label">Infants <span style="font-weight:400;color:var(--text-muted);font-size:11px;">(0–3)</span></label>
+                                            <div class="guest-counter">
+                                                <button class="counter-btn" onclick="updateModifyCount('modifyInfants', -1)">-</button>
+                                                <span class="counter-value" id="modifyInfants">0</span>
+                                                <button class="counter-btn" onclick="updateModifyCount('modifyInfants', 1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group guest-group" id="modifyCaretakersGroup">
+                                            <label class="form-label" id="modifyCaretakersLabel">Caretakers</label>
+                                            <div class="guest-counter">
+                                                <button class="counter-btn" onclick="updateModifyCount('modifyCaretakers', -1)">-</button>
+                                                <span class="counter-value" id="modifyCaretakers">0</span>
+                                                <button class="counter-btn" onclick="updateModifyCount('modifyCaretakers', 1)">+</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div id="modifyChildAgesContainer" style="margin-top:var(--space-md);"></div>
+                                    <div id="modifyChildAgesContainer" style="margin-top:var(--space-md);display:none;"></div>
                                 </div>
 
                                 <!-- Retreat Selection (card-based) -->
@@ -3719,18 +3735,21 @@
                 }
             }
 
-            // Apply destination visibility — hide children counter for adults-only (jayasom).
+            // Apply destination visibility — hide children/infants and rename caretakers for adults-only (jayasom).
             const isAdultsOnly = booking.destination === 'jayasom';
             const childrenGroup = document.getElementById('modifyChildrenGroup');
             if (childrenGroup) childrenGroup.style.display = isAdultsOnly ? 'none' : '';
-            const ageContainer = document.getElementById('modifyChildAgesContainer');
-            if (ageContainer) ageContainer.style.display = 'none'; // per-room rows replace this
+            const infantsGroup = document.getElementById('modifyInfantsGroup');
+            if (infantsGroup) infantsGroup.style.display = isAdultsOnly ? 'none' : '';
+            const caretakersLabelEl = document.getElementById('modifyCaretakersLabel');
+            if (caretakersLabelEl) caretakersLabelEl.textContent = isAdultsOnly ? 'Support Staff' : 'Caretakers';
             const guestCountersGrid = document.getElementById('modifyGuestCountersGrid');
-            if (guestCountersGrid) guestCountersGrid.style.gridTemplateColumns = isAdultsOnly ? '1fr' : '1fr 1fr';
+            if (guestCountersGrid) guestCountersGrid.style.gridTemplateColumns = isAdultsOnly ? '1fr 1fr' : '1fr 1fr';
             if (isAdultsOnly && booking.children > 0) {
                 booking.children = 0;
                 booking.childrenByRoom = {};
             }
+            if (isAdultsOnly && booking.infants > 0) booking.infants = 0;
 
             // Restore action buttons including policy checkboxes (cancel flow may have replaced them).
             document.getElementById('modifySidebarActions').innerHTML = ''
@@ -3746,6 +3765,10 @@
             document.getElementById('modifyCheckout').value = booking.checkout;
             document.getElementById('modifyAdults').textContent = booking.adults;
             document.getElementById('modifyChildren').textContent = booking.children;
+            const modifyInfantsEl = document.getElementById('modifyInfants');
+            if (modifyInfantsEl) modifyInfantsEl.textContent = booking.infants || 0;
+            const modifyCaretakersEl = document.getElementById('modifyCaretakers');
+            if (modifyCaretakersEl) modifyCaretakersEl.textContent = booking.caretakers || 0;
 
             // Init modify calendar state
             modifyCalendarCheckin = new Date(booking.checkin);
@@ -4018,8 +4041,10 @@
                             <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input-white" id="modifyRoom${r}Guest${g}Last" placeholder="Enter last name"${required}></div>
                             <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input-white" id="modifyRoom${r}Guest${g}Email" placeholder="email@example.com"${required}></div>
                             <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input-white" id="modifyRoom${r}Guest${g}Phone" placeholder="+966 5XX XXX XXXX"${required}></div>
-                            <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input-white" id="modifyRoom${r}Guest${g}Age" placeholder="Enter age" min="0" max="120"></div>
+                            <div class="form-group"><label class="form-label">Age <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><input type="number" class="form-input-white" id="modifyRoom${r}Guest${g}Age" placeholder="Enter age" min="0" max="120"></div>
+                            <div class="form-group"><label class="form-label">Gender <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);" id="modifyRoom${r}Guest${g}Gender"><option value="">Prefer not to say</option><option>Male</option><option>Female</option></select></div>
                         </div>
+                        ${typeof renderGuestTreatments === 'function' ? renderGuestTreatments(r, g) : ''}
                     </div>`;
                 }
 
@@ -4092,8 +4117,10 @@
                     <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input-white" placeholder="Enter last name"></div>
                     <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input-white" placeholder="email@example.com"></div>
                     <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input-white" placeholder="+966 5XX XXX XXXX"></div>
-                    <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input-white" placeholder="Enter age" min="0" max="120"></div>
+                    <div class="form-group"><label class="form-label">Age <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><input type="number" class="form-input-white" placeholder="Enter age" min="0" max="120"></div>
+                    <div class="form-group"><label class="form-label">Gender <span style="font-size:9px;color:var(--text-muted);">(optional)</span></label><select class="form-select" style="background:var(--open-white);"><option value="">Prefer not to say</option><option>Male</option><option>Female</option></select></div>
                 </div>
+                ${typeof renderGuestTreatments === 'function' ? renderGuestTreatments(roomIndex, guestNum) : ''}
             </div>`;
         }
 
@@ -4246,6 +4273,8 @@
                 renderModifyChildAgeSelectors();
                 renderModifyGuestForms();
             }
+            if (id === 'modifyInfants') booking.infants = val;
+            if (id === 'modifyCaretakers') booking.caretakers = val;
             validateModifyRoomCapacity();
             renderModifyPriceSummary();
         }
@@ -4255,7 +4284,12 @@
             const container = document.getElementById('modifyChildAgesContainer');
             if (!container) return;
             const count = parseInt(document.getElementById('modifyChildren').textContent) || 0;
-            if (count === 0) { container.innerHTML = ''; return; }
+            if (count === 0) {
+                container.style.display = 'none';
+                container.innerHTML = '';
+                return;
+            }
+            container.style.display = 'block';
             let html = '<label class="form-label" style="margin-bottom:8px;">Child Ages</label>'
                 + '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">Brackets: ' + CHILD_AGE_BRACKETS + '</div>'
                 + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">';
@@ -4286,6 +4320,10 @@
             booking.checkout = document.getElementById('modifyCheckout').value;
             booking.adults = parseInt(document.getElementById('modifyAdults').textContent);
             booking.children = parseInt(document.getElementById('modifyChildren').textContent);
+            const _modInf = document.getElementById('modifyInfants');
+            if (_modInf) booking.infants = parseInt(_modInf.textContent) || 0;
+            const _modCare = document.getElementById('modifyCaretakers');
+            if (_modCare) booking.caretakers = parseInt(_modCare.textContent) || 0;
 
             // booking.retreatName / retreatPrice are maintained by selectModifyRetreat
             // (keyed to the r0g1 guest). Don't read .selected from the DOM here — it
