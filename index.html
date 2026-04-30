@@ -79,31 +79,6 @@
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-light);
         }
-        /* Transparent header over the landing hero */
-        body.is-landing .header {
-            background: transparent !important;
-            backdrop-filter: none !important;
-            border-bottom: none !important;
-        }
-        body.is-landing .logo-text,
-        body.is-landing .header-manage-link,
-        body.is-landing .header-phone,
-        body.is-landing .header-phone span,
-        body.is-landing .lang-switch {
-            color: #fff;
-        }
-        body.is-landing .lang-switch {
-            border-color: rgba(255,255,255,0.4);
-        }
-        body.is-landing .currency-switch {
-            background: transparent;
-            border-color: rgba(255,255,255,0.4);
-            color: #fff;
-        }
-        body.is-landing .header-phone svg { stroke: #fff; }
-        /* On the landing page, let the hero extend behind the transparent header */
-        body.is-landing .main-content { margin-top: 0; min-height: 100vh; }
-        body.is-landing .hero-section { min-height: 100vh; }
         .header-inner {
             max-width: 1400px; margin: 0 auto;
             padding: 0 var(--space-2xl);
@@ -3398,8 +3373,66 @@
             return diff > 0 ? diff : 1;
         }
 
+        const RETREAT_PRICES = {
+            'The Renewal Retreat': 28500,
+            'The Reset Experience': 19200,
+            'The Reclaim Journey': 52000,
+            'The Weekend Pause': 9800
+        };
+
+        // Group adult guests by their selected retreat. Unassigned guests
+        // fall back to the lead's retreat so the common "all guests share
+        // the lead's retreat" case behaves like price × adults.
+        function summarizeRetreats() {
+            const adults = booking.adults || 0;
+            const map = booking.retreatsByGuest || {};
+            const fallbackName = booking.retreatName || '';
+            const fallbackPrice = booking.retreatPrice || 0;
+            const hasMap = Object.keys(map).length > 0;
+            const result = {};
+
+            if (!hasMap) {
+                if (fallbackName && adults > 0) {
+                    result[fallbackName] = { count: adults, price: fallbackPrice };
+                }
+                return result;
+            }
+
+            const guests = (typeof listRetreatGuests === 'function')
+                ? listRetreatGuests()
+                : Array.from({ length: adults }, (_, i) => ({ key: 'r0g' + (i + 1) }));
+
+            guests.forEach(g => {
+                const name = map[g.key] || fallbackName;
+                if (!name) return;
+                const price = (RETREAT_PRICES[name] != null)
+                    ? RETREAT_PRICES[name]
+                    : (name === fallbackName ? fallbackPrice : 0);
+                if (!result[name]) result[name] = { count: 0, price };
+                result[name].count += 1;
+            });
+            return result;
+        }
+
+        function computeRetreatTotal() {
+            const breakdown = summarizeRetreats();
+            let total = 0;
+            for (const info of Object.values(breakdown)) {
+                total += info.count * info.price;
+            }
+            return total;
+        }
+
+        function retreatDisplayLabel() {
+            const breakdown = summarizeRetreats();
+            const names = Object.keys(breakdown);
+            if (names.length === 0) return booking.retreatName || 'N/A';
+            if (names.length === 1) return names[0];
+            return names.map(n => `${n} (${breakdown[n].count})`).join(', ');
+        }
+
         function getTotal() {
-            const retreatTotal = booking.retreatPrice * booking.adults;
+            const retreatTotal = computeRetreatTotal();
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             const treatmentsTotal = typeof computeGuestTreatmentsTotal === 'function' ? computeGuestTreatmentsTotal().total : 0;
@@ -4395,7 +4428,7 @@
             // Temporarily sync state to calculate
             syncModifyBookingState();
             var nights = getNights();
-            var retreatTotal = booking.retreatPrice * booking.adults;
+            var retreatTotal = computeRetreatTotal();
             var roomTotal = getRoomTotal();
             var addonsTotal = booking.addons.reduce(function(s, a) { return s + a.price; }, 0);
             var guestTreatments = (typeof computeGuestTreatmentsTotal === 'function') ? computeGuestTreatmentsTotal() : { total: 0, count: 0 };
@@ -4405,9 +4438,18 @@
             var newBadge = '<span style="font-size:9px;background:var(--delicate-green);color:white;padding:2px 6px;border-radius:8px;margin-left:6px;">New</span>';
 
             var html = '<h3 class="price-summary-title">Your Journey Summary</h3>';
-            if (booking.retreatName) {
-                var retreatChanged = orig && (booking.retreatName !== orig.retreatName || booking.retreatPrice !== orig.retreatPrice || booking.adults !== orig.adults);
-                html += '<div class="price-line"><div><div class="price-line-label">' + booking.retreatName + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + guestsSummaryText() + '</div></div><div class="price-line-value">' + formatCurrency(retreatTotal) + '</div></div>';
+            var retreatBreakdown = summarizeRetreats();
+            var retreatNames = Object.keys(retreatBreakdown);
+            var retreatChanged = orig && (retreatTotal !== ((orig.retreatPrice || 0) * (orig.adults || 0)));
+            if (retreatNames.length === 1) {
+                var only = retreatBreakdown[retreatNames[0]];
+                html += '<div class="price-line"><div><div class="price-line-label">' + retreatNames[0] + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + guestsSummaryText() + '</div></div><div class="price-line-value">' + formatCurrency(only.count * only.price) + '</div></div>';
+            } else if (retreatNames.length > 1) {
+                retreatNames.forEach(function(name) {
+                    var info = retreatBreakdown[name];
+                    var sub = info.count + ' ' + (info.count === 1 ? 'guest' : 'guests');
+                    html += '<div class="price-line"><div><div class="price-line-label">' + name + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + sub + '</div></div><div class="price-line-value">' + formatCurrency(info.count * info.price) + '</div></div>';
+                });
             }
             booking.selectedRooms.forEach(function(r) {
                 var isNew = orig && !orig.rooms.some(function(or) { return or.name === r.name; });
@@ -4435,9 +4477,11 @@
             origCard.innerHTML = '<h4 class="summary-card-title">Original Booking</h4><div class="summary-row"><span class="summary-row-label">Original Total</span><span class="summary-row-value">' + formatCurrency(originalBookingTotal) + '</span></div>';
 
             var newHtml = '<h4 class="summary-card-title">Updated Breakdown</h4>';
-            if (booking.retreatName) {
-                newHtml += '<div class="summary-row"><span class="summary-row-label">Retreat: ' + booking.retreatName + '</span><span class="summary-row-value">' + formatCurrency(retreatTotal) + '</span></div>';
-            }
+            retreatNames.forEach(function(name) {
+                var info = retreatBreakdown[name];
+                var label = retreatNames.length > 1 ? (name + ' (' + info.count + ')') : ('Retreat: ' + name);
+                newHtml += '<div class="summary-row"><span class="summary-row-label">' + label + '</span><span class="summary-row-value">' + formatCurrency(info.count * info.price) + '</span></div>';
+            });
             booking.selectedRooms.forEach(function(r) {
                 newHtml += '<div class="summary-row"><span class="summary-row-label">Room: ' + r.name + '</span><span class="summary-row-value">' + formatCurrency(r.pricePerNight * nights) + '</span></div>';
             });
@@ -4519,7 +4563,7 @@
             document.getElementById('modifySuccessSubtitle').textContent = detailText;
 
             var detailsHtml = '';
-            detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Retreat</span><span class="confirmation-detail-value">' + (booking.retreatName || 'N/A') + '</span></div>';
+            detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Retreat</span><span class="confirmation-detail-value">' + retreatDisplayLabel() + '</span></div>';
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-in</span><span class="confirmation-detail-value">' + booking.checkin + '</span></div>';
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Check-out</span><span class="confirmation-detail-value">' + booking.checkout + '</span></div>';
             detailsHtml += '<div class="confirmation-detail-row"><span class="confirmation-detail-label">Nights</span><span class="confirmation-detail-value">' + nights + '</span></div>';
@@ -4991,14 +5035,12 @@
         }
 
         function selectRetreatFromDrawer(name, price) {
-            document.querySelectorAll('#retreatGrid .retreat-card').forEach(c => c.classList.remove('selected'));
-            document.querySelectorAll('#retreatGrid .retreat-card').forEach(c => {
-                const cardName = c.querySelector('.retreat-card-name').textContent;
-                if (cardName === name) c.classList.add('selected');
-            });
-            booking.retreatName = name;
-            booking.retreatPrice = price;
-            renderPriceSummary('priceSummaryStep2');
+            const target = Array.from(document.querySelectorAll('#retreatGrid .retreat-card'))
+                .find(c => {
+                    const n = c.querySelector('.retreat-card-name');
+                    return n && n.textContent.trim() === name;
+                });
+            if (target) selectRetreatDirect(target, name, price);
             closeDetailDrawer();
         }
 
@@ -5347,7 +5389,7 @@
             const el = document.getElementById(containerId);
             if (!el) return;
             const nights = getNights();
-            const retreatTotal = booking.retreatPrice * booking.adults;
+            const retreatTotal = computeRetreatTotal();
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             const guestTreatments = computeGuestTreatmentsTotal();
@@ -5356,8 +5398,19 @@
             const isAr = currentLang === 'ar';
             const t = translations.ar;
             let html = `<h3 class="price-summary-title">${isAr ? t.journeySummary : 'Your Journey Summary'}</h3>`;
-            if (booking.retreatName) {
-                html += `<div class="price-line"><div><div class="price-line-label">${booking.retreatName}</div><div class="price-line-sublabel">${guestsSummaryText()}</div></div><div class="price-line-value">${formatCurrency(retreatTotal)}</div></div>`;
+            const retreatBreakdown = summarizeRetreats();
+            const retreatNames = Object.keys(retreatBreakdown);
+            if (retreatNames.length === 1) {
+                const only = retreatBreakdown[retreatNames[0]];
+                html += `<div class="price-line"><div><div class="price-line-label">${retreatNames[0]}</div><div class="price-line-sublabel">${guestsSummaryText()}</div></div><div class="price-line-value">${formatCurrency(only.count * only.price)}</div></div>`;
+            } else if (retreatNames.length > 1) {
+                retreatNames.forEach(name => {
+                    const info = retreatBreakdown[name];
+                    const sub = isAr
+                        ? `${info.count} ${info.count === 1 ? 'ضيف' : 'ضيوف'}`
+                        : `${info.count} ${info.count === 1 ? 'guest' : 'guests'}`;
+                    html += `<div class="price-line"><div><div class="price-line-label">${name}</div><div class="price-line-sublabel">${sub}</div></div><div class="price-line-value">${formatCurrency(info.count * info.price)}</div></div>`;
+                });
             }
             booking.selectedRooms.forEach(r => {
                 html += `<div class="price-line"><div><div class="price-line-label">${r.name}</div><div class="price-line-sublabel">1 ${isAr ? 'غرفة' : 'room'} &times; ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatCurrency(r.pricePerNight * nights)}</div></div>`;
@@ -5380,7 +5433,7 @@
 
             // Render payment breakdown in sidebar
             const nights = getNights();
-            const retreatTotal = booking.retreatPrice * booking.adults;
+            const retreatTotal = computeRetreatTotal();
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             const guestTreatments = computeGuestTreatmentsTotal();
@@ -5402,7 +5455,7 @@
         function renderPriceBreakdown() {
             const el = document.getElementById('priceBreakdownCard');
             const nights = getNights();
-            const retreatTotal = booking.retreatPrice * booking.adults;
+            const retreatTotal = computeRetreatTotal();
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             const total = retreatTotal + roomTotal + addonsTotal;
@@ -5797,7 +5850,7 @@
             });
             document.getElementById('summarySelectionsCard').innerHTML = selectionsHtml;
 
-            const retreatTotal = booking.retreatPrice * booking.adults;
+            const retreatTotal = computeRetreatTotal();
             const roomTotal = getRoomTotal();
             const addonsTotal = booking.addons.reduce((s, a) => s + a.price, 0);
             let breakdownHtml = `<div style="margin-bottom:var(--space-lg);">
@@ -5821,7 +5874,7 @@
             const opts = { day: 'numeric', month: 'long', year: 'numeric' };
 
             let html = '';
-            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.retreat : 'Retreat'}</span><span class="confirmation-detail-value">${booking.retreatName || 'N/A'}</span></div>`;
+            html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.retreat : 'Retreat'}</span><span class="confirmation-detail-value">${retreatDisplayLabel()}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.room : 'Room(s)'}</span><span class="confirmation-detail-value">${getRoomNames()}</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkin : 'Check-in'}</span><span class="confirmation-detail-value">${ci.toLocaleDateString(locale, opts)}, 3:00 PM</span></div>`;
             html += `<div class="confirmation-detail-row"><span class="confirmation-detail-label">${isAr ? t.checkout : 'Check-out'}</span><span class="confirmation-detail-value">${co.toLocaleDateString(locale, opts)}, 12:00 PM</span></div>`;
