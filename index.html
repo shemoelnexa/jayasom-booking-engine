@@ -3380,9 +3380,9 @@
             'The Weekend Pause': 9800
         };
 
-        // Group adult guests by their selected retreat. Unassigned guests
-        // fall back to the lead's retreat so the common "all guests share
-        // the lead's retreat" case behaves like price × adults.
+        // Group adult guests by their selected retreat. Each guest must
+        // be explicitly assigned a retreat to be charged — no implicit
+        // extrapolation to unassigned guests.
         function summarizeRetreats() {
             const adults = booking.adults || 0;
             const map = booking.retreatsByGuest || {};
@@ -3391,6 +3391,8 @@
             const hasMap = Object.keys(map).length > 0;
             const result = {};
 
+            // Legacy path: no per-guest entries but a single retreat is
+            // chosen — apply it to every adult.
             if (!hasMap) {
                 if (fallbackName && adults > 0) {
                     result[fallbackName] = { count: adults, price: fallbackPrice };
@@ -3398,19 +3400,16 @@
                 return result;
             }
 
-            const guests = (typeof listRetreatGuests === 'function')
-                ? listRetreatGuests()
-                : Array.from({ length: adults }, (_, i) => ({ key: 'r0g' + (i + 1) }));
-
-            guests.forEach(g => {
-                const name = map[g.key] || fallbackName;
-                if (!name) return;
+            // Per-guest mode: only count guests that have an explicit
+            // selection in retreatsByGuest.
+            for (const [, name] of Object.entries(map)) {
+                if (!name) continue;
                 const price = (RETREAT_PRICES[name] != null)
                     ? RETREAT_PRICES[name]
                     : (name === fallbackName ? fallbackPrice : 0);
                 if (!result[name]) result[name] = { count: 0, price };
                 result[name].count += 1;
-            });
+            }
             return result;
         }
 
@@ -4441,16 +4440,14 @@
             var retreatBreakdown = summarizeRetreats();
             var retreatNames = Object.keys(retreatBreakdown);
             var retreatChanged = orig && (retreatTotal !== ((orig.retreatPrice || 0) * (orig.adults || 0)));
-            if (retreatNames.length === 1) {
-                var only = retreatBreakdown[retreatNames[0]];
-                html += '<div class="price-line"><div><div class="price-line-label">' + retreatNames[0] + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + guestsSummaryText() + '</div></div><div class="price-line-value">' + formatCurrency(only.count * only.price) + '</div></div>';
-            } else if (retreatNames.length > 1) {
-                retreatNames.forEach(function(name) {
-                    var info = retreatBreakdown[name];
-                    var sub = info.count + ' ' + (info.count === 1 ? 'guest' : 'guests');
-                    html += '<div class="price-line"><div><div class="price-line-label">' + name + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + sub + '</div></div><div class="price-line-value">' + formatCurrency(info.count * info.price) + '</div></div>';
-                });
-            }
+            var hasPerGuestModify = Object.keys(booking.retreatsByGuest || {}).length > 0;
+            retreatNames.forEach(function(name) {
+                var info = retreatBreakdown[name];
+                var sub = (!hasPerGuestModify && retreatNames.length === 1)
+                    ? guestsSummaryText()
+                    : (info.count + ' ' + (info.count === 1 ? 'guest' : 'guests'));
+                html += '<div class="price-line"><div><div class="price-line-label">' + name + (retreatChanged ? updBadge : '') + '</div><div class="price-line-sublabel">' + sub + '</div></div><div class="price-line-value">' + formatCurrency(info.count * info.price) + '</div></div>';
+            });
             booking.selectedRooms.forEach(function(r) {
                 var isNew = orig && !orig.rooms.some(function(or) { return or.name === r.name; });
                 html += '<div class="price-line"><div><div class="price-line-label">' + r.name + (isNew ? newBadge : '') + '</div><div class="price-line-sublabel">1 room x ' + nights + ' night(s)</div></div><div class="price-line-value">' + formatCurrency(r.pricePerNight * nights) + '</div></div>';
@@ -5400,18 +5397,15 @@
             let html = `<h3 class="price-summary-title">${isAr ? t.journeySummary : 'Your Journey Summary'}</h3>`;
             const retreatBreakdown = summarizeRetreats();
             const retreatNames = Object.keys(retreatBreakdown);
-            if (retreatNames.length === 1) {
-                const only = retreatBreakdown[retreatNames[0]];
-                html += `<div class="price-line"><div><div class="price-line-label">${retreatNames[0]}</div><div class="price-line-sublabel">${guestsSummaryText()}</div></div><div class="price-line-value">${formatCurrency(only.count * only.price)}</div></div>`;
-            } else if (retreatNames.length > 1) {
-                retreatNames.forEach(name => {
-                    const info = retreatBreakdown[name];
-                    const sub = isAr
-                        ? `${info.count} ${info.count === 1 ? 'ضيف' : 'ضيوف'}`
-                        : `${info.count} ${info.count === 1 ? 'guest' : 'guests'}`;
-                    html += `<div class="price-line"><div><div class="price-line-label">${name}</div><div class="price-line-sublabel">${sub}</div></div><div class="price-line-value">${formatCurrency(info.count * info.price)}</div></div>`;
-                });
-            }
+            const hasPerGuest = Object.keys(booking.retreatsByGuest || {}).length > 0;
+            const guestSub = (count) => isAr
+                ? `${count} ${count === 1 ? 'ضيف' : 'ضيوف'}`
+                : `${count} ${count === 1 ? 'guest' : 'guests'}`;
+            retreatNames.forEach(name => {
+                const info = retreatBreakdown[name];
+                const sub = (!hasPerGuest && retreatNames.length === 1) ? guestsSummaryText() : guestSub(info.count);
+                html += `<div class="price-line"><div><div class="price-line-label">${name}</div><div class="price-line-sublabel">${sub}</div></div><div class="price-line-value">${formatCurrency(info.count * info.price)}</div></div>`;
+            });
             booking.selectedRooms.forEach(r => {
                 html += `<div class="price-line"><div><div class="price-line-label">${r.name}</div><div class="price-line-sublabel">1 ${isAr ? 'غرفة' : 'room'} &times; ${nights} ${isAr ? t.nightsUnit : 'night(s)'}</div></div><div class="price-line-value">${formatCurrency(r.pricePerNight * nights)}</div></div>`;
             });
