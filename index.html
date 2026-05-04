@@ -99,9 +99,6 @@
         .header-right {
             display: flex; align-items: center; gap: var(--space-lg);
         }
-        .header-bookings, .header-utility {
-            display: flex; align-items: center; gap: var(--space-lg);
-        }
         .header-phone {
             display: flex; align-items: center; gap: var(--space-sm);
             font-size: 12px; color: var(--text-secondary);
@@ -156,86 +153,29 @@
         .currency-menu button:hover { background: #f5f2ec; }
         .currency-menu button.active { color: var(--soft-coral); font-weight: 600; }
 
-        /* Landing: header is relocated to the bottom of the right form panel (50% width) */
-        body.is-landing .header {
-            top: auto; bottom: 0;
-            left: 50%; right: 0; width: 50%;
-            background: var(--purifying-beige) !important;
-            backdrop-filter: none !important;
-            border-top: 1px solid var(--border-light);
-            border-bottom: none !important;
-        }
-        body.is-landing .header-inner {
-            max-width: none; height: 64px;
-            padding: 0 var(--space-2xl);
-        }
-        body.is-landing .header .logo-link { display: none; }
-        body.is-landing .header-right {
-            width: 100%; justify-content: space-between; gap: var(--space-md);
-        }
-        /* Header lives at the bottom on landing — flip the currency menu so it opens UP */
-        body.is-landing .currency-menu {
-            top: auto; bottom: calc(100% + 4px);
-        }
-        body.is-landing .main-content { margin-top: 0; min-height: 100vh; }
-        /* Calendar opens inline inside the form, pushing elements below.
-           Widened past the 520px form column with negative margins so two
-           months sit comfortably side-by-side. */
-        body.is-landing .calendar-dropdown {
-            position: static;
-            width: calc(100% + 200px);
-            margin-left: -100px; margin-right: -100px;
-            transform: none; box-shadow: none;
-            margin-top: var(--space-xs); max-height: none;
-        }
-        body.is-landing .calendar-two-months {
-            grid-template-columns: 1fr 1fr; gap: var(--space-lg);
-        }
-        body.is-landing .calendar-day {
-            min-height: 40px; padding: 4px 2px 3px; font-size: 12px;
-        }
-
         /* MAIN LAYOUT WITH VERTICAL STEPPER */
         .main-content { margin-top: 72px; min-height: calc(100vh - 72px); }
 
         .step-layout {
-            display: flex; flex-direction: column;
-            min-height: calc(100vh - 72px);
-            background: var(--purifying-beige);
+            display: flex; min-height: calc(100vh - 72px);
         }
 
         .step-content-area {
             flex: 1; min-width: 0;
         }
 
-        /* HORIZONTAL STEPPER (legacy class kept for JS compatibility) */
+        /* VERTICAL STEPPER */
         .vertical-stepper {
-            width: 100%; flex-shrink: 0;
-            background: transparent;
-            border-right: none; border-bottom: none;
-            padding: var(--space-2xl) var(--space-2xl) 0;
-            position: relative;
-            height: auto;
-            display: flex; flex-direction: row; align-items: center; justify-content: center;
-            overflow-x: auto;
+            width: 240px; flex-shrink: 0;
+            background: var(--warm-white);
+            border-right: 1px solid var(--border-light);
+            padding: var(--space-2xl) var(--space-lg);
+            position: sticky; top: 72px;
+            height: calc(100vh - 72px);
+            overflow-y: auto;
+            display: flex; flex-direction: column; justify-content: center;
         }
         .vertical-stepper.hidden { display: none; }
-        .vertical-stepper #stepperContent {
-            display: flex; align-items: center; gap: 0;
-            flex-wrap: nowrap;
-            width: 100%; max-width: calc(1400px - 2 * var(--space-2xl));
-            background: var(--warm-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            padding: 10px var(--space-lg);
-            box-shadow: 0 6px 24px rgba(16, 24, 32, 0.06);
-        }
-        /* On the booking flow, keep the default full-width cream header bar but drop the hard divider line */
-        body.is-flow .header {
-            background: var(--warm-white) !important;
-            border-bottom: none !important;
-            box-shadow: 0 1px 0 rgba(16, 24, 32, 0.04);
-        }
 
         /* MOBILE STEPPER — only visible on mobile ≤768px */
         .mobile-stepper {
@@ -261,26 +201,23 @@
             font-size: 12px; color: var(--text-secondary); font-weight: 600;
         }
 
-        .stepper-title { display: none; }
+        .stepper-title {
+            font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: var(--space-xl); font-weight: 700;
+        }
 
         .v-step {
-            display: flex; align-items: center; gap: 8px;
-            cursor: pointer; position: relative;
-            padding: 8px 14px;
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-btn);
-            background: var(--open-white);
-            min-height: auto; flex-shrink: 0;
-            transition: all 0.25s ease;
+            display: flex; align-items: center; gap: var(--space-md);
+            cursor: pointer; position: relative; padding-bottom: 0;
+            min-height: 40px;
         }
-        .v-step:hover { border-color: var(--gentle-beige); }
 
         .v-step-connector {
-            display: flex; align-items: center; justify-content: center;
-            flex: 1 1 auto; min-width: 16px; padding: 0 8px;
+            display: flex; justify-content: center; width: 36px; flex-shrink: 0;
+            padding: 6px 0;
         }
         .v-step-connector .v-line {
-            width: 100%; height: 1px; background: var(--border-light);
+            width: 2px; height: 36px; background: var(--border-light);
             transition: background 0.3s ease;
         }
         .v-step.completed + .v-step-connector .v-line,
@@ -289,30 +226,26 @@
         }
 
         .v-step-circle {
-            width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+            width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            border: 1.5px solid var(--border-light); background: white;
-            font-size: 11px; font-weight: 700; color: var(--text-muted);
+            border: 2px solid var(--border-light); background: white;
+            font-size: 13px; font-weight: 700; color: var(--text-muted);
             transition: all 0.3s ease;
         }
         .v-step.completed .v-step-circle {
-            background: var(--success-green); border-color: var(--success-green); color: #fff;
-        }
-        .v-step.active {
-            border-color: var(--soft-coral); background: var(--soft-coral);
+            background: #E8F5E9; border-color: var(--success-green); color: var(--success-green);
         }
         .v-step.active .v-step-circle {
-            background: #fff; border-color: #fff; color: var(--soft-coral);
+            background: var(--soft-coral); border-color: var(--soft-coral); color: white;
         }
 
         .v-step-text { padding-top: 0; }
         .v-step-label {
-            font-size: 12px; font-weight: 600; color: var(--text-secondary);
+            font-size: 13px; font-weight: 700; color: var(--text-muted);
             line-height: 1.3; transition: color 0.3s ease;
-            white-space: nowrap;
         }
-        .v-step.active .v-step-label { color: #fff; }
-        .v-step.completed .v-step-label { color: var(--text-primary); }
+        .v-step.active .v-step-label { color: var(--inner-black); }
+        .v-step.completed .v-step-label { color: var(--text-secondary); }
 
         .v-step-sublabel {
             font-size: 11px; color: var(--text-muted); line-height: 1.3; margin-top: 1px;
@@ -326,83 +259,51 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* STEP 1: SPLIT LANDING (image left, form right) */
-        .landing-split {
-            display: flex; align-items: flex-start;
-            min-height: 100vh; width: 100%;
+        /* STEP 1: HERO */
+        .hero-section {
+            position: relative; min-height: calc(100vh - 72px);
+            display: flex; align-items: stretch;
         }
-        .landing-image-panel {
-            position: sticky; top: 0;
-            flex: 1 1 0; height: 100vh; align-self: flex-start;
-            background: url('images/Rectangle 33.png') center/cover no-repeat;
-            overflow: hidden;
-            display: flex; flex-direction: column; justify-content: space-between;
-            padding: var(--space-2xl) var(--space-2xl);
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--inner-black) 0%, #1a2838 30%, #2a3848 60%, var(--inner-black-soft) 100%);
         }
-        .landing-image-panel::before {
+        .hero-bg::before {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(180deg, rgba(16,24,32,0.35) 0%, rgba(16,24,32,0.10) 35%, rgba(16,24,32,0.30) 70%, rgba(16,24,32,0.65) 100%);
+            background: linear-gradient(135deg, rgba(16,24,32,0.7) 0%, rgba(26,40,56,0.6) 50%, rgba(16,24,32,0.75) 100%);
             z-index: 1;
         }
-        .landing-image-logo {
-            position: relative; z-index: 2;
-            text-decoration: none; display: inline-block;
+        .hero-bg-pattern {
+            position: absolute; inset: 0; opacity: 0.03; z-index: 2;
+            background-image:
+                radial-gradient(circle at 20% 50%, var(--soft-coral) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--delicate-green) 0%, transparent 40%),
+                radial-gradient(circle at 60% 80%, var(--kind-yellow) 0%, transparent 45%);
         }
-        .landing-image-logo .logo-text {
-            color: #fff;
-            font-family: 'Century Gothic', 'CenturyGothic', sans-serif;
-            font-size: 24px; font-weight: 700;
-            letter-spacing: 0.22em; text-transform: uppercase;
-        }
-        .landing-image-caption {
-            position: relative; z-index: 2;
-            max-width: 520px;
-        }
-        .landing-image-panel .hero-title {
-            color: #fff;
-            font-size: 38px; line-height: 1.2;
-            letter-spacing: 0.03em; margin: 0 0 var(--space-md) 0;
-            text-align: left;
-        }
-        .landing-image-panel .hero-desc {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 14px; line-height: 1.7;
-            margin: 0; max-width: 460px;
-            text-align: left;
-        }
-        .landing-form-panel {
-            position: relative; flex: 1 1 0;
-            background: var(--purifying-beige);
-            display: flex; min-height: 100vh;
-            padding: var(--space-2xl) var(--space-2xl) calc(64px + var(--space-2xl));
-        }
-        .landing-form-panel-inner {
-            width: 100%; max-width: 520px;
-            margin: auto;
+        .hero-content {
+            position: relative; z-index: 2; text-align: center;
+            width: 100%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: var(--space-xl) var(--space-xl);
         }
         .hero-title {
-            font-family: 'Century Gothic', 'CenturyGothic', sans-serif; font-size: 32px;
-            font-weight: 300; color: var(--inner-black); letter-spacing: 0.04em;
-            line-height: 1.25; margin-bottom: var(--space-xl); text-align: left;
+            font-family: 'Century Gothic', 'CenturyGothic', sans-serif; font-size: 28px;
+            font-weight: 300; color: var(--open-white); letter-spacing: 0.08em;
+            line-height: 1.3; margin-bottom: var(--space-lg);
         }
         .hero-subtitle {
             font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
-            color: var(--text-secondary); margin-bottom: var(--space-2xl);
+            color: white; margin-bottom: var(--space-3xl);
         }
         .booking-widget {
-            background: transparent; border-radius: 0;
-            padding: 0; max-width: none;
-            width: 100%; box-shadow: none;
+            background: rgba(250, 247, 244, 0.97); border-radius: var(--radius-xl);
+            padding: var(--space-2xl) var(--space-xl); max-width: 720px;
+            width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         .booking-widget-title {
-            font-family: 'Century Gothic', 'CenturyGothic', sans-serif; letter-spacing: 0.04em; font-size: 26px;
-            font-weight: 400; color: var(--inner-black); margin-bottom: var(--space-sm);
-            text-align: left; line-height: 1.3;
-        }
-        .booking-widget-desc {
-            font-size: 13px; line-height: 1.6;
-            color: var(--text-secondary); margin: 0 0 var(--space-xl) 0;
-            text-align: left; max-width: 460px;
+            font-family: 'Century Gothic', 'CenturyGothic', sans-serif; letter-spacing: 4px; font-size: 22px;
+            font-weight: 400; color: var(--inner-black); margin-bottom: var(--space-lg);
+            text-align: center; letter-spacing: 0.05em;
         }
         .booking-widget-title span { color: var(--soft-coral); }
         .booking-form-grid {
@@ -421,7 +322,7 @@
           align-items: center;
           justify-content: flex-start;
           gap: 8px;
-          padding: 14px 16px;
+          padding: 8px 12px;
           border: 1.5px solid var(--border-light);
           border-radius: 0;
           cursor: pointer;
@@ -541,7 +442,7 @@
 
         /* STEP PAGES */
         .step-page {
-            max-width: 1400px; margin: 0 auto;
+            max-width: 1200px; margin: 0 auto;
             padding: var(--space-2xl) var(--space-2xl) var(--space-3xl);
         }
         .step-header { margin-bottom: var(--space-2xl); }
@@ -639,10 +540,6 @@
 
         /* CUSTOM CALENDAR */
         .calendar-container { background: var(--warm-white); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--space-md); }
-        /* Inline modify-booking calendar already lives inside an elevated card — strip its inner chrome */
-        #modifyBookingCalendar.calendar-container {
-            background: transparent; border: none; padding: 0;
-        }
         .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-sm); }
         .calendar-header h4 { font-family: 'Century Gothic', 'CenturyGothic', sans-serif; letter-spacing: 4px; font-size: 18px; font-weight: 400; color: var(--inner-black); }
         .calendar-nav-btn { width: 32px; height: 32px; border: 1px solid var(--border-light); border-radius: 50%; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.3s ease; }
@@ -821,16 +718,7 @@
         .room-price-value span { font-size: 12px; font-weight: 400; color: var(--text-muted); }
 
         /* ADD-ONS */
-        .addons-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--space-2xl); align-items: start; }
-        .addons-layout > *:first-child {
-            background: var(--warm-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            box-shadow: 0 6px 24px rgba(16, 24, 32, 0.06);
-            position: sticky; top: 100px;
-            align-self: start;
-        }
+        .addons-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--space-2xl); }
         .addons-list { display: flex; flex-direction: column; gap: var(--space-md); }
         .addon-card {
             display: flex; background: var(--warm-white); border: 1px solid var(--border-light);
@@ -971,7 +859,6 @@
         .price-summary {
             background: var(--warm-white);
             border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--space-xl);
-            box-shadow: 0 6px 24px rgba(16, 24, 32, 0.06);
         }
         .sidebar-sticky-group { position: sticky; top: 100px; }
         .price-summary-title {
@@ -999,16 +886,7 @@
         .price-vat-note { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 4px; }
 
         /* GUEST DETAILS */
-        .guest-details-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--space-2xl); align-items: start; }
-        .guest-details-layout > *:first-child {
-            background: var(--warm-white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            box-shadow: 0 6px 24px rgba(16, 24, 32, 0.06);
-            position: sticky; top: 100px;
-            align-self: start;
-        }
+        .guest-details-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--space-2xl); }
         .guest-form-section {
             background: var(--warm-white); border: 1px solid var(--border-light);
             border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-lg);
@@ -1298,7 +1176,7 @@
         .step-navigation {
             display: flex; justify-content: space-between; align-items: center;
             margin-top: var(--space-xl);
-            padding: var(--space-md) var(--space-2xl);
+            padding: var(--space-md) 0;
             position: sticky; bottom: 0; z-index: 20;
             background: rgba(250, 247, 244, 0.97);
             border-top: 1px solid var(--border-light);
@@ -1449,22 +1327,13 @@
             .mobile-stepper.show { display: block !important; }
             .vertical-stepper { display: none !important; }
 
-            /* Landing / Step 1 — stack image above form on mobile */
-            .landing-split { flex-direction: column; min-height: auto; }
-            .landing-image-panel {
-                position: static; height: auto;
-                flex: 0 0 240px; padding: var(--space-lg);
-            }
-            .landing-image-panel .hero-title { font-size: 22px; max-width: 100%; }
-            .landing-image-logo .logo-text { font-size: 18px; }
-            .landing-form-panel { padding: var(--space-xl) var(--space-md) calc(56px + var(--space-xl)); }
-            body.is-landing .header {
-                top: auto; bottom: 0; left: 0; right: 0; width: 100%;
-            }
-            body.is-landing .header-inner { height: 56px; padding: 0 var(--space-md); }
+            /* Hero / Step 1 */
+            .hero-section { min-height: auto; }
+            .hero-content { padding: var(--space-lg) var(--space-md); }
+            .hero-title { font-size: 22px; letter-spacing: 0.04em; margin-bottom: var(--space-md); }
             .hero-subtitle { font-size: 11px; margin-bottom: var(--space-xl); letter-spacing: 0.12em; }
-            .booking-widget-title { font-size: 22px; }
-            .booking-widget-desc { font-size: 12px; margin-bottom: var(--space-lg); }
+            .booking-widget { padding: var(--space-lg) var(--space-md); max-width: 100%; border-radius: var(--radius-lg); }
+            .booking-widget-title { font-size: 18px; }
             .booking-form-grid { grid-template-columns: 1fr !important; }
             .form-input, .form-select, .form-input-white { font-size: 16px; padding: 14px 16px; }
             .date-picker-field { padding: 12px var(--space-md); }
@@ -1954,7 +1823,7 @@
         .step-container.active .guest-form-section:nth-child(4) { animation: fadeInUp 0.5s ease-out 0.4s both; }
 
         /* Hero BG subtle movement */
-        .landing-image-panel {
+        .hero-bg {
             animation: subtlePan 20s ease-in-out infinite alternate;
         }
         @keyframes subtlePan {
@@ -2451,26 +2320,22 @@
                 <span class="logo-text">JAYASOM</span>
             </a>
             <div class="header-right">
-                <div class="header-bookings">
-                    <a class="header-manage-link" onclick="showManageBooking()">Manage Booking</a>
-                    <div class="header-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                        <span>+966 800 123 4567</span>
+                <a class="header-manage-link" onclick="showManageBooking()">Manage Booking</a>
+                <div class="header-phone">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span>+966 800 123 4567</span>
+                </div>
+                <div class="currency-switch" onclick="toggleCurrencyMenu(event)">
+                    <span id="currencyLabel">SAR</span>
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 3l4 4 4-4"/></svg>
+                    <div class="currency-menu" id="currencyMenu">
+                        <button data-currency="SAR" class="active" onclick="selectCurrency('SAR', event)">SAR — ر.س</button>
+                        <button data-currency="USD" onclick="selectCurrency('USD', event)">USD — $</button>
+                        <button data-currency="EUR" onclick="selectCurrency('EUR', event)">EUR — €</button>
+                        <button data-currency="GBP" onclick="selectCurrency('GBP', event)">GBP — £</button>
                     </div>
                 </div>
-                <div class="header-utility">
-                    <div class="currency-switch" onclick="toggleCurrencyMenu(event)">
-                        <span id="currencyLabel">SAR</span>
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 3l4 4 4-4"/></svg>
-                        <div class="currency-menu" id="currencyMenu">
-                            <button data-currency="SAR" class="active" onclick="selectCurrency('SAR', event)">SAR — ر.س</button>
-                            <button data-currency="USD" onclick="selectCurrency('USD', event)">USD — $</button>
-                            <button data-currency="EUR" onclick="selectCurrency('EUR', event)">EUR — €</button>
-                            <button data-currency="GBP" onclick="selectCurrency('GBP', event)">GBP — £</button>
-                        </div>
-                    </div>
-                    <button class="lang-switch" onclick="toggleLanguage()">EN / AR</button>
-                </div>
+                <button class="lang-switch" onclick="toggleLanguage()">EN / AR</button>
             </div>
         </div>
     </header>
@@ -2480,19 +2345,12 @@
 
         <!-- STEP 1: SEARCH -->
         <div class="step-container active" id="step1">
-            <div class="landing-split">
-                <div class="landing-image-panel">
-                    <a class="landing-image-logo" onclick="goToStep(1)" title="Home"><span class="logo-text">JAYASOM</span></a>
-                    <div class="landing-image-caption">
-                        <h1 class="hero-title" data-i18n="heroTitle">Begin Your Return to Inner Wellness</h1>
-                        <p class="hero-desc" data-i18n="heroDesc">A sanctuary on the Red Sea where ancient wisdom meets modern wellness — designed to slow you down, restore your rhythm, and reconnect you with what matters.</p>
-                    </div>
-                </div>
-                <div class="landing-form-panel">
-                    <div class="landing-form-panel-inner">
+            <div class="hero-section">
+                <div class="hero-bg" style="background:url('images/Rectangle 33.png') center/cover no-repeat;"><div class="hero-bg-pattern"></div></div>
+                <div class="hero-content">
+                    <h1 class="hero-title" data-i18n="heroTitle">Begin Your Return to Inner Wellness</h1>
                     <div class="booking-widget">
                         <h2 class="booking-widget-title" data-i18n="widgetTitle">Plan your <span>journey</span></h2>
-                        <p class="booking-widget-desc" data-i18n="widgetDesc">Choose your destination, select your dates, and shape an experience designed for restoration.</p>
                         <div class="booking-form-grid">
                             <div class="form-group full-width">
                                 <label class="form-label" data-i18n="destinationLabel">Destination</label>
@@ -2588,59 +2446,25 @@
                             </div>
                         </div>
                     </div>
-                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- MANAGE BOOKING (split landing-style layout) -->
-        <div class="step-container" id="stepManage">
-            <div class="landing-split">
-                <div class="landing-image-panel">
-                    <a class="landing-image-logo" onclick="goToStep(1)" title="Home"><span class="logo-text">JAYASOM</span></a>
-                    <div class="landing-image-caption">
-                        <h1 class="hero-title">Welcome Back</h1>
-                        <p class="hero-desc">Retrieve your reservation, modify the details of your stay, or simply revisit what awaits you on the Red Sea.</p>
+            <footer class="footer step1-footer">
+                <div class="footer-inner">
+                    <div>
+                        <a class="logo-link" onclick="goToStep(1)" style="display:inline-block;"><span class="footer-logo-text">JAYASOM</span></a>
+                        <p class="footer-tagline">"Connecting each guest to their own singularity."</p>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-col"><div class="footer-col-title">Explore</div><a href="#">Retreats & Programs</a><a href="#">Accommodation</a><a href="#">Dining</a><a href="#">Experiences</a></div>
+                        <div class="footer-col"><div class="footer-col-title">Information</div><a href="#">About Jayasom</a><a href="#">About Amaala</a><a href="#">Getting Here</a><a href="#">Contact Us</a></div>
+                        <div class="footer-col"><div class="footer-col-title">Legal</div><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a><a href="#">Booking Policies</a><a href="#">Cookie Settings</a></div>
                     </div>
                 </div>
-                <div class="landing-form-panel">
-                    <div class="landing-form-panel-inner">
-                        <div class="booking-widget">
-                            <h2 class="booking-widget-title">Manage <span>Booking</span></h2>
-                            <p class="booking-widget-desc">Enter your booking details below to retrieve your reservation.</p>
-                            <div class="booking-form-grid">
-                                <div class="form-group full-width">
-                                    <label class="form-label">Booking Reference Number</label>
-                                    <input type="text" class="form-input-white" id="manageRefNumber" placeholder="e.g. JWR-2026-04158">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" class="form-input-white" id="manageFirstName" placeholder="Enter first name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-input-white" id="manageLastName" placeholder="Enter last name">
-                                </div>
-                                <div class="form-group full-width">
-                                    <label class="form-label">Phone Number or Email</label>
-                                    <input type="text" class="form-input-white" id="manageContact" placeholder="Enter phone number or email address">
-                                </div>
-                                <div class="form-group full-width">
-                                    <button class="btn-primary" onclick="lookupBooking()">Find My Booking</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="manage-booking-result" id="manageBookingResult" style="margin-top:var(--space-xl);">
-                            <div class="manage-booking-detail-card" id="manageBookingDetails"></div>
-                            <div class="manage-booking-actions">
-                                <button class="btn-secondary" onclick="showManageBooking()">Back to Search</button>
-                                <button class="btn-primary" style="width:auto;margin-top:0;" onclick="showModifyBooking()">Modify Booking</button>
-                                <button class="btn-danger" onclick="showCancelConfirm()">Cancel Reservation</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 Jayasom Wellness Resort. All rights reserved.</p>
+                    <p>Part of the Amaala destination, Red Sea, Saudi Arabia</p>
                 </div>
-            </div>
+            </footer>
         </div>
 
         <!-- STEPS 2-7 WRAPPED WITH STEPPER LAYOUT -->
@@ -2665,15 +2489,13 @@
                 <!-- STEP 2: RETREAT -->
                 <div class="step-container" id="step2">
                     <div class="step-page">
-                        <div class="addons-layout">
-                        <div>
                         <div class="step-header">
                             <p class="step-overline" data-i18n="step1of4">Step 1 of 4</p>
                             <h2 class="step-title" data-i18n="chooseRetreat">Choose Your Retreat</h2>
                             <p class="step-description" data-i18n="chooseRetreatDesc">Each retreat is a curated journey designed to guide you back to your inner self. Select the experience that speaks to your needs.</p>
                         </div>
                         <div class="retreat-guest-tabs" id="retreatGuestTabs"></div>
-                        <div class="retreat-grid" id="retreatGrid">
+                        <div class="addons-layout"><div class="retreat-grid" id="retreatGrid">
                             <div class="retreat-card" data-price="28500">
                                 <button class="view-details-btn" onclick="openRetreatDrawer(this.closest('.retreat-card'), 'The Renewal Retreat', 28500)">View Details</button>
                                 <div class="retreat-card-image">
@@ -2763,7 +2585,6 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
                         <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep2"></div></div>
                         </div>
                         <div class="step-navigation">
@@ -2776,14 +2597,14 @@
                 <!-- STEP 3: ROOM (Booking.com style with quantities) -->
                 <div class="step-container" id="step3">
                     <div class="step-page">
-                        <div class="addons-layout">
-                            <div style="min-width:0;">
-                            <div class="step-header">
+                        <div class="step-header">
                             <p class="step-overline">Step 2 of 4</p>
                             <h2 class="step-title">Select Your Accommodation</h2>
                             <p class="step-description">Every room is a sanctuary. Select room types and quantities to suit your group.</p>
                         </div>
                         <div id="roomCapacityWarning" style="display:none;padding:var(--space-md);background:rgba(236,198,129,0.15);border:1px solid var(--kind-yellow);border-radius:var(--radius-md);margin-bottom:var(--space-lg);font-size:13px;color:var(--text-secondary);"></div>
+                        <div class="addons-layout">
+                            <div style="min-width:0;">
                             <div class="room-grid" style="grid-template-columns:1fr;">
                                 <!-- Desert View Suite -->
                                 <div class="room-card" data-room-name="Desert View Suite" data-room-price="3200" data-room-capacity="2">
@@ -2860,13 +2681,12 @@
                 <script type="text/html" id="archived-step4-treatments">
                 <div class="step-container" id="step4">
                     <div class="step-page">
-                        <div class="addons-layout">
-                            <div>
-                            <div class="step-header">
+                        <div class="step-header">
                             <p class="step-overline">Step 3 of 5</p>
                             <h2 class="step-title">Enhance Your Experience</h2>
                             <p class="step-description">Add personalized treatments and arrange your travel to deepen your wellness journey.</p>
                         </div>
+                        <div class="addons-layout">
                             <div class="addons-list">
                                 <div class="addon-card" onclick="openTreatmentDrawer(this, 'Deep Tissue Massage', 850)" data-price="850" data-name="Deep Tissue Massage">
                                     <div class="addon-image"><img src="images/image 18.png" alt="Deep Tissue Massage"></div>
@@ -2947,7 +2767,6 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
 
                             <div class="sidebar-sticky-group"><div class="price-summary" id="priceSummaryStep4"></div></div>
                         </div>
@@ -2963,14 +2782,14 @@
                 <!-- STEP 5: GUEST DETAILS + SUMMARY + PAYMENT (MERGED) -->
                 <div class="step-container" id="step5">
                     <div class="step-page">
-                        <div class="addons-layout">
-                            <!-- Left: Guest Forms + Policies -->
-                            <div style="min-width:0;">
-                                <div class="step-header">
+                        <div class="step-header">
                             <p class="step-overline">Step 3 of 4</p>
                             <h2 class="step-title">Guest Information & Payment</h2>
                             <p class="step-description">Provide guest details, review your booking, and confirm your reservation.</p>
                         </div>
+                        <div class="addons-layout">
+                            <!-- Left: Guest Forms + Policies -->
+                            <div style="min-width:0;">
                                 <!-- Airport Transfer & Travel (moved from room selection step) -->
                                 <div class="summary-card" id="airportTransferSection">
                                     <h3 class="summary-card-title" data-i18n="arrivalTransferTitle">Arrival &amp; Transfer</h3>
@@ -3114,17 +2933,57 @@
                     </div>
                 </div>
 
+                <!-- MANAGE BOOKING PAGE -->
+                <div class="step-container" id="stepManage">
+                    <div class="manage-booking-page">
+                        <div class="step-header">
+                            <p class="step-overline">Manage Your Stay</p>
+                            <h2 class="step-title">Manage Booking</h2>
+                            <p class="step-description">Enter your booking details below to retrieve your reservation.</p>
+                        </div>
+                        <div class="manage-booking-form">
+                            <div class="guest-form-grid">
+                                <div class="form-group full-width">
+                                    <label class="form-label">Booking Reference Number</label>
+                                    <input type="text" class="form-input-white" id="manageRefNumber" placeholder="e.g. JWR-2026-04158">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-input-white" id="manageFirstName" placeholder="Enter first name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-input-white" id="manageLastName" placeholder="Enter last name">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label class="form-label">Phone Number or Email</label>
+                                    <input type="text" class="form-input-white" id="manageContact" placeholder="Enter phone number or email address">
+                                </div>
+                            </div>
+                            <button class="btn-primary" onclick="lookupBooking()">Find My Booking</button>
+                        </div>
+                        <div class="manage-booking-result" id="manageBookingResult">
+                            <div class="manage-booking-detail-card" id="manageBookingDetails"></div>
+                            <div class="manage-booking-actions">
+                                <button class="btn-secondary" onclick="showManageBooking()">Back to Search</button>
+                                <button class="btn-primary" style="width:auto;margin-top:0;" onclick="showModifyBooking()">Modify Booking</button>
+                                <button class="btn-danger" onclick="showCancelConfirm()">Cancel Reservation</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- MODIFY BOOKING PAGE -->
                 <div class="step-container" id="stepModify">
-                    <div class="step-page">
-                        <div class="addons-layout">
-                            <!-- Left column: all modify content -->
-                            <div style="min-width:0;">
-                                <div class="step-header">
+                    <div class="step-page" style="max-width:1200px;">
+                        <div class="step-header">
                             <p class="step-overline">Modify Your Stay</p>
                             <h2 class="step-title">Modify Booking</h2>
                             <p class="step-description">Update your booking details below. Changes are subject to availability.</p>
                         </div>
+                        <div class="addons-layout">
+                            <!-- Left column: all modify content -->
+                            <div style="min-width:0;">
                                 <!-- Stay Details -->
                                 <div class="manage-booking-form" style="margin-bottom:var(--space-2xl);">
                                     <h4 class="summary-card-title">Stay Details</h4>
@@ -3407,17 +3266,6 @@
                                     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--space-lg);">Review and update guest details for each room.</p>
                                     <div id="modifyGuestFormsContainer"></div>
                                 </div>
-
-                                <div class="summary-card" style="margin-top:var(--space-lg);">
-                                    <h4 class="summary-card-title">Inclusions</h4>
-                                    <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
-                                        <p style="margin-bottom:var(--space-md);"><strong>Daily Wellness Activities:</strong> Morning yoga, evening meditation, and group sound bath sessions are included throughout your stay.</p>
-                                        <p style="margin-bottom:var(--space-md);"><strong>Full Board Cuisine:</strong> Three nutritionist-curated meals daily, plus herbal teas and wellness snacks at our garden lounge.</p>
-                                        <p style="margin-bottom:var(--space-md);"><strong>Resort Amenities:</strong> Unlimited access to thermal pools, sauna, steam room, and the Jayasom relaxation gardens.</p>
-                                        <p style="margin-bottom:var(--space-md);"><strong>Wellness Consultation:</strong> A complimentary 30-minute session with our resident wellness practitioner on arrival.</p>
-                                        <p><strong>Airport Transfer:</strong> Round-trip transfers between Amaala Airport and the resort included with all retreat bookings.</p>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- Right column: sidebar -->
@@ -3694,7 +3542,6 @@
                 document.getElementById('stepLayout').style.display = 'none';
                 document.getElementById('mainFooter').style.display = 'none';
                 document.body.classList.add('is-landing');
-                document.body.classList.remove('is-flow');
             } else {
                 document.getElementById('stepLayout').style.display = 'flex';
                 document.getElementById('mainFooter').style.display = 'block';
@@ -3702,7 +3549,6 @@
                 const stepId = 'step' + step;
                 document.getElementById(stepId).classList.add('active');
                 document.body.classList.remove('is-landing');
-                document.body.classList.add('is-flow');
             }
 
             // Update steppers
@@ -3865,11 +3711,10 @@
 
         // ===== MANAGE BOOKING =====
         function showManageBooking() {
-            document.body.classList.add('is-landing');
-            document.body.classList.remove('is-flow');
+            document.body.classList.remove('is-landing');
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
-            document.getElementById('stepLayout').style.display = 'none';
-            document.getElementById('mainFooter').style.display = 'none';
+            document.getElementById('stepLayout').style.display = 'flex';
+            document.getElementById('mainFooter').style.display = 'block';
             document.getElementById('verticalStepper').classList.add('hidden');
             hideMobileStepper();
             document.getElementById('stepManage').classList.add('active');
@@ -3929,9 +3774,6 @@
 
         function showModifyBooking() {
             document.body.classList.remove('is-landing');
-            document.body.classList.add('is-flow');
-            document.getElementById('stepLayout').style.display = 'flex';
-            document.getElementById('mainFooter').style.display = 'block';
             // Capture the original total before any modifications
             originalBookingTotal = getTotal();
 
@@ -4105,8 +3947,6 @@
         function listModifyRetreatGuests() {
             const adultsEl = document.getElementById('modifyAdults');
             const adults = adultsEl ? (parseInt(adultsEl.textContent) || 0) : (booking.adults || 0);
-            const childrenEl = document.getElementById('modifyChildren');
-            const children = childrenEl ? (parseInt(childrenEl.textContent) || 0) : (booking.children || 0);
             const rooms = Math.max(1, getModifyRoomsCount());
             const perRoom = Math.ceil(adults / rooms);
             const guests = [];
@@ -4115,12 +3955,6 @@
                 for (let g = 1; g <= perRoom && a <= adults; g++, a++) {
                     guests.push({ key: `r${r}g${g}`, label: `Guest ${a}` });
                 }
-            }
-            for (let c = 1; c <= children; c++) {
-                const ageRaw = (typeof modifyChildAges !== 'undefined' && modifyChildAges) ? modifyChildAges[c - 1] : null;
-                const age = ageRaw === '' || ageRaw == null ? null : Number(ageRaw);
-                const label = (age != null && !isNaN(age)) ? `Child ${c} (${age} yrs)` : `Child ${c}`;
-                guests.push({ key: `c${c}`, label });
             }
             return guests;
         }
@@ -4180,8 +4014,6 @@
 
         function selectModifyRetreat(card, name, price) {
             if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
-            const isAdultKey = /^r\d+g\d+$/.test(modifyActiveRetreatGuestKey);
-            let didSelect = false;
             if (booking.retreatsByGuest[modifyActiveRetreatGuestKey] === name) {
                 delete booking.retreatsByGuest[modifyActiveRetreatGuestKey];
                 if (modifyActiveRetreatGuestKey === 'r0g1') {
@@ -4190,17 +4022,9 @@
                 }
             } else {
                 booking.retreatsByGuest[modifyActiveRetreatGuestKey] = name;
-                if (isAdultKey && (modifyActiveRetreatGuestKey === 'r0g1' || !booking.retreatName)) {
+                if (modifyActiveRetreatGuestKey === 'r0g1' || !booking.retreatName) {
                     booking.retreatName = name;
                     booking.retreatPrice = price;
-                }
-                didSelect = true;
-            }
-            if (didSelect) {
-                const guests = listModifyRetreatGuests();
-                const idx = guests.findIndex(g => g.key === modifyActiveRetreatGuestKey);
-                if (idx !== -1 && idx < guests.length - 1) {
-                    modifyActiveRetreatGuestKey = guests[idx + 1].key;
                 }
             }
             highlightModifySelectedRetreat();
@@ -4557,11 +4381,7 @@
         }
 
         function backToManageResult() {
-            document.body.classList.add('is-landing');
-            document.body.classList.remove('is-flow');
             document.querySelectorAll('.step-container').forEach(s => s.classList.remove('active'));
-            document.getElementById('stepLayout').style.display = 'none';
-            document.getElementById('mainFooter').style.display = 'none';
             document.getElementById('stepManage').classList.add('active');
             document.getElementById('manageBookingResult').classList.add('show');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6129,9 +5949,7 @@
                 // Hero
                 heroTitle: 'ابدأ رحلة العودة<br>إلى العافية الداخلية',
                 heroSubtitle: 'استراحة للتجديد في أمالا، البحر الأحمر',
-                heroDesc: 'ملاذ على البحر الأحمر تلتقي فيه الحكمة القديمة بالعافية الحديثة — مُصمم ليُهدّئ إيقاعك ويُعيد لك التوازن وما يهمك حقًا.',
                 widgetTitle: 'خطط <span>لرحلتك</span>',
-                widgetDesc: 'اختر وجهتك، وحدد تواريخك، وصمم تجربة مخصصة للراحة والتجديد.',
                 destination: 'الوجهة',
                 checkin: 'تسجيل الوصول',
                 checkout: 'تسجيل المغادرة',
@@ -6763,8 +6581,8 @@
         }
 
         // ===== CUSTOM CALENDAR =====
-        let calendarMonth = new Date().getMonth();
-        let calendarYear = new Date().getFullYear();
+        let calendarMonth = 3; // April (0-indexed)
+        let calendarYear = 2026;
         let calendarCheckin = null;
         let calendarCheckout = null;
         let calendarSelectMode = 'checkin'; // 'checkin' or 'checkout'
@@ -6866,10 +6684,8 @@
             const nextMonth = calendarMonth === 11 ? 0 : calendarMonth + 1;
             const nextYear = calendarMonth === 11 ? calendarYear + 1 : calendarYear;
 
-            const atFloor = calendarYear === today.getFullYear() && calendarMonth === today.getMonth();
-            const prevAttrs = atFloor ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : 'onclick="changeCalendarMonth(-1)"';
             let html = `<div class="calendar-header">
-                <button class="calendar-nav-btn" ${prevAttrs}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <button class="calendar-nav-btn" onclick="changeCalendarMonth(-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                 <h4>${monthNames[calendarMonth]} ${calendarYear} &nbsp;·&nbsp; ${monthNames[nextMonth]} ${nextYear}</h4>
                 <button class="calendar-nav-btn" onclick="changeCalendarMonth(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
             </div>`;
@@ -7000,19 +6816,15 @@
         });
 
         function changeCalendarMonth(delta) {
-            const now = new Date();
-            const minMonth = now.getMonth(), minYear = now.getFullYear();
-            let m = calendarMonth + delta, y = calendarYear;
-            if (m > 11) { m = 0; y++; }
-            if (m < 0) { m = 11; y--; }
-            if (y < minYear || (y === minYear && m < minMonth)) return;
-            calendarMonth = m; calendarYear = y;
+            calendarMonth += delta;
+            if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+            if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
             renderCalendar();
         }
 
         // ===== MODIFY BOOKING CALENDAR =====
-        let modifyCalendarMonth = new Date().getMonth();
-        let modifyCalendarYear = new Date().getFullYear();
+        let modifyCalendarMonth = 3;
+        let modifyCalendarYear = 2026;
         let modifyCalendarCheckin = null;
         let modifyCalendarCheckout = null;
         let modifyCalendarSelectMode = 'checkin';
@@ -7029,10 +6841,8 @@
             const nextMonth = modifyCalendarMonth === 11 ? 0 : modifyCalendarMonth + 1;
             const nextYear = modifyCalendarMonth === 11 ? modifyCalendarYear + 1 : modifyCalendarYear;
 
-            const atFloor = modifyCalendarYear === today.getFullYear() && modifyCalendarMonth === today.getMonth();
-            const prevAttrs = atFloor ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : 'onclick="changeModifyCalendarMonth(-1)"';
             let html = '<div class="calendar-header">';
-            html += '<button class="calendar-nav-btn" ' + prevAttrs + '><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
+            html += '<button class="calendar-nav-btn" onclick="changeModifyCalendarMonth(-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>';
             html += '<h4>' + monthNames[modifyCalendarMonth] + ' ' + modifyCalendarYear + ' &nbsp;·&nbsp; ' + monthNames[nextMonth] + ' ' + nextYear + '</h4>';
             html += '<button class="calendar-nav-btn" onclick="changeModifyCalendarMonth(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
             html += '</div>';
@@ -7085,13 +6895,9 @@
         }
 
         function changeModifyCalendarMonth(delta) {
-            const now = new Date();
-            const minMonth = now.getMonth(), minYear = now.getFullYear();
-            let m = modifyCalendarMonth + delta, y = modifyCalendarYear;
-            if (m > 11) { m = 0; y++; }
-            if (m < 0) { m = 11; y--; }
-            if (y < minYear || (y === minYear && m < minMonth)) return;
-            modifyCalendarMonth = m; modifyCalendarYear = y;
+            modifyCalendarMonth += delta;
+            if (modifyCalendarMonth > 11) { modifyCalendarMonth = 0; modifyCalendarYear++; }
+            if (modifyCalendarMonth < 0) { modifyCalendarMonth = 11; modifyCalendarYear--; }
             renderModifyCalendar();
         }
 
