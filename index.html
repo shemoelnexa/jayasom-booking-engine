@@ -2845,6 +2845,16 @@
                                 <div id="guestFormsContainer"></div>
 
                                 <div class="summary-card" style="margin-top:var(--space-lg);">
+                                    <h4 class="summary-card-title">Inclusions</h4>
+                                    <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                                        <p style="margin-bottom:var(--space-md);"><strong>Daily Wellness Activities:</strong> Morning yoga, evening meditation, and group sound bath sessions are included throughout your stay.</p>
+                                        <p style="margin-bottom:var(--space-md);"><strong>Full Board Cuisine:</strong> Three nutritionist-curated meals daily, plus herbal teas and wellness snacks at our garden lounge.</p>
+                                        <p style="margin-bottom:var(--space-md);"><strong>Resort Amenities:</strong> Unlimited access to thermal pools, sauna, steam room, and the Jayasom relaxation gardens.</p>
+                                        <p style="margin-bottom:var(--space-md);"><strong>Wellness Consultation:</strong> A complimentary 30-minute session with our resident wellness practitioner on arrival.</p>
+                                        <p><strong>Airport Transfer:</strong> Round-trip transfers between Amaala Airport and the resort included with all retreat bookings.</p>
+                                    </div>
+                                </div>
+                                <div class="summary-card" style="margin-top:var(--space-lg);">
                                     <h4 class="summary-card-title">Booking Policies</h4>
                                     <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
                                         <p style="margin-bottom:var(--space-md);"><strong>Cancellation Policy:</strong> Free cancellation up to 14 days before check-in. 50% charge within 7-14 days. Full charge within 7 days.</p>
@@ -5096,8 +5106,10 @@
         let activeRetreatGuestKey = 'r0g1';
 
         function listRetreatGuests() {
-            // Children attend with their parent — retreat selection is adults-only.
+            // Adults first, then children. Adult keys use `r{r}g{g}`; child
+            // keys use `c{n}` (1-based across all children) to avoid collision.
             const adults = booking.adults || 0;
+            const children = booking.children || 0;
             const rooms = Math.max(1, booking.rooms || 1);
             const perRoom = Math.ceil(adults / rooms);
             const guests = [];
@@ -5106,6 +5118,14 @@
                 for (let g = 1; g <= perRoom && a <= adults; g++, a++) {
                     guests.push({ key: `r${r}g${g}`, label: `Guest ${a}` });
                 }
+            }
+            for (let c = 1; c <= children; c++) {
+                const ageRaw = (booking.childAges || [])[c - 1];
+                const age = ageRaw === '' || ageRaw == null ? null : Number(ageRaw);
+                const label = (age != null && !isNaN(age))
+                    ? `Child ${c} (${age} yrs)`
+                    : `Child ${c}`;
+                guests.push({ key: `c${c}`, label });
             }
             return guests;
         }
@@ -5145,6 +5165,7 @@
 
         function selectRetreatDirect(card, name, price) {
             if (!booking.retreatsByGuest) booking.retreatsByGuest = {};
+            let didSelect = false;
             if (booking.retreatsByGuest[activeRetreatGuestKey] === name) {
                 // Same retreat clicked again for this guest → clear it
                 delete booking.retreatsByGuest[activeRetreatGuestKey];
@@ -5154,9 +5175,22 @@
                 }
             } else {
                 booking.retreatsByGuest[activeRetreatGuestKey] = name;
-                if (activeRetreatGuestKey === 'r0g1' || !booking.retreatName) {
+                // Only adults drive the legacy booking.retreatName/Price.
+                // Child keys (c1, c2, ...) must NOT overwrite it.
+                const isAdultKey = /^r\d+g\d+$/.test(activeRetreatGuestKey);
+                if (isAdultKey && (activeRetreatGuestKey === 'r0g1' || !booking.retreatName)) {
                     booking.retreatName = name;
                     booking.retreatPrice = price;
+                }
+                didSelect = true;
+            }
+            // Auto-advance to next guest in list after a selection (not on clear),
+            // but never wrap past the last guest.
+            if (didSelect) {
+                const guests = listRetreatGuests();
+                const idx = guests.findIndex(g => g.key === activeRetreatGuestKey);
+                if (idx >= 0 && idx < guests.length - 1) {
+                    activeRetreatGuestKey = guests[idx + 1].key;
                 }
             }
             highlightSelectedRetreatForActiveGuest();
@@ -5637,7 +5671,7 @@
             const list = getTreatmentCatalogForPicker();
             if (list.length === 0) return '';
 
-            const headerLabel = isAr ? 'العلاجات' : 'Treatments';
+            const headerLabel = isAr ? 'العلاجات الإضافية' : 'Add-on Treatments';
             const countLabel = isAr
                 ? `${selected.length} محدد`
                 : `${selected.length} selected`;
@@ -6085,7 +6119,7 @@
                 specialRequestsText: 'حسب التوفر. تواصل مع المنتجع للمتطلبات الغذائية أو الطبية.',
                 selectPayment: 'اختر الدفع',
                 accommodation: 'الإقامة',
-                treatmentsLabel: 'العلاجات',
+                treatmentsLabel: 'العلاجات الإضافية',
                 fullPayment: 'الدفع الكامل',
                 fullPaymentDesc: 'ادفع المبلغ الكامل الآن وسيتم تأكيد حجزك فوراً.',
                 depositPayment: 'دفع العربون',
