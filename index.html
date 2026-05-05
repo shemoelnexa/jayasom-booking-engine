@@ -4915,6 +4915,65 @@
         };
 
         let currentDrawerCarouselIndex = 0;
+        let currentDrawerCarouselTotal = 1;
+
+        function renderDrawerCarousel(images, altLabel) {
+            const list = (images && images.length) ? images : [];
+            if (list.length === 0) return '';
+            const single = list.length === 1;
+            const dots = list.map((_, i) =>
+                `<button class="drawer-carousel-dot${i === 0 ? ' active' : ''}" onclick="drawerCarouselGoTo(${i})" aria-label="Image ${i + 1}"></button>`
+            ).join('');
+            const slides = list.map(src => `<img src="${src}" alt="${altLabel || ''}" draggable="false">`).join('');
+            return `
+                <div class="drawer-image-carousel" ontouchstart="drawerCarouselTouchStart(event)" ontouchend="drawerCarouselTouchEnd(event)">
+                    <div class="drawer-carousel-track" id="drawerCarouselTrack">${slides}</div>
+                    ${single ? '' : `
+                        <button class="drawer-carousel-nav prev" onclick="drawerCarouselNav(-1)" aria-label="Previous image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <button class="drawer-carousel-nav next" onclick="drawerCarouselNav(1)" aria-label="Next image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                        <div class="drawer-carousel-dots">${dots}</div>
+                        <div class="drawer-carousel-counter">1 / ${list.length}</div>
+                    `}
+                </div>`;
+        }
+
+        function setDrawerCarousel(index) {
+            if (currentDrawerCarouselTotal <= 1) return;
+            const i = ((index % currentDrawerCarouselTotal) + currentDrawerCarouselTotal) % currentDrawerCarouselTotal;
+            currentDrawerCarouselIndex = i;
+            const track = document.getElementById('drawerCarouselTrack');
+            if (track) track.style.transform = `translateX(-${i * 100}%)`;
+            document.querySelectorAll('.drawer-carousel-dot').forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === i);
+            });
+            const counter = document.querySelector('.drawer-carousel-counter');
+            if (counter) counter.textContent = `${i + 1} / ${currentDrawerCarouselTotal}`;
+        }
+
+        function drawerCarouselNav(dir) { setDrawerCarousel(currentDrawerCarouselIndex + dir); }
+        function drawerCarouselGoTo(i) { setDrawerCarousel(i); }
+
+        let _drawerCarouselTouchX = null;
+        function drawerCarouselTouchStart(e) {
+            _drawerCarouselTouchX = e.touches && e.touches[0] ? e.touches[0].clientX : null;
+        }
+        function drawerCarouselTouchEnd(e) {
+            if (_drawerCarouselTouchX == null) return;
+            const endX = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : null;
+            if (endX == null) { _drawerCarouselTouchX = null; return; }
+            const dx = endX - _drawerCarouselTouchX;
+            if (Math.abs(dx) > 40) drawerCarouselNav(dx < 0 ? 1 : -1);
+            _drawerCarouselTouchX = null;
+        }
+
+        function resetDrawerCarousel(images) {
+            currentDrawerCarouselIndex = 0;
+            currentDrawerCarouselTotal = (images && images.length) ? images.length : 1;
+        }
 
         function openRetreatDrawer(card, name, price, context) {
             if (event) event.stopPropagation();
@@ -4924,10 +4983,11 @@
 
             document.getElementById('drawerTitle').textContent = name;
 
+            const retreatImages = details.images && details.images.length ? details.images : [details.image];
+            resetDrawerCarousel(retreatImages);
+
             let bodyHTML = `
-                <div class="detail-drawer-image">
-                    <img src="${details.image}" alt="${name}">
-                </div>
+                ${renderDrawerCarousel(retreatImages, name)}
                 <div class="detail-drawer-content">
                     <div class="drawer-tabs">
                         <button class="drawer-tab active" onclick="switchDrawerTab(this, 'desc')">Description</button>
@@ -5002,10 +5062,10 @@
 
             document.getElementById('drawerTitle').textContent = roomName;
 
+            resetDrawerCarousel(details.images);
+
             let bodyHTML = `
-                <div class="detail-drawer-image">
-                    <img src="${details.images[0]}" alt="${roomName}">
-                </div>
+                ${renderDrawerCarousel(details.images, roomName)}
                 <div class="detail-drawer-content">
                     <div class="drawer-room-specs">
                         <div class="drawer-room-spec">
@@ -5061,10 +5121,11 @@
 
             document.getElementById('drawerTitle').textContent = treatmentName;
 
+            const treatmentImages = details.images && details.images.length ? details.images : [details.image];
+            resetDrawerCarousel(treatmentImages);
+
             let bodyHTML = `
-                <div class="detail-drawer-image">
-                    <img src="${details.image}" alt="${treatmentName}">
-                </div>
+                ${renderDrawerCarousel(treatmentImages, treatmentName)}
                 <div class="detail-drawer-content">
                     <div class="drawer-tabs">
                         <button class="drawer-tab active" onclick="switchDrawerTab(this, 'desc')">Description</button>
